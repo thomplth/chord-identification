@@ -1,11 +1,5 @@
-from Note import Note
 from constant import *
-
-
-def note_input_convertor(input_note_str):
-    note_name = input_note_str[0].upper()
-    note_accidental = input_note_str[1:]
-    return Note(note_name, note_accidental.count("+") - note_accidental.count("-"))
+from utility import note_input_convertor
 
 
 def get_scale(tonic, is_major):

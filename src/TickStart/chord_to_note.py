@@ -1,11 +1,8 @@
 from constant import *
-from scale_generator import note_input_convertor
+from utility import note_input_convertor
 
 import sys
 
-# hello
-def null():
-    pass
 
 def chord_picker(tonic, chord, is_major):
     chord_intervals = (

@@ -53,3 +53,23 @@ MINOR_CHORD_DICTIONARY["ItVI"] = MAJOR_CHORD_DICTIONARY["ItVI"]
 MINOR_CHORD_DICTIONARY["VII"] = ["m7", "M3", "m3"]
 MINOR_CHORD_DICTIONARY["viidim"] = MAJOR_CHORD_DICTIONARY["viidim"]
 MINOR_CHORD_DICTIONARY["viidim7"] = MAJOR_CHORD_DICTIONARY["viidim7"]
+
+# General one
+CHORD_DICTIONARY = MAJOR_CHORD_DICTIONARY.copy()
+for chord, pattern in MINOR_CHORD_DICTIONARY.items():
+    if chord not in CHORD_DICTIONARY:
+        CHORD_DICTIONARY[chord] = pattern
+
+# Dictionary for note to chord
+CHORD_FINDER_DICTIONARY = {}
+for chord, pattern in CHORD_DICTIONARY.items():
+    chord_pattern = tuple(pattern[1:])
+    # print(chord, pattern[0], chord_pattern)
+    if chord_pattern in CHORD_FINDER_DICTIONARY:
+        CHORD_FINDER_DICTIONARY[chord_pattern].append(
+            {"chord": chord, "tonic_interval": pattern[0]}
+        )
+    else:
+        CHORD_FINDER_DICTIONARY[chord_pattern] = [
+            {"chord": chord, "tonic_interval": pattern[0]}
+        ]
