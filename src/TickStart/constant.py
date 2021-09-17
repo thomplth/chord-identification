@@ -36,7 +36,7 @@ MAJOR_CHORD_DICTIONARY["viidim5"] = ["M7", "m3", "m3", "M3"]  # Half-dim 7th
 MAJOR_CHORD_DICTIONARY["viidim7"] = ["M7", "m3", "m3", "m3"]  # Dim 7th
 
 MINOR_CHORD_DICTIONARY = {"i": ["P1", "m3", "M3"]}
-MINOR_CHORD_DICTIONARY["I"] = MAJOR_CHORD_DICTIONARY["I"]
+MINOR_CHORD_DICTIONARY["I+"] = MAJOR_CHORD_DICTIONARY["I"]  # from I to I+
 MINOR_CHORD_DICTIONARY["bII"] = MAJOR_CHORD_DICTIONARY["bII"]
 MINOR_CHORD_DICTIONARY["iidim"] = ["M2", "m3", "m3"]
 MINOR_CHORD_DICTIONARY["iidim5"] = ["M2", "m3", "m3", "M3"]  # Half-dim 7th
