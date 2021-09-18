@@ -92,13 +92,13 @@ def find_chords_two_notes(notes, notes_intervals):
 
 
 # Find chords in recursive way
-def find_chords(notes, notes_intervals):
+def find_chords(notes, notes_intervals, can_drop_notes=True):
     # base case: notes = 2
     notes_num = len(notes)
     if notes_num == 2:
         return find_chords_two_notes(notes, notes_intervals)
 
-    # If the notes satisfy the chord pattern, then stop
+    # If the notes satisfy the chord pattern by adding 0+ notes, stop
     res = []
     if notes_num == 3 or notes_num == 4:
         for idx in range(notes_num):
@@ -110,14 +110,27 @@ def find_chords(notes, notes_intervals):
                 rotated_notes[0], rotated_intervals[0 : notes_num - 1]
             )
 
-    # Else drop a note and search whether the rest notes can give a chord
-    if len(res) == 0:
-        for idx in range(notes_num):
-            new_notes = notes.copy()
-            new_notes.pop(idx)
-            new_notes_intervals = get_adjacent_intervals(new_notes)
-            res += find_chords(new_notes, new_notes_intervals)
+    if len(res) > 0:
+        return res
 
+    # Else drop a note and search whether the rest notes can give a chord
+    if can_drop_notes:
+
+        def find_chords_in_subsets(notes, notes_num, can_drop):
+            result = []
+            for idx in range(notes_num):
+                new_notes = notes.copy()
+                new_notes.pop(idx)
+                new_notes_intervals = get_adjacent_intervals(new_notes)
+                result += find_chords(new_notes, new_notes_intervals, can_drop)
+            return result
+
+        # First disallow drop any notes for the subset of notes
+        res += find_chords_in_subsets(notes, notes_num, False)
+        # If none of the subset of notes can find a chord, allow them to drop one more note
+        # If res has >= 1 chord, then recursion is avoided to enhance efficiency
+        if len(res) == 0:
+            res += find_chords_in_subsets(notes, notes_num, True)
     return res
 
 
