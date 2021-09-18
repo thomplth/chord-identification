@@ -1,10 +1,11 @@
 from constant import *
 from utility import note_input_convertor, invert_interval
-from chord_to_note import pick_chord, print_chord
+from chord_to_note import pick_chord
 import sys
 import time
 
-# For a list of notes with length n, output all intervals that between i and (i+1) mod n notes, i.e. the nth/1st notes interval is included
+# For a list of notes with length n, output all intervals that between i and (i+1) mod n notes,
+# i.e. the nth/1st notes interval is included
 def get_adjacent_intervals(notes):
     notes_num = len(notes)
     res = []
@@ -17,7 +18,7 @@ def get_adjacent_intervals(notes):
 def search_chord_dictionary(first_note, target):
     res = []
 
-    def search_in_one_dictionary(is_major):
+    def search_one_dictionary(is_major):
         dictionary = (
             MAJOR_CHORD_FINDER_DICTIONARY if is_major else MINOR_CHORD_FINDER_DICTIONARY
         )
@@ -37,8 +38,8 @@ def search_chord_dictionary(first_note, target):
                         }
                     )
 
-    search_in_one_dictionary(True)
-    search_in_one_dictionary(False)
+    search_one_dictionary(True)
+    search_one_dictionary(False)
     return res
 
 
@@ -90,27 +91,34 @@ def find_chords_two_notes(notes, notes_intervals):
     return res
 
 
-# def find_chords(notes_intervals):
-#     res = []
-#     print(len(MAJOR_CHORD_FINDER_DICTIONARY))
-#     for k, v in MAJOR_CHORD_FINDER_DICTIONARY.items():
-#         print(k, v)
-#         chord = list(k)
-#         # print("a:", chord, notes_intervals)
-#         for idx in range(len(notes_intervals) - len(chord) + 1):
-#             # print("b:", notes_intervals[idx : idx + len(chord)])
-#             if notes_intervals[idx : idx + len(chord)] == chord:
-#                 res += v
-#                 # print("c:", res)
-#     print(len(MINOR_CHORD_FINDER_DICTIONARY))
-#     for k, v in MINOR_CHORD_FINDER_DICTIONARY.items():
-#         print(k, v)
-#         chord = list(k)
-#         # print(chord, v)
-#         for idx in range(len(notes_intervals) - len(chord) + 1):
-#             if notes_intervals[idx : idx + len(chord)] == chord:
-#                 res += v
-#     return res
+# Find chords in recursive way
+def find_chords(notes, notes_intervals):
+    # base case: notes = 2
+    notes_num = len(notes)
+    if notes_num == 2:
+        return find_chords_two_notes(notes, notes_intervals)
+
+    # If the notes satisfy the chord pattern, then stop
+    res = []
+    if notes_num == 3 or notes_num == 4:
+        for idx in range(notes_num):
+            r = idx % notes_num
+            rotated_notes = notes[-r:] + notes[:-r]
+            rotated_intervals = notes_intervals[-r:] + notes_intervals[:-r]
+
+            res += search_chord_dictionary(
+                rotated_notes[0], rotated_intervals[0 : notes_num - 1]
+            )
+
+    # Else drop a note and search whether the rest notes can give a chord
+    if len(res) == 0:
+        for idx in range(notes_num):
+            new_notes = notes.copy()
+            new_notes.pop(idx)
+            new_notes_intervals = get_adjacent_intervals(new_notes)
+            res += find_chords(new_notes, new_notes_intervals)
+
+    return res
 
 
 # print all right pattern
@@ -121,28 +129,12 @@ def print_chords_names(notes, possible_chords):
         chord_notes_str = [note.note_str() for note in chord_notes]
         print(ans["chord"], end=" chord in ")
         if ans["is_major"]:
-            print(ans["scale"].note_str(), "major.")
+            print(ans["scale"].note_str(), "major; ", end="")
         else:
-            print(ans["scale"].note_str().lower(), "minor.")
+            print(ans["scale"].note_str().lower(), "minor; ", end="")
+        print("Chord notes :", chord_notes_str, end="; ")
         missing_notes = list(set(chord_notes_str) - set(notes_str))
-        print("Missing notes:", missing_notes)
-
-        # print(ans)
-        # major_interval = invert_interval(ans["tonic_interval"])
-        # print(major_interval)
-        # chord_scale = notes[0].get_note_by_interval(
-        #     major_interval[0], int(major_interval[1])
-        # )
-
-        # scale_str = ""
-        # is_major = True
-        # if ans["chord"] in MAJOR_CHORD_DICTIONARY:
-        #     scale_str = chord_scale.note_str()
-        # else:
-        #     scale_str = chord_scale.get_note_by_interval("M", 6).note_str().lower()
-        #     is_major = False
-        # if scale_str == scale or scale == "":
-        #     print(ans["chord"], "in", scale_str, "major" if is_major else "minor")
+        print("Missing notes :", missing_notes)
 
 
 if __name__ == "__main__":
@@ -166,10 +158,9 @@ if __name__ == "__main__":
     notes_intervals = get_adjacent_intervals(notes)
 
     # search for the right pattern
-    print(notes[0].note_str(), notes_intervals)
-    possible_chords = find_chords_two_notes(notes[0:2], notes_intervals[0:2])
-    # possible_chords = find_chords(notes_intervals)
-    # print(possible_chords)
-    print_chords_names(notes[0:2], possible_chords)
+    # print(notes[0].note_str(), notes_intervals)
+    possible_chords = find_chords(notes, notes_intervals)
+    print_chords_names(notes, possible_chords)
 
+    # Time calculation
     print("--- Used %s seconds ---" % (time.time() - start_time))
