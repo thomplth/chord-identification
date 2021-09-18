@@ -10,7 +10,7 @@ class Note:
         self.accidental = accidental
 
     # Use string format to represent the note
-    def get_note_string(self):
+    def note_str(self):
         if self.accidental == 1:
             return self.alphabet + "♯"
         elif self.accidental == 2:

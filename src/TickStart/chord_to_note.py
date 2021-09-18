@@ -3,13 +3,11 @@ from utility import note_input_convertor
 
 import sys
 
-
-def chord_picker(tonic, chord, is_major):
+# Given the scale and the chord, output the notes of the chord
+def pick_chord(tonic, chord, is_major):
     chord_intervals = (
         MAJOR_CHORD_DICTIONARY[chord] if is_major else MINOR_CHORD_DICTIONARY[chord]
     )
-    if not is_major:
-        pass
     base_note = tonic
     chord_notes = []
     for interval in chord_intervals:
@@ -22,7 +20,7 @@ def chord_picker(tonic, chord, is_major):
 
 
 def print_chord(tonic, chord, is_major):
-    chord_notes = chord_picker(tonic, chord, is_major)
+    chord_notes = pick_chord(tonic, chord, is_major)
     print(chord, end=" : ")
     for note in chord_notes:
         print(note.get_note_string(), end=" ")
