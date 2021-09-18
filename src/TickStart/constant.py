@@ -55,21 +55,47 @@ MINOR_CHORD_DICTIONARY["viidim"] = MAJOR_CHORD_DICTIONARY["viidim"]
 MINOR_CHORD_DICTIONARY["viidim7"] = MAJOR_CHORD_DICTIONARY["viidim7"]
 
 # General one
-CHORD_DICTIONARY = MAJOR_CHORD_DICTIONARY.copy()
-for chord, pattern in MINOR_CHORD_DICTIONARY.items():
-    if chord not in CHORD_DICTIONARY:
-        CHORD_DICTIONARY[chord] = pattern
+# CHORD_DICTIONARY = MAJOR_CHORD_DICTIONARY.copy()
+# for chord, pattern in MINOR_CHORD_DICTIONARY.items():
+#     if chord not in CHORD_DICTIONARY:
+#         CHORD_DICTIONARY[chord] = pattern
 
 # Dictionary for note to chord
-CHORD_FINDER_DICTIONARY = {}
-for chord, pattern in CHORD_DICTIONARY.items():
+# CHORD_FINDER_DICTIONARY = {}
+# for chord, pattern in CHORD_DICTIONARY.items():
+#     chord_pattern = tuple(pattern[1:])
+#     # print(chord, pattern[0], chord_pattern)
+#     if chord_pattern in CHORD_FINDER_DICTIONARY:
+#         CHORD_FINDER_DICTIONARY[chord_pattern].append(
+#             {"chord": chord, "tonic_interval": pattern[0]}
+#         )
+#     else:
+#         CHORD_FINDER_DICTIONARY[chord_pattern] = [
+#             {"chord": chord, "tonic_interval": pattern[0]}
+#         ]
+
+MAJOR_CHORD_FINDER_DICTIONARY = {}
+for chord, pattern in MAJOR_CHORD_DICTIONARY.items():
     chord_pattern = tuple(pattern[1:])
     # print(chord, pattern[0], chord_pattern)
-    if chord_pattern in CHORD_FINDER_DICTIONARY:
-        CHORD_FINDER_DICTIONARY[chord_pattern].append(
+    if chord_pattern in MAJOR_CHORD_FINDER_DICTIONARY:
+        MAJOR_CHORD_FINDER_DICTIONARY[chord_pattern].append(
             {"chord": chord, "tonic_interval": pattern[0]}
         )
     else:
-        CHORD_FINDER_DICTIONARY[chord_pattern] = [
+        MAJOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
+            {"chord": chord, "tonic_interval": pattern[0]}
+        ]
+
+MINOR_CHORD_FINDER_DICTIONARY = {}
+for chord, pattern in MINOR_CHORD_DICTIONARY.items():
+    chord_pattern = tuple(pattern[1:])
+    # print(chord, pattern[0], chord_pattern)
+    if chord_pattern in MINOR_CHORD_FINDER_DICTIONARY:
+        MINOR_CHORD_FINDER_DICTIONARY[chord_pattern].append(
+            {"chord": chord, "tonic_interval": pattern[0]}
+        )
+    else:
+        MINOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
             {"chord": chord, "tonic_interval": pattern[0]}
         ]
