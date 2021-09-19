@@ -45,12 +45,14 @@ class Note:
 
     # Here is the general one
     # quality: M (major), m (minor), P (perfect), A (augmented), d (diminished)
-    def get_note_by_interval(self, quality, distance):
-        if distance < 1 or distance > 7:
+    def get_note_by_interval(self, interval):
+        quality = interval[0]
+        distance = int(interval[1])
+        if distance < 1 or distance > 8:
             print("Distance Error in get_note_by_interval.")
         if not quality in ["M", "m", "P", "A", "d"]:
             print("Quality Error in get_note_by_interval.")
-        new_note = self.get_note_by_major_interval(distance)
+        new_note = self.get_note_by_major_interval((distance - 1) % 7 + 1)
 
         if quality == "A":
             new_note.modify_accidental(1)
@@ -90,6 +92,8 @@ class Note:
         elif distance in [1, 4, 5]:
             if accidental == -1:
                 quality = "d"
+                if distance == 1:
+                    distance = 8
             elif accidental == 0:
                 quality = "P"
 

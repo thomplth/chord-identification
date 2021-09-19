@@ -30,10 +30,7 @@ def search_chord_dictionary(first_note, target):
                     res.append(
                         {
                             "chord": option["chord"],
-                            "tonic": first_note.get_note_by_interval(
-                                tonic_interval[0],
-                                int(tonic_interval[1]),
-                            ),
+                            "tonic": first_note.get_note_by_interval(tonic_interval),
                             "is_major": is_major,
                         }
                     )
@@ -57,8 +54,9 @@ def find_chords_two_notes(notes, notes_intervals):
             res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": True})
             res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": False})
         elif interval == "A2":
-            res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": True})
-            res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": False})
+            tonic = notes[idx].get_note_by_major_interval(6)
+            res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
+            res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
         elif interval == "A4":
             res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": True})
             res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": False})
@@ -92,6 +90,7 @@ def find_chords_two_notes(notes, notes_intervals):
 
 
 # Find chords in recursive way
+# TODO: enhances efficiency
 def find_chords(notes, notes_intervals, can_drop_notes=True):
     # base case: notes = 2
     notes_num = len(notes)
@@ -136,6 +135,7 @@ def find_chords(notes, notes_intervals, can_drop_notes=True):
 
 # print all right pattern
 def print_chords_names(notes, possible_chords, scale):
+    # Get the scale in note object
     if scale == "":
         target_tonic = ""
     else:
@@ -145,6 +145,7 @@ def print_chords_names(notes, possible_chords, scale):
     notes_str = [note.note_str() for note in notes]
     for ans in possible_chords:
         chord_tonic = ans["tonic"].note_str()
+        # print if there is no specify scale or match the scale
         if target_tonic == "" or (
             target_tonic == chord_tonic and target_is_major == ans["is_major"]
         ):
@@ -174,14 +175,15 @@ if __name__ == "__main__":
         input_notes.append(scale)
         scale = ""
 
-    # First do sorting
-    input_notes.sort()
-
+    # First convert to notes
     notes = [note_input_convertor(note) for note in input_notes]
+    # and do sorting
+    notes.sort(key=lambda x: (x.alphabet, x.accidental))
+    # Then generate the intervals
     notes_intervals = get_adjacent_intervals(notes)
 
     # search for the right pattern
-    # print(notes[0].note_str(), notes_intervals)
+    print(notes[0].note_str(), notes_intervals)
     possible_chords = find_chords(notes, notes_intervals)
     print_chords_names(notes, possible_chords, scale)
 

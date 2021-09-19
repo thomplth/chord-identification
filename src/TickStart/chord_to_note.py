@@ -11,9 +11,7 @@ def pick_chord(tonic, chord, is_major):
     base_note = tonic
     chord_notes = []
     for interval in chord_intervals:
-        quality = interval[0]
-        distance = int(interval[1])
-        next_note = base_note.get_note_by_interval(quality, distance)
+        next_note = base_note.get_note_by_interval(interval)
         chord_notes.append(next_note)
         base_note = next_note
     return chord_notes

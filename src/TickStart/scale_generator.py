@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("E.g. for F♯ major, type 'F+'. ")
     input_str = input("E.g. for B♭ minor, type 'b-'. ")
     note = note_input_convertor(input_str)
-    print("Unison:", note.get_note_by_interval("P", 1).note_str())
+    print("Unison:", note.get_note_by_interval("P1").note_str())
     is_major = input_str[0].upper() == input_str[0]
     scale = get_scale(note, is_major)
     for note in scale:
