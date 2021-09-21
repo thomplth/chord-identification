@@ -14,13 +14,13 @@ class Note:
         if self.accidental == 1:
             return self.alphabet + "♯"
         elif self.accidental == 2:
-            return self.alphabet + "𝄪"
+            return self.alphabet + "♯♯"  # 𝄪
         elif self.accidental == 0:
             return self.alphabet
         elif self.accidental == -1:
             return self.alphabet + "♭"
         elif self.accidental == -2:
-            return self.alphabet + "𝄫"
+            return self.alphabet + "♭♭"  # 𝄫
         # Error printing
         else:
             return self.alphabet + "?"

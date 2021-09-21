@@ -156,9 +156,11 @@ def print_chords_names(notes, possible_chords, scale):
                 print(chord_tonic, "major; ", end="")
             else:
                 print(chord_tonic.lower(), "minor; ", end="")
-            print("Chord notes :", chord_notes_str, end="; ")
+            print("Chord notes :", chord_notes_str, end="")
             missing_notes = list(set(chord_notes_str) - set(notes_str))
-            print("Missing notes :", missing_notes)
+            if len(missing_notes) > 0:
+                print("; Missing notes :", missing_notes, end="")
+            print()
 
 
 if __name__ == "__main__":
@@ -183,7 +185,7 @@ if __name__ == "__main__":
     notes_intervals = get_adjacent_intervals(notes)
 
     # search for the right pattern
-    print(notes[0].note_str(), notes_intervals)
+    # print(notes[0].note_str(), notes_intervals)
     possible_chords = find_chords(notes, notes_intervals)
     print_chords_names(notes, possible_chords, scale)
 
