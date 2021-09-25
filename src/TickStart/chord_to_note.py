@@ -12,6 +12,9 @@ def pick_chord(tonic, chord, is_major):
     chord_notes = []
     for interval in chord_intervals:
         next_note = base_note.get_note_by_interval(interval)
+        # If you get some strange notes, just DO NOT return that chord
+        if next_note.accidental > 2 or next_note.accidental < -2:
+            return None
         chord_notes.append(next_note)
         base_note = next_note
     return chord_notes
@@ -19,9 +22,15 @@ def pick_chord(tonic, chord, is_major):
 
 def print_chord(tonic, chord, is_major):
     chord_notes = pick_chord(tonic, chord, is_major)
-    print(chord, end=" : ")
-    chord_notes_str = [note.note_str() for note in chord_notes]
-    print(chord_notes_str)
+    if chord_notes != None:
+        print(chord, end=" : ")
+        chord_notes_str = [note.note_str() for note in chord_notes]
+        print(chord_notes_str)
+    else:
+        print(
+            chord,
+            ": unable to print the chord because of there are notes with more than 2 accidentals.",
+        )
 
 
 def print_all_chords(tonic, is_major):

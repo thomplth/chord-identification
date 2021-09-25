@@ -53,16 +53,16 @@ def find_chords_two_notes(notes, notes_intervals):
         elif interval == "m3":
             res += search_chord_dictionary(notes[idx], ["m3", "M3"])
             res += search_chord_dictionary(notes[idx], ["m3", "m3"])
-        elif interval == "M2":
-            res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": True})
-            res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": False})
-        elif interval == "A2":
-            tonic = notes[idx].get_note_by_major_interval(6)
-            res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
-            res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
-        elif interval == "A4":
-            res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": True})
-            res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": False})
+        # elif interval == "M2":
+        #     res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": True})
+        #     res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": False})
+        # elif interval == "A2":
+        #     tonic = notes[idx].get_note_by_major_interval(6)
+        #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
+        #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
+        # elif interval == "A4":
+        #     res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": True})
+        #     res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": False})
         elif interval == "d5":
             res += search_chord_dictionary(notes[idx], ["m3", "m3"])
         elif interval == "P5":
@@ -72,14 +72,14 @@ def find_chords_two_notes(notes, notes_intervals):
             tonic = notes[idx].get_note_by_major_interval(3)
             res.append({"chord": "ItVI", "tonic": tonic, "is_major": True})
             res.append({"chord": "ItVI", "tonic": tonic, "is_major": False})
-        elif interval == "d7":
-            res += search_chord_dictionary(notes[idx], ["m3", "m3", "m3"])
-        elif interval == "m7":
-            res += search_chord_dictionary(notes[idx], ["M3", "m3", "m3"])
-            res += search_chord_dictionary(notes[idx], ["m3", "M3", "m3"])
-            res += search_chord_dictionary(notes[idx], ["m3", "m3", "M3"])
-        elif interval == "M7":
-            res += search_chord_dictionary(notes[idx], ["M3", "m3", "M3"])
+        # elif interval == "d7":
+        #     res += search_chord_dictionary(notes[idx], ["m3", "m3", "m3"])
+        # elif interval == "m7":
+        #     res += search_chord_dictionary(notes[idx], ["M3", "m3", "m3"])
+        #     res += search_chord_dictionary(notes[idx], ["m3", "M3", "m3"])
+        #     res += search_chord_dictionary(notes[idx], ["m3", "m3", "M3"])
+        # elif interval == "M7":
+        #     res += search_chord_dictionary(notes[idx], ["M3", "m3", "M3"])
         # The rest 13 intervals have no combinations of intervals
     return res
 
@@ -139,6 +139,8 @@ def print_chords_names(notes, possible_chords, scale):
     target_is_major = scale.isupper()
 
     notes_str = [note.note_str() for note in notes]
+    total_valid_chords = 0
+
     for ans in possible_chords:
         chord_tonic = ans["tonic"].note_str()
         # print if there is no specify scale or match the scale
@@ -146,6 +148,9 @@ def print_chords_names(notes, possible_chords, scale):
             target_tonic == chord_tonic and target_is_major == ans["is_major"]
         ):
             chord_notes = pick_chord(ans["tonic"], ans["chord"], ans["is_major"])
+            # If you get some strange notes, just DO NOT return that chord
+            if chord_notes == None:
+                continue
             chord_notes_str = [note.note_str() for note in chord_notes]
             print(ans["chord"], end=" chord in ")
             if ans["is_major"]:
@@ -157,6 +162,8 @@ def print_chords_names(notes, possible_chords, scale):
             if len(missing_notes) > 0:
                 print("; Missing notes :", missing_notes, end="")
             print()
+            total_valid_chords += 1
+    print("--- Total %d chords ---" % (total_valid_chords))
 
 
 if __name__ == "__main__":
@@ -180,7 +187,6 @@ if __name__ == "__main__":
     # print(notes[0].note_str(), notes_intervals)
     possible_chords = find_chords(notes)
     print_chords_names(notes, possible_chords, scale)
-    print("--- Total %d chords ---" % (len(possible_chords)))
 
     # Time calculation
     print("--- Used %s seconds ---" % (time.time() - start_time))
