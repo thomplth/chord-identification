@@ -87,6 +87,9 @@ for chord, pattern in MAJOR_CHORD_DICTIONARY.items():
         MAJOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
             {"chord": chord, "tonic_interval": pattern[0]}
         ]
+# GerVI and FrVI special cases:
+MAJOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
+MAJOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]
 
 MINOR_CHORD_FINDER_DICTIONARY = {}
 for chord, pattern in MINOR_CHORD_DICTIONARY.items():
@@ -100,3 +103,6 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
         MINOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
             {"chord": chord, "tonic_interval": pattern[0]}
         ]
+# GerVI and FrVI special cases:
+MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
+MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]

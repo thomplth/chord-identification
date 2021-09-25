@@ -3,6 +3,7 @@ from utility import note_input_convertor, invert_interval
 from chord_to_note import pick_chord
 import sys
 import time
+from itertools import combinations
 
 # For a list of notes with length n, output all intervals that between i and (i+1) mod n notes,
 # i.e. the nth/1st notes interval is included
@@ -24,7 +25,8 @@ def search_chord_dictionary(first_note, target):
         )
         for k, v in dictionary.items():
             chord = list(k)
-            if chord[0 : len(target)] == target:
+            isMatchedChord = chord == target
+            if isMatchedChord:
                 for option in v:
                     tonic_interval = invert_interval(option["tonic_interval"])
                     res.append(
@@ -47,9 +49,10 @@ def find_chords_two_notes(notes, notes_intervals):
     for idx in range(len(notes_intervals)):
         interval = notes_intervals[idx]
         if interval == "M3":
-            res += search_chord_dictionary(notes[idx], [interval])
+            res += search_chord_dictionary(notes[idx], ["M3", "m3"])
         elif interval == "m3":
-            res += search_chord_dictionary(notes[idx], [interval])
+            res += search_chord_dictionary(notes[idx], ["m3", "M3"])
+            res += search_chord_dictionary(notes[idx], ["m3", "m3"])
         elif interval == "M2":
             res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": True})
             res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": False})
@@ -58,10 +61,6 @@ def find_chords_two_notes(notes, notes_intervals):
             res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
             res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
         elif interval == "A4":
-            res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": True})
-            res.append({"chord": "GerVI", "tonic": notes[idx], "is_major": False})
-            res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": True})
-            res.append({"chord": "FrVI", "tonic": notes[idx], "is_major": False})
             res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": True})
             res.append({"chord": "ItVI", "tonic": notes[idx], "is_major": False})
         elif interval == "d5":
@@ -71,10 +70,6 @@ def find_chords_two_notes(notes, notes_intervals):
             res += search_chord_dictionary(notes[idx], ["m3", "M3"])
         elif interval == "A6":
             tonic = notes[idx].get_note_by_major_interval(3)
-            res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
-            res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
-            res.append({"chord": "FrVI", "tonic": tonic, "is_major": True})
-            res.append({"chord": "FrVI", "tonic": tonic, "is_major": False})
             res.append({"chord": "ItVI", "tonic": tonic, "is_major": True})
             res.append({"chord": "ItVI", "tonic": tonic, "is_major": False})
         elif interval == "d7":
@@ -89,47 +84,48 @@ def find_chords_two_notes(notes, notes_intervals):
     return res
 
 
-# Find chords in recursive way
-# TODO: enhances efficiency
-def find_chords(notes, notes_intervals, can_drop_notes=True):
+def match_chords_patterns(notes, notes_intervals):
     # base case: notes = 2
     notes_num = len(notes)
     if notes_num == 2:
         return find_chords_two_notes(notes, notes_intervals)
 
-    # If the notes satisfy the chord pattern by adding 0+ notes, stop
+    # If the notes satisfy the chord pattern , get the chord
     res = []
     if notes_num == 3 or notes_num == 4:
         for idx in range(notes_num):
-            r = idx % notes_num
-            rotated_notes = notes[-r:] + notes[:-r]
-            rotated_intervals = notes_intervals[-r:] + notes_intervals[:-r]
+            rotated_notes = notes[-idx:] + notes[:-idx]
+            rotated_intervals = notes_intervals[-idx:] + notes_intervals[:-idx]
 
+            # the last interval is ignored as it is the difference between last and first notes
             res += search_chord_dictionary(
-                rotated_notes[0], rotated_intervals[0 : notes_num - 1]
+                rotated_notes[0],
+                rotated_intervals[0 : notes_num - 1],
             )
 
-    if len(res) > 0:
-        return res
+    return res
 
-    # Else drop a note and search whether the rest notes can give a chord
-    if can_drop_notes:
 
-        def find_chords_in_subsets(notes, notes_num, can_drop):
-            result = []
-            for idx in range(notes_num):
-                new_notes = notes.copy()
-                new_notes.pop(idx)
-                new_notes_intervals = get_adjacent_intervals(new_notes)
-                result += find_chords(new_notes, new_notes_intervals, can_drop)
-            return result
+# Find chords in 'recursive' way
+def find_chords(notes):
+    # do sorting
+    notes.sort(key=lambda x: (x.alphabet, x.accidental))
+    res = []
 
-        # First disallow drop any notes for the subset of notes
-        res += find_chords_in_subsets(notes, notes_num, False)
-        # If none of the subset of notes can find a chord, allow them to drop one more note
-        # If res has >= 1 chord, then recursion is avoided to enhance efficiency
-        if len(res) == 0:
-            res += find_chords_in_subsets(notes, notes_num, True)
+    # drop a note if previous combinations have no result
+    for note_num in range(len(notes), 1, -1):
+        # cannot have chord with more than 4 notes
+        if note_num > 4:
+            continue
+        # for each combination, search if it satisfy the pattern of chords
+        for combo in list(combinations(notes, note_num)):
+            # Then generate the intervals
+            notes_intervals = get_adjacent_intervals(combo)
+            res += match_chords_patterns(list(combo), notes_intervals)
+        # if drop several notes to get result, stop searching
+        if len(res) > 0:
+            break
+
     return res
 
 
@@ -179,15 +175,12 @@ if __name__ == "__main__":
 
     # First convert to notes
     notes = [note_input_convertor(note) for note in input_notes]
-    # and do sorting
-    notes.sort(key=lambda x: (x.alphabet, x.accidental))
-    # Then generate the intervals
-    notes_intervals = get_adjacent_intervals(notes)
 
     # search for the right pattern
     # print(notes[0].note_str(), notes_intervals)
-    possible_chords = find_chords(notes, notes_intervals)
+    possible_chords = find_chords(notes)
     print_chords_names(notes, possible_chords, scale)
+    print("--- Total %d chords ---" % (len(possible_chords)))
 
     # Time calculation
     print("--- Used %s seconds ---" % (time.time() - start_time))
