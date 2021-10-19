@@ -1,0 +1,387 @@
+File name:  Etude_Opus_10_No._11__in_E_Major.mxl
+Used time: 1279ms
+---------------------------------------------
+Predicted keys:
+Eb major from measure 0 to measure 55
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 0 to measure 55
+**********************************************
+File name:  E?tude_in_C_Minor.mxl
+Used time: 3463ms
+---------------------------------------------
+Predicted keys:
+C minor from measure 0 to measure 83
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 1 to measure 83
+**********************************************
+File name:  E?tude_in_F_Major.mxl
+Used time: 4688ms
+---------------------------------------------
+Predicted keys:
+F major from measure 0 to measure 17
+Eb major from measure 18 to measure 24
+F# minor from measure 25 to measure 44
+F major from measure 45 to measure 73
+---------------------------------------------
+Real keys:
+F major / D minor from measure 0 to measure 28
+B major / G# minor from measure 29 to measure 44
+F major / D minor from measure 45 to measure 73
+**********************************************
+File name:  E?tude_in_F_Minor.mxl
+Used time: 1875ms
+---------------------------------------------
+Predicted keys:
+F minor from measure 0 to measure 67
+---------------------------------------------
+Real keys:
+Ab major / F minor from measure 1 to measure 67
+**********************************************
+File name:  E?tude_in_Gb_Major.mxl
+Used time: 4347ms
+---------------------------------------------
+Predicted keys:
+Gb major from measure 0 to measure 85
+---------------------------------------------
+Real keys:
+Gb major / Eb minor from measure 1 to measure 85
+**********************************************
+File name:  E?tude_in_Gb_Major_Opus_25.mxl
+Used time: 1330ms
+---------------------------------------------
+Predicted keys:
+Gb major from measure 0 to measure 51
+---------------------------------------------
+Real keys:
+Gb major / Eb minor from measure 1 to measure 51
+**********************************************
+File name:  Il_Vecchio_Castello.mxl
+Used time: 2757ms
+---------------------------------------------
+Predicted keys:
+G# minor from measure 0 to measure 107
+---------------------------------------------
+Real keys:
+B major / G# minor from measure 1 to measure 107
+**********************************************
+File name:  Menuet_in_G_Minor.mxl
+Used time: 265ms
+---------------------------------------------
+Predicted keys:
+G minor from measure 0 to measure 32
+---------------------------------------------
+Real keys:
+Bb major / G minor from measure 1 to measure 32
+**********************************************
+File name:  Minuet_in_F.mxl
+Used time: 209ms
+---------------------------------------------
+Predicted keys:
+F major from measure 0 to measure 24
+---------------------------------------------
+Real keys:
+F major / D minor from measure 1 to measure 24
+**********************************************
+File name:  Minuet_in_G_Major_2nd.mxl
+Used time: 510ms
+---------------------------------------------
+Predicted keys:
+G major from measure 0 to measure 40
+---------------------------------------------
+Real keys:
+G major / E minor from measure 1 to measure 40
+**********************************************
+File name:  Moonlight_Sonata_1st_Movement.mxl
+Used time: 2887ms
+---------------------------------------------
+Predicted keys:
+C# minor from measure 0 to measure 69
+---------------------------------------------
+Real keys:
+E major / C# minor from measure 1 to measure 69
+**********************************************
+File name:  Nocturne_in_B_Major.mxl
+Used time: 5287ms
+---------------------------------------------
+Predicted keys:
+B major from measure 0 to measure 36
+Eb major from measure 37 to measure 67
+B major from measure 68 to measure 94
+---------------------------------------------
+Real keys:
+B major / G# minor from measure 1 to measure 36
+Ab major / F minor from measure 37 to measure 67
+B major / G# minor from measure 68 to measure 94
+**********************************************
+File name:  Nocturne_in_C#_Minor.mxl
+Used time: 5224ms
+---------------------------------------------
+Predicted keys:
+F# minor from measure 0 to measure 48
+Ab major from measure 49 to measure 80
+C# minor from measure 81 to measure 101
+---------------------------------------------
+Real keys:
+E major / C# minor from measure 1 to measure 48
+Ab major / F minor from measure 49 to measure 80
+E major / C# minor from measure 81 to measure 101
+**********************************************
+File name:  Nocturne_in_Eb_Major.mxl
+Used time: 1099ms
+---------------------------------------------
+Predicted keys:
+Eb major from measure 0 to measure 36
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 0 to measure 36
+**********************************************
+File name:  Nocturne_in_E_Major.mxl
+Used time: 3229ms
+---------------------------------------------
+Predicted keys:
+E major from measure 0 to measure 46
+E minor from measure 47 to measure 57
+E major from measure 58 to measure 82
+---------------------------------------------
+Real keys:
+E major / C# minor from measure 0 to measure 82
+**********************************************
+File name:  Nocturne_in_E_Minor.mxl
+Used time: 1857ms
+---------------------------------------------
+Predicted keys:
+B minor from measure 0 to measure 45
+A major from measure 46 to measure 57
+---------------------------------------------
+Real keys:
+G major / E minor from measure 1 to measure 57
+**********************************************
+File name:  Nocturne_in_F#_Major.mxl
+Used time: 2940ms
+---------------------------------------------
+Predicted keys:
+F# major from measure 0 to measure 32
+A major from measure 33 to measure 48
+F# major from measure 49 to measure 63
+---------------------------------------------
+Real keys:
+F# major / D# minor from measure 0 to measure 63
+**********************************************
+File name:  Nocturne_in_F_Minor.mxl
+Used time: 3956ms
+---------------------------------------------
+Predicted keys:
+F minor from measure 0 to measure 88
+F major from measure 89 to measure 102
+---------------------------------------------
+Real keys:
+Ab major / F minor from measure 0 to measure 102
+**********************************************
+musicxml.xmlToM21: WARNING: Could not import wedge: Error in getting DynamicWedges...Measure no. 48 P1
+musicxml.xmlToM21: WARNING: Could not import wedge: Error in getting DynamicWedges...Measure no. 51 P1
+musicxml.xmlToM21: WARNING: Could not import wedge: Error in getting DynamicWedges...Measure no. 51 P1
+File name:  Nocturne_No._20_in_C#_Minor.mxl
+Used time: 1889ms
+---------------------------------------------
+Predicted keys:
+C# minor from measure 0 to measure 65
+---------------------------------------------
+Real keys:
+E major / C# minor from measure 1 to measure 65
+**********************************************
+File name:  Piano_Sonata_No._11.mxl
+Used time: 4624ms
+---------------------------------------------
+Predicted keys:
+A minor from measure 0 to measure 24
+A major from measure 25 to measure 137
+---------------------------------------------
+Real keys:
+C major / A minor from measure 0 to measure 25
+A major / F# minor from measure 26 to measure 69
+C major / A minor from measure 70 to measure 95
+A major / F# minor from measure 96 to measure 137
+**********************************************
+File name:  Pre?lude_in_A_Major.mxl
+Used time: 120ms
+---------------------------------------------
+Predicted keys:
+A major from measure 0 to measure 17
+---------------------------------------------
+Real keys:
+A major / F# minor from measure 0 to measure 17
+**********************************************
+File name:  Pre?lude_in_B_Major.mxl
+Used time: 292ms
+---------------------------------------------
+Predicted keys:
+B major from measure 0 to measure 27
+---------------------------------------------
+Real keys:
+B major / G# minor from measure 1 to measure 27
+**********************************************
+File name:  Pre?lude_in_B_Minor.mxl
+Used time: 455ms
+---------------------------------------------
+Predicted keys:
+B minor from measure 0 to measure 10
+C major from measure 11 to measure 14
+B minor from measure 15 to measure 26
+---------------------------------------------
+Real keys:
+D major / B minor from measure 1 to measure 26
+**********************************************
+File name:  Pre?lude_in_B_Minor_Opus104a.mxl
+Used time: 752ms
+---------------------------------------------
+Predicted keys:
+B minor from measure 0 to measure 32
+---------------------------------------------
+Real keys:
+D major / B minor from measure 0 to measure 32
+**********************************************
+File name:  Pre?lude_in_C_Minor.mxl
+Used time: 101ms
+---------------------------------------------
+Predicted keys:
+C minor from measure 0 to measure 13
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 1 to measure 13
+**********************************************
+File name:  Pre?lude_in_Db_Major.mxl
+Used time: 2348ms
+---------------------------------------------
+Predicted keys:
+Db major from measure 0 to measure 27
+G# minor from measure 28 to measure 75
+Db major from measure 76 to measure 89
+---------------------------------------------
+Real keys:
+Db major / Bb minor from measure 1 to measure 27
+E major / C# minor from measure 28 to measure 75
+Db major / Bb minor from measure 76 to measure 89
+**********************************************
+File name:  Pre?lude_in_F#_Major.mxl
+Used time: 715ms
+---------------------------------------------
+Predicted keys:
+F# major from measure 0 to measure 38
+---------------------------------------------
+Real keys:
+F# major / D# minor from measure 1 to measure 38
+**********************************************
+File name:  Pre?lude_in_G_Major.mxl
+Used time: 613ms
+---------------------------------------------
+Predicted keys:
+G major from measure 0 to measure 33
+---------------------------------------------
+Real keys:
+G major / E minor from measure 1 to measure 33
+**********************************************
+File name:  Prlude_Opus_28_No._4_in_E_Minor.mxl
+Used time: 285ms
+---------------------------------------------
+Predicted keys:
+E minor from measure 0 to measure 26
+---------------------------------------------
+Real keys:
+G major / E minor from measure 0 to measure 26
+**********************************************
+musicxml.xmlToM21: WARNING: Could not import wedge: Error in getting DynamicWedges...Measure no. 63 P1
+File name:  Sonata_No._1.mxl
+Used time: 2833ms
+---------------------------------------------
+Predicted keys:
+Eb major from measure 0 to measure 49
+Eb minor from measure 50 to measure 84
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 0 to measure 49
+Gb major / Eb minor from measure 50 to measure 84
+**********************************************
+File name:  Sonate_No._28.mxl
+Used time: 3482ms
+---------------------------------------------
+Predicted keys:
+A major from measure 0 to measure 102
+---------------------------------------------
+Real keys:
+A major / F# minor from measure 1 to measure 102
+**********************************************
+File name:  Sonate_No._28_2nd_mov.mxl
+Used time: 6179ms
+---------------------------------------------
+Predicted keys:
+F major from measure 0 to measure 98
+---------------------------------------------
+Real keys:
+F major / D minor from measure 0 to measure 57
+Bb major / G minor from measure 58 to measure 98
+**********************************************
+File name:  Sonate_No._31.mxl
+Used time: 5337ms
+---------------------------------------------
+Predicted keys:
+F minor from measure 0 to measure 160
+---------------------------------------------
+Real keys:
+Ab major / F minor from measure 1 to measure 41
+Db major / Bb minor from measure 42 to measure 96
+Ab major / F minor from measure 97 to measure 160
+**********************************************
+File name:  Sonatina_in_G.mxl
+Used time: 1746ms
+---------------------------------------------
+Predicted keys:
+G major from measure 0 to measure 77
+---------------------------------------------
+Real keys:
+G major / E minor from measure 1 to measure 77
+**********************************************
+File name:  Twinkle-Twinkle.mxl
+Used time: 157ms
+---------------------------------------------
+Predicted keys:
+C major from measure 0 to measure 11
+F major from measure 12 to measure 24
+---------------------------------------------
+Real keys:
+C major / A minor from measure 1 to measure 24
+**********************************************
+File name:  Waltz_in_A_Major_Op.39_No.15_by_Johannes_Brahms.mxl
+Used time: 624ms
+---------------------------------------------
+Predicted keys:
+Ab major from measure 0 to measure 38
+---------------------------------------------
+Real keys:
+Ab major / F minor from measure 1 to measure 38
+**********************************************
+File name:  Waltz_in_A_Minor.mxl
+Used time: 12994ms
+---------------------------------------------
+Predicted keys:
+A minor from measure 0 to measure 204
+---------------------------------------------
+Real keys:
+C major / A minor from measure 1 to measure 52
+A major / F# minor from measure 53 to measure 68
+C major / A minor from measure 69 to measure 120
+A major / F# minor from measure 121 to measure 136
+C major / A minor from measure 137 to measure 204
+**********************************************
+File name:  Waltz_in_Eb_Major.mxl
+Used time: 23374ms
+---------------------------------------------
+Predicted keys:
+Ab major from measure 0 to measure 311
+---------------------------------------------
+Real keys:
+Eb major / C minor from measure 1 to measure 69
+Db major / Bb minor from measure 70 to measure 192
+Eb major / C minor from measure 193 to measure 311
+**********************************************
