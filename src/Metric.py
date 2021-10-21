@@ -1,6 +1,7 @@
 import pickle
 
-class Metric():
+
+class Metric:
     def chord_segmentation_accuracy(self, prediction, target):
         pass
 
@@ -8,17 +9,17 @@ class Metric():
         pass
 
     def get_target(self, filename):
-        input_path = '../data/data_answer' + '/' + filename + '.pydata'
-        with open(input_path, 'rb') as f:
+        input_path = "../data_KY2001/data_answer" + "/" + filename + ".pydata"
+        with open(input_path, "rb") as f:
             return pickle.load(f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     metric = Metric()
     # print(metric.chord_segmentation_accuracy())
 
 
-'''
+"""
 >>> music21.music21.converter.subConverters.ConverterMusicXML
 def parseFile(self, fp: Union[str, pathlib.Path], number=None):
     # Open from a file path; check to see if there is a pickled
@@ -49,4 +50,4 @@ def parseFile(self, fp: Union[str, pathlib.Path], number=None):
         c.stream.metadata.movementName = fn  # this should become a Path
     self.stream = c.stream
     
-'''
+"""
