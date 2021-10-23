@@ -1,22 +1,25 @@
-import pickle
 
-class Metric():
-    def chord_segmentation_accuracy(self, prediction, target):
-        pass
 
-    def key_segmentation_accuracy(self, prediction, target):
-        pass
+def cSeg_accuracy_hard(piece, prediction):
+    target = piece.get_cSeg_target()
+    aligned = 0
+    segments = min(len(prediction), len(target))
+    for i in range(segments):
+        if prediction[i] == target[i][1]:
+            aligned += 1
 
-    def get_target(self, filename):
-        input_path = '../data/data_answer' + '/' + filename + '.pydata'
-        with open(input_path, 'rb') as f:
-            return pickle.load(f)
+    return round(aligned / len(target), 2)
+
+def cSeg_accuracy(piece, prediction):
+    pass
+
+def kSeg_accuracy(piece, prediction):
+    pass
 
 
 if __name__ == '__main__':
-    metric = Metric()
-    # print(metric.chord_segmentation_accuracy())
-
+    pass
+    # print(chord_segmentation_accuracy())
 
 '''
 >>> music21.music21.converter.subConverters.ConverterMusicXML
