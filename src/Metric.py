@@ -1,5 +1,3 @@
-
-
 def cSeg_accuracy_hard(piece, prediction):
     target = piece.get_cSeg_target()
     aligned = 0
@@ -8,8 +6,10 @@ def cSeg_accuracy_hard(piece, prediction):
         if prediction[i] == target[i][1]:
             aligned += 1
 
+
 def cSeg_accuracy(piece, prediction):
     pass
+
 
 def kSeg_accuracy(piece, prediction):
     pass
@@ -54,4 +54,3 @@ def parseFile(self, fp: Union[str, pathlib.Path], number=None):
 '''
 =======
 """
->>>>>>> fc634d2767129441883fea4e33534c24dc5fca46
