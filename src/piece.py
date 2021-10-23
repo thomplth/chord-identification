@@ -4,7 +4,7 @@ import pickle
 
 # I was trying to just inherit music21.stream.base, but
 # 1) even stream.base is a module i.e. cannot be extended like class
-# 2) I have no idea how to write the parsing result of converter as the object itself
+# 2) I have no idea how to overwrite the parsing result of converter as the object itself
 class Piece:
     """
     Piece class represents music piece
@@ -28,15 +28,26 @@ class Piece:
         return stream.iterator.StreamIterator(self.score)
 
     def get_chord_seg_target(self):
+        """
+        Search target (answer) for this piece
+
+        :rtype: list of tuples of chord name and offset
+        """
         input_path = '../data/data_answer' + '/' + self.name + '.pydata'
         with open(input_path, 'rb') as f:
             return pickle.load(f)
 
     def get_key_signatures(self):
+        """
+        Search key signatures for all parts of the score
+
+        :rtype: list of keySignature objects
+        """
         keysigs = []
         for item in self.score:
             try:
                 if item[1].keySignature:
+                    print(item[1].keySignature)
                     keysigs.append(item[1].keySignature)
             except (IndexError, TypeError):
                 pass

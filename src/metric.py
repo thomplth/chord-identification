@@ -1,26 +1,39 @@
-def cSeg_accuracy_hard(piece, prediction):
-    target = piece.get_cSeg_target()
+from piece import Piece
+
+
+def chord_seg_accuracy_hard(piece, prediction):
+    """
+    Naive scoring method for chord segmentation.
+    Only checks portion of correct slicing.
+
+    :rtype: score in 0-1 range
+    """
+
+    target = piece.get_chord_seg_target()
     aligned = 0
     segments = min(len(prediction), len(target))
     for i in range(segments):
         if prediction[i] == target[i][1]:
             aligned += 1
 
+    return round(aligned / len(target), 4)
 
-def cSeg_accuracy(piece, prediction):
+
+def chord_seg_accuracy(piece, prediction):
     pass
 
 
-def kSeg_accuracy(piece, prediction):
+def key_seg_accuracy(piece, prediction):
     pass
 
 
 if __name__ == "__main__":
-    pass
-    # print(chord_segmentation_accuracy())
+    p = Piece('Twinkle-Twinkle')
+    print(chord_seg_accuracy_hard(p, [0.0, 4.0, 6.0, 8.0, 10.0, 11.0]))
 
-"""
+""" reference for
 >>> music21.music21.converter.subConverters.ConverterMusicXML
+
 def parseFile(self, fp: Union[str, pathlib.Path], number=None):
     # Open from a file path; check to see if there is a pickled
     # version available and up to date; if so, open that, otherwise
