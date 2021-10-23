@@ -15,7 +15,7 @@ def kSeg_accuracy(piece, prediction):
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass
     # print(chord_segmentation_accuracy())
 
@@ -50,7 +50,4 @@ def parseFile(self, fp: Union[str, pathlib.Path], number=None):
         c.stream.metadata.movementName = fn  # this should become a Path
     self.stream = c.stream
     
-<<<<<<< HEAD
-'''
-=======
 """

@@ -18,7 +18,7 @@ def get_scale(tonic, is_major):
 # The input is currently error free: No checking is needed
 if __name__ == "__main__":
     print("Please input the scale you want. ")
-    print("E.g. for F♯ major, type 'F+'. ")
+    print("E.g. for F♯ major, type 'F#'. ")
     input_str = input("E.g. for B♭ minor, type 'b-'. \n")
     note = note_input_convertor(input_str)
     print("Unison:", note.get_note_by_interval("P1").note_str())

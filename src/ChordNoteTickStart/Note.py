@@ -10,20 +10,30 @@ class Note:
         self.accidental = accidental
 
     # Use string format to represent the note
-    def note_str(self):
-        if self.accidental == 1:
-            return self.alphabet + "♯"
-        elif self.accidental == 2:
-            return self.alphabet + "♯♯"  # 𝄪
-        elif self.accidental == 0:
-            return self.alphabet
-        elif self.accidental == -1:
-            return self.alphabet + "♭"
-        elif self.accidental == -2:
-            return self.alphabet + "♭♭"  # 𝄫
-        # Error printing
-        else:
-            return self.alphabet + "?"
+    def note_str(self, isPrintedInDos=True):
+        # If print in DOS, keep the representation as good as possible;
+        # If used by music21, keep the alignment with music21
+        sharp = "♯" if isPrintedInDos else "#"
+        flat = "♭" if isPrintedInDos else "-"
+        accidentals = ""
+        if self.accidental > 0:
+            accidentals = sharp * self.accidental
+        elif self.accidental < 0:
+            accidentals = flat * (-1 * self.accidental)
+        return self.alphabet + accidentals
+        # if self.accidental == 1:
+        #     return self.alphabet + sharp
+        # elif self.accidental == 2:
+        #     return self.alphabet + sharp + sharp  # 𝄪
+        # elif self.accidental == 0:
+        #     return self.alphabet
+        # elif self.accidental == -1:
+        #     return self.alphabet + flat
+        # elif self.accidental == -2:
+        #     return self.alphabet + flat + flat  # 𝄫
+        # # Error printing
+        # else:
+        #     return self.alphabet + "?"
 
     # Modify the accidental manually
     def modify_accidental(self, value):

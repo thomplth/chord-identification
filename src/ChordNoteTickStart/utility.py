@@ -4,7 +4,8 @@ from Note import Note
 def note_input_convertor(input_note_str):
     note_name = input_note_str[0].upper()
     note_accidental = input_note_str[1:]
-    return Note(note_name, note_accidental.count("+") - note_accidental.count("-"))
+    # Use # for sharp and - for flat (align with music21)
+    return Note(note_name, note_accidental.count("#") - note_accidental.count("-"))
 
 
 # Get the invert interval from an interval
