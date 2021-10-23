@@ -1,0 +1,609 @@
+C,,
+I,C E G,C E G B
+II,D F A,D F A C
+III,E G B,E G B D
+IV,F A C,F A C E
+V,G B D,G B D F
+bVI,Ab C Eb,
+VI,A C E,A C E G
+GVI,Ab C Eb F#,
+FVI,Ab C D F#,
+ItVI,Ab C F#,
+VII,B D F,B D F A
+DVII,,B D F Ab
+C#,,
+I,C# E# G#,C# E# G# B#
+II,D# F# A#,D# F# A# C#
+III,E# G# B#,E# G# B# D#
+IV,F# A# C#,F# A# C# E#
+V,G# B# D#,G# B# D# F#
+bVI,A C# E,
+VI,A# C# E#,A# C# E# G#
+GVI,A C# E F##,
+FVI,A C# D# F##,
+ItVI,A C# F##,
+VII,B# D# F#,B# D# F# A#
+DVII,,B# D# F# A
+Cb,,
+I,Cb Eb Gb,Cb Eb Gb Bb
+II,Db Fb Ab,Db Fb Ab Cb
+III,Eb Gb Bb,Eb Gb Bb Db
+IV,Fb Ab Cb,Fb Ab Cb Eb
+V,Gb Bb Db,Gb Bb Db Fb
+bVI,Abb Cb Ebb,
+VI,Ab Cb Eb,Ab Cb Eb Gb
+GVI,Abb Cb Ebb F,
+FVI,Abb Cb Db F,
+ItVI,Abb Cb F,
+VII,Bb Db Fb,Bb Db Fb Ab
+DVII,,Bb Db Fb Abb
+D,,
+I,D F# A,D F# A C#
+II,E G B,E G B D
+III,F# A C#,F# A C# E
+IV,G B D,G B D F#
+V,A C# E,A C# E G
+bVI,Bb D F,
+VI,B D F#,B D F# A
+GVI,Bb D F G#,
+FVI,Bb D E G#,
+ItVI,Bb D G#,
+VII,C# E G,C# E G B
+DVII,,C# E G Bb
+D#,,
+I,D# F## A#,D# F## A# C##
+II,E# G# B#,E# G# B# D#
+III,F## A# C##,F## A# C## E#
+IV,G# B# D#,G# B# D# F##
+V,A# C## E#,A# C## E# G#
+bVI,B D# F#,
+VI,B# D# F##,B# D# F## A#
+GVI,B D# F# G##,
+FVI,B D# E# G##,
+ItVI,B D# G##,
+VII,C## E# G#,C## E# G# B#
+DVII,,C## E# G# B
+Db,,
+I,Db F Ab,Db F Ab C
+II,Eb Gb Bb,Eb Gb Bb Db
+III,F Ab C,F Ab C Eb
+IV,Gb Bb Db,Gb Bb Db F
+V,Ab C Eb,Ab C Eb Gb
+bVI,Bbb Db Fb,
+VI,Bb Db F,Bb Db F Ab
+GVI,Bbb Db Fb G,
+FVI,Bbb Db Eb G,
+ItVI,Bbb Db G,
+VII,C Eb Gb,C Eb Gb Bb
+DVII,,C Eb Gb Bbb
+E,,
+I,E G# B,E G# B D#
+II,F# A C#,F# A C# E
+III,G# B D#,G# B D# F#
+IV,A C# E,A C# E G#
+V,B D# F#,B D# F# A
+bVI,C E G,
+VI,C# E G#,C# E G# B
+GVI,C E G A#,
+FVI,C E F# A#,
+ItVI,C E A#,
+VII,D# F# A,D# F# A C#
+DVII,,D# F# A C
+E#,,
+I,E# G## B#,E# G## B# D##
+II,F## A# C##,F## A# C## E#
+III,G## B# D##,G## B# D## F##
+IV,A# C## E#,A# C## E# G##
+V,B# D## F##,B# D## F## A#
+bVI,C# E# G#,
+VI,C## E# G##,C## E# G## B#
+GVI,C# E# G# A##,
+FVI,C# E# F## A##,
+ItVI,C# E# A##,
+VII,D## F## A#,D## F## A# C##
+DVII,,D## F## A# C#
+Eb,,
+I,Eb G Bb,Eb G Bb D
+II,F Ab C,F Ab C Eb
+III,G Bb D,G Bb D F
+IV,Ab C Eb,Ab C Eb G
+V,Bb D F,Bb D F Ab
+bVI,Cb Eb Gb,
+VI,C Eb G,C Eb G Bb
+GVI,Cb Eb Gb A,
+FVI,Cb Eb F A,
+ItVI,Cb Eb A,
+VII,D F Ab,D F Ab C
+DVII,,D F Ab Cb
+F,,
+I,F A C,F A C E
+II,G Bb D,G Bb D F
+III,A C E,A C E G
+IV,Bb D F,Bb D F A
+V,C E G,C E G Bb
+bVI,Db F Ab,
+VI,D F A,D F A C
+GVI,Db F Ab B,
+FVI,Db F G B,
+ItVI,Db F B,
+VII,E G Bb,E G Bb D
+DVII,,E G Bb Db
+F#,,
+I,F# A# C#,F# A# C# E#
+II,G# B D#,G# B D# F#
+III,A# C# E#,A# C# E# G#
+IV,B D# F#,B D# F# A#
+V,C# E# G#,C# E# G# B
+bVI,D F# A,
+VI,D# F# A#,D# F# A# C#
+GVI,D F# A B#,
+FVI,D F# G# B#,
+ItVI,D F# B#,
+VII,E# G# B,E# G# B D#
+DVII,,E# G# B D
+Fb,,
+I,Fb Ab Cb,Fb Ab Cb Eb
+II,Gb Bbb Db,Gb Bbb Db Fb
+III,Ab Cb Eb,Ab Cb Eb Gb
+IV,Bbb Db Fb,Bbb Db Fb Ab
+V,Cb Eb Gb,Cb Eb Gb Bbb
+bVI,Dbb Fb Abb,
+VI,Db Fb Ab,Db Fb Ab Cb
+GVI,Dbb Fb Abb Bb,
+FVI,Dbb Fb Gb Bb,
+ItVI,Dbb Fb Bb,
+VII,Eb Gb Bbb,Eb Gb Bbb Db
+DVII,,Eb Gb Bbb Dbb
+G,,
+I,G B D,G B D F#
+II,A C E,A C E G
+III,B D F#,B D F# A
+IV,C E G,C E G B
+V,D F# A,D F# A C
+bVI,Eb G Bb,
+VI,E G B,E G B D
+GVI,Eb G Bb C#,
+FVI,Eb G A C#,
+ItVI,Eb G C#,
+VII,F# A C,F# A C E
+DVII,,F# A C Eb
+G#,,
+I,G# B# D#,G# B# D# F##
+II,A# C# E#,A# C# E# G#
+III,B# D# F##,B# D# F## A#
+IV,C# E# G#,C# E# G# B#
+V,D# F## A#,D# F## A# C#
+bVI,E G# B,
+VI,E# G# B#,E# G# B# D#
+GVI,E G# B C##,
+FVI,E G# A# C##,
+ItVI,E G# C##,
+VII,F## A# C#,F## A# C# E#
+DVII,,F## A# C# E
+Gb,,
+I,Gb Bb Db,Gb Bb Db F
+II,Ab Cb Eb,Ab Cb Eb Gb
+III,Bb Db F,Bb Db F Ab
+IV,Cb Eb Gb,Cb Eb Gb Bb
+V,Db F Ab,Db F Ab Cb
+bVI,Ebb Gb Bbb,
+VI,Eb Gb Bb,Eb Gb Bb Db
+GVI,Ebb Gb Bbb C,
+FVI,Ebb Gb Ab C,
+ItVI,Ebb Gb C,
+VII,F Ab Cb,F Ab Cb Eb
+DVII,,F Ab Cb Ebb
+A,,
+I,A C# E,A C# E G#
+II,B D F#,B D F# A
+III,C# E G#,C# E G# B
+IV,D F# A,D F# A C#
+V,E G# B,E G# B D
+bVI,F A C,
+VI,F# A C#,F# A C# E
+GVI,F A C D#,
+FVI,F A B D#,
+ItVI,F A D#,
+VII,G# B D,G# B D F#
+DVII,,G# B D F
+A#,,
+I,A# C## E#,A# C## E# G##
+II,B# D# F##,B# D# F## A#
+III,C## E# G##,C## E# G## B#
+IV,D# F## A#,D# F## A# C##
+V,E# G## B#,E# G## B# D#
+bVI,F# A# C#,
+VI,F## A# C##,F## A# C## E#
+GVI,F# A# C# D##,
+FVI,F# A# B# D##,
+ItVI,F# A# D##,
+VII,G## B# D#,G## B# D# F##
+DVII,,G## B# D# F#
+Ab,,
+I,Ab C Eb,Ab C Eb G
+II,Bb Db F,Bb Db F Ab
+III,C Eb G,C Eb G Bb
+IV,Db F Ab,Db F Ab C
+V,Eb G Bb,Eb G Bb Db
+bVI,Fb Ab Cb,
+VI,F Ab C,F Ab C Eb
+GVI,Fb Ab Cb D,
+FVI,Fb Ab Bb D,
+ItVI,Fb Ab D,
+VII,G Bb Db,G Bb Db F
+DVII,,G Bb Db Fb
+B,,
+I,B D# F#,B D# F# A#
+II,C# E G#,C# E G# B
+III,D# F# A#,D# F# A# C#
+IV,E G# B,E G# B D#
+V,F# A# C#,F# A# C# E
+bVI,G B D,
+VI,G# B D#,G# B D# F#
+GVI,G B D E#,
+FVI,G B C# E#,
+ItVI,G B E#,
+VII,A# C# E,A# C# E G#
+DVII,,A# C# E G
+B#,,
+I,B# D## F##,B# D## F## A##
+II,C## E# G##,C## E# G## B#
+III,D## F## A##,D## F## A## C##
+IV,E# G## B#,E# G## B# D##
+V,F## A## C##,F## A## C## E#
+bVI,G# B# D#,
+VI,G## B# D##,G## B# D## F##
+GVI,G# B# D# E##,
+FVI,G# B# C## E##,
+ItVI,G# B# E##,
+VII,A## C## E#,A## C## E# G##
+DVII,,A## C## E# G#
+Bb,,
+I,Bb D F,Bb D F A
+II,C Eb G,C Eb G Bb
+III,D F A,D F A C
+IV,Eb G Bb,Eb G Bb D
+V,F A C,F A C Eb
+bVI,Gb Bb Db,
+VI,G Bb D,G Bb D F
+GVI,Gb Bb Db E,
+FVI,Gb Bb C E,
+ItVI,Gb Bb E,
+VII,A C Eb,A C Eb G
+DVII,,A C Eb Gb
+c,,
+I,C Eb G,C Eb G Bb
+I+,C E G,
+bII,Db F Ab,
+II,D F Ab,D F Ab C
+III,Eb G Bb,Eb G Bb D
+IV,F Ab C,F Ab C Eb
+IV+,F A C,
+V,G Bb D,G Bb D F
+V+,G B D,G B D F
+VI,Ab C Eb,Ab C Eb G
+GVI,Ab C Eb F#,
+FVI,Ab C D F#,
+ItVI,Ab C F#,
+VII,Bb D F,Bb D F Ab
+DVII,,B D F Ab
+c#,,
+I,C# E G#,C# E G# B
+I+,C# E# G#,
+bII,D F# A,
+II,D# F# A,D# F# A C#
+III,E G# B,E G# B D#
+IV,F# A C#,F# A C# E
+IV+,F# A# C#,
+V,G# B D#,G# B D# F#
+V+,G# B# D#,G# B# D# F#
+VI,A C# E,A C# E G#
+GVI,A C# E F##,
+FVI,A C# D# F##,
+ItVI,A C# F##,
+VII,B D# F#,B D# F# A
+DVII,,B# D# F# A
+cb,,
+I,Cb Ebb Gb,Cb Ebb Gb Bbb
+I+,Cb Eb Gb,
+bII,Dbb Fb Abb,
+II,Db Fb Abb,Db Fb Abb Cb
+III,Ebb Gb Bbb,Ebb Gb Bbb Db
+IV,Fb Abb Cb,Fb Abb Cb Ebb
+IV+,Fb Ab Cb,
+V,Gb Bbb Db,Gb Bbb Db Fb
+V+,Gb Bb Db,Gb Bb Db Fb
+VI,Abb Cb Ebb,Abb Cb Ebb Gb
+GVI,Abb Cb Ebb F,
+FVI,Abb Cb Db F,
+ItVI,Abb Cb F,
+VII,Bbb Db Fb,Bbb Db Fb Abb
+DVII,,Bb Db Fb Abb
+d,,
+I,D F A,D F A C
+I+,D F# A,
+bII,Eb G Bb,
+II,E G Bb,E G Bb D
+III,F A C,F A C E
+IV,G Bb D,G Bb D F
+IV+,G B D,
+V,A C E,A C E G
+V+,A C# E,A C# E G
+VI,Bb D F,Bb D F A
+GVI,Bb D F G#,
+FVI,Bb D E G#,
+ItVI,Bb D G#,
+VII,C E G,C E G Bb
+DVII,,C# E G Bb
+d#,,
+I,D# F# A#,D# F# A# C#
+I+,D# F## A#,
+bII,E G# B,
+II,E# G# B,E# G# B D#
+III,F# A# C#,F# A# C# E#
+IV,G# B D#,G# B D# F#
+IV+,G# B# D#,
+V,A# C# E#,A# C# E# G#
+V+,A# C## E#,A# C## E# G#
+VI,B D# F#,B D# F# A#
+GVI,B D# F# G##,
+FVI,B D# E# G##,
+ItVI,B D# G##,
+VII,C# E# G#,C# E# G# B
+DVII,,C## E# G# B
+db,,
+I,Db Fb Ab,Db Fb Ab Cb
+I+,Db F Ab,
+bII,Ebb Gb Bbb,
+II,Eb Gb Bbb,Eb Gb Bbb Db
+III,Fb Ab Cb,Fb Ab Cb Eb
+IV,Gb Bbb Db,Gb Bbb Db Fb
+IV+,Gb Bb Db,
+V,Ab Cb Eb,Ab Cb Eb Gb
+V+,Ab C Eb,Ab C Eb Gb
+VI,Bbb Db Fb,Bbb Db Fb Ab
+GVI,Bbb Db Fb G,
+FVI,Bbb Db Eb G,
+ItVI,Bbb Db G,
+VII,Cb Eb Gb,Cb Eb Gb Bbb
+DVII,,C Eb Gb Bbb
+e,,
+I,E G B,E G B D
+I+,E G# B,
+bII,F A C,
+II,F# A C,F# A C E
+III,G B D,G B D F#
+IV,A C E,A C E G
+IV+,A C# E,
+V,B D F#,B D F# A
+V+,B D# F#,B D# F# A
+VI,C E G,C E G B
+GVI,C E G A#,
+FVI,C E F# A#,
+ItVI,C E A#,
+VII,D F# A,D F# A C
+DVII,,D# F# A C
+e#,,
+I,E# G# B#,E# G# B# D#
+I+,E# G## B#,
+bII,F# A# C#,
+II,F## A# C#,F## A# C# E#
+III,G# B# D#,G# B# D# F##
+IV,A# C# E#,A# C# E# G#
+IV+,A# C## E#,
+V,B# D# F##,B# D# F## A#
+V+,B# D## F##,B# D## F## A#
+VI,C# E# G#,C# E# G# B#
+GVI,C# E# G# A##,
+FVI,C# E# F## A##,
+ItVI,C# E# A##,
+VII,D# F## A#,D# F## A# C#
+DVII,,D## F## A# C#
+eb,,
+I,Eb Gb Bb,Eb Gb Bb Db
+I+,Eb G Bb,
+bII,Fb Ab Cb,
+II,F Ab Cb,F Ab Cb Eb
+III,Gb Bb Db,Gb Bb Db F
+IV,Ab Cb Eb,Ab Cb Eb Gb
+IV+,Ab C Eb,
+V,Bb Db F,Bb Db F Ab
+V+,Bb D F,Bb D F Ab
+VI,Cb Eb Gb,Cb Eb Gb Bb
+GVI,Cb Eb Gb A,
+FVI,Cb Eb F A,
+ItVI,Cb Eb A,
+VII,Db F Ab,Db F Ab Cb
+DVII,,D F Ab Cb
+f,,
+I,F Ab C,F Ab C Eb
+I+,F A C,
+bII,Gb Bb Db,
+II,G Bb Db,G Bb Db F
+III,Ab C Eb,Ab C Eb G
+IV,Bb Db F,Bb Db F Ab
+IV+,Bb D F,
+V,C Eb G,C Eb G Bb
+V+,C E G,C E G Bb
+VI,Db F Ab,Db F Ab C
+GVI,Db F Ab B,
+FVI,Db F G B,
+ItVI,Db F B,
+VII,Eb G Bb,Eb G Bb Db
+DVII,,E G Bb Db
+f#,,
+I,F# A C#,F# A C# E
+I+,F# A# C#,
+bII,G B D,
+II,G# B D,G# B D F#
+III,A C# E,A C# E G#
+IV,B D F#,B D F# A
+IV+,B D# F#,
+V,C# E G#,C# E G# B
+V+,C# E# G#,C# E# G# B
+VI,D F# A,D F# A C#
+GVI,D F# A B#,
+FVI,D F# G# B#,
+ItVI,D F# B#,
+VII,E G# B,E G# B D
+DVII,,E# G# B D
+fb,,
+I,Fb Abb Cb,Fb Abb Cb Ebb
+I+,Fb Ab Cb,
+bII,Gbb Bbb Dbb,
+II,Gb Bbb Dbb,Gb Bbb Dbb Fb
+III,Abb Cb Ebb,Abb Cb Ebb Gb
+IV,Bbb Dbb Fb,Bbb Dbb Fb Abb
+IV+,Bbb Db Fb,
+V,Cb Ebb Gb,Cb Ebb Gb Bbb
+V+,Cb Eb Gb,Cb Eb Gb Bbb
+VI,Dbb Fb Abb,Dbb Fb Abb Cb
+GVI,Dbb Fb Abb Bb,
+FVI,Dbb Fb Gb Bb,
+ItVI,Dbb Fb Bb,
+VII,Ebb Gb Bbb,Ebb Gb Bbb Dbb
+DVII,,Eb Gb Bbb Dbb
+g,,
+I,G Bb D,G Bb D F
+I+,G B D,
+bII,Ab C Eb,
+II,A C Eb,A C Eb G
+III,Bb D F,Bb D F A
+IV,C Eb G,C Eb G Bb
+IV+,C E G,
+V,D F A,D F A C
+V+,D F# A,D F# A C
+VI,Eb G Bb,Eb G Bb D
+GVI,Eb G Bb C#,
+FVI,Eb G A C#,
+ItVI,Eb G C#,
+VII,F A C,F A C Eb
+DVII,,F# A C Eb
+g#,,
+I,G# B D#,G# B D# F#
+I+,G# B# D#,
+bII,A C# E,
+II,A# C# E,A# C# E G#
+III,B D# F#,B D# F# A#
+IV,C# E G#,C# E G# B
+IV+,C# E# G#,
+V,D# F# A#,D# F# A# C#
+V+,D# F## A#,D# F## A# C#
+VI,E G# B,E G# B D#
+GVI,E G# B C##,
+FVI,E G# A# C##,
+ItVI,E G# C##,
+VII,F# A# C#,F# A# C# E
+DVII,,F## A# C# E
+gb,,
+I,Gb Bbb Db,Gb Bbb Db Fb
+I+,Gb Bb Db,
+bII,Abb Cb Ebb,
+II,Ab Cb Ebb,Ab Cb Ebb Gb
+III,Bbb Db Fb,Bbb Db Fb Ab
+IV,Cb Ebb Gb,Cb Ebb Gb Bbb
+IV+,Cb Eb Gb,
+V,Db Fb Ab,Db Fb Ab Cb
+V+,Db F Ab,Db F Ab Cb
+VI,Ebb Gb Bbb,Ebb Gb Bbb Db
+GVI,Ebb Gb Bbb C,
+FVI,Ebb Gb Ab C,
+ItVI,Ebb Gb C,
+VII,Fb Ab Cb,Fb Ab Cb Ebb
+DVII,,F Ab Cb Ebb
+a,,
+I,A C E,A C E G
+I+,A C# E,
+bII,Bb D F,
+II,B D F,B D F A
+III,C E G,C E G B
+IV,D F A,D F A C
+IV+,D F# A,
+V,E G B,E G B D
+V+,E G# B,E G# B D
+VI,F A C,F A C E
+GVI,F A C D#,
+FVI,F A B D#,
+ItVI,F A D#,
+VII,G B D,G B D F
+DVII,,G# B D F
+a#,,
+I,A# C# E#,A# C# E# G#
+I+,A# C## E#,
+bII,B D# F#,
+II,B# D# F#,B# D# F# A#
+III,C# E# G#,C# E# G# B#
+IV,D# F# A#,D# F# A# C#
+IV+,D# F## A#,
+V,E# G# B#,E# G# B# D#
+V+,E# G## B#,E# G## B# D#
+VI,F# A# C#,F# A# C# E#
+GVI,F# A# C# D##,
+FVI,F# A# B# D##,
+ItVI,F# A# D##,
+VII,G# B# D#,G# B# D# F#
+DVII,,G## B# D# F#
+ab,,
+I,Ab Cb Eb,Ab Cb Eb Gb
+I+,Ab C Eb,
+bII,Bbb Db Fb,
+II,Bb Db Fb,Bb Db Fb Ab
+III,Cb Eb Gb,Cb Eb Gb Bb
+IV,Db Fb Ab,Db Fb Ab Cb
+IV+,Db F Ab,
+V,Eb Gb Bb,Eb Gb Bb Db
+V+,Eb G Bb,Eb G Bb Db
+VI,Fb Ab Cb,Fb Ab Cb Eb
+GVI,Fb Ab Cb D,
+FVI,Fb Ab Bb D,
+ItVI,Fb Ab D,
+VII,Gb Bb Db,Gb Bb Db Fb
+DVII,,G Bb Db Fb
+b,,
+I,B D F#,B D F# A
+I+,B D# F#,
+bII,C E G,
+II,C# E G,C# E G B
+III,D F# A,D F# A C#
+IV,E G B,E G B D
+IV+,E G# B,
+V,F# A C#,F# A C# E
+V+,F# A# C#,F# A# C# E
+VI,G B D,G B D F#
+GVI,G B D E#,
+FVI,G B C# E#,
+ItVI,G B E#,
+VII,A C# E,A C# E G
+DVII,,A# C# E G
+b#,,
+I,B# D# F##,B# D# F## A#
+I+,B# D## F##,
+bII,C# E# G#,
+II,C## E# G#,C## E# G# B#
+III,D# F## A#,D# F## A# C##
+IV,E# G# B#,E# G# B# D#
+IV+,E# G## B#,
+V,F## A# C##,F## A# C## E#
+V+,F## A## C##,F## A## C## E#
+VI,G# B# D#,G# B# D# F##
+GVI,G# B# D# E##,
+FVI,G# B# C## E##,
+ItVI,G# B# E##,
+VII,A# C## E#,A# C## E# G#
+DVII,,A## C## E# G#
+bb,,
+I,Bb Db F,Bb Db F Ab
+I+,Bb D F,
+bII,Cb Eb Gb,
+II,C Eb Gb,C Eb Gb Bb
+III,Db F Ab,Db F Ab C
+IV,Eb Gb Bb,Eb Gb Bb Db
+IV+,Eb G Bb,
+V,F Ab C,F Ab C Eb
+V+,F A C,F A C Eb
+VI,Gb Bb Db,Gb Bb Db F
+GVI,Gb Bb Db E,
+FVI,Gb Bb C E,
+ItVI,Gb Bb E,
+VII,Ab C Eb,Ab C Eb Gb
+DVII,,A C Eb Gb
