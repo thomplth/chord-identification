@@ -8,8 +8,6 @@ def cSeg_accuracy_hard(piece, prediction):
         if prediction[i] == target[i][1]:
             aligned += 1
 
-    return round(aligned / len(target), 2)
-
 def cSeg_accuracy(piece, prediction):
     pass
 
@@ -21,7 +19,7 @@ if __name__ == '__main__':
     pass
     # print(chord_segmentation_accuracy())
 
-'''
+"""
 >>> music21.music21.converter.subConverters.ConverterMusicXML
 def parseFile(self, fp: Union[str, pathlib.Path], number=None):
     # Open from a file path; check to see if there is a pickled
@@ -52,4 +50,8 @@ def parseFile(self, fp: Union[str, pathlib.Path], number=None):
         c.stream.metadata.movementName = fn  # this should become a Path
     self.stream = c.stream
     
+<<<<<<< HEAD
 '''
+=======
+"""
+>>>>>>> fc634d2767129441883fea4e33534c24dc5fca46
