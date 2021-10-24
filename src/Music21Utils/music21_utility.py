@@ -1,5 +1,4 @@
 from music21 import *
-import time
 
 # get the name of the pieces of music
 def get_music_title(whole_stream):
@@ -13,7 +12,7 @@ def load_file(path):
 
 # TODO: output stream in Music XML format
 def export_file(whole_stream, path):
-    whole_stream.write("musicxml", fp=path)
+    whole_stream.write("mxl", fp=path)
 
 
 # reduce multiple parts to one part
@@ -58,18 +57,6 @@ def analyze_key(stream):
     # return (key.tonic, key.mode)
 
 
-start_time = time.time()
-
-# TODO: transfer the lyrics from the old file to the new file
-filename = "Nocturne_in_E_Major"
-# filename = "Chopin_F._Nocturne_in_E_Major,_Op.26_No.2"
-# filename = "Brahms_J._Waltz_in_A-Flat_Major,_Op.35_No.15"
-s1 = load_file("../../data/" + filename + ".mxl")
-chordify_s1 = chordify(s1)
-
-print(get_initial_key_signature(chordify_s1))
-
-measures = get_measures(chordify_s1)
 # for measure in measures[:4]:
 #     for element in measure.recurse():
 #         print(element)
@@ -81,9 +68,6 @@ measures = get_measures(chordify_s1)
 # print(get_key_signature(s2.parts[0]))
 # print(get_key_signature(chordify(s1)))
 # key = analyze_key(s1)
-
-# Time calculation
-print("--- Used %s seconds ---" % (time.time() - start_time))
 
 # Other useful:
 # print(stream.parts[0].show("text"))

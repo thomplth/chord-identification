@@ -1,0 +1,20 @@
+# from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
+from Music21Utils.music21_utility import *
+import music21
+
+# TODO: transfer the lyrics from the old file to the new file
+# filename = "Nocturne_in_E_Major"
+# filename = "Chopin_F._Nocturne_in_E_Major,_Op.26_No.2"
+filename = "Minuet_in_F_C"
+stream = load_file("../" + filename + ".mxl")
+chordify_stream = chordify(stream)
+measures_len = len(get_measures(chordify_stream))
+print(measures_len)
+
+
+for element in stream.parts[0].recurse().getElementsByClass("Measure"):
+    notes = element.recurse().getElementsByClass("Note")
+    if len(notes) > 0:
+        notes[0].addLyric(str("x"))
+
+export_file(stream, "../result/" + filename + "test")
