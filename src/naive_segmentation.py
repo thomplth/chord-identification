@@ -1,5 +1,6 @@
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from Music21Utils.music21_utility import *
+from metric import *
 import music21
 
 # TODO: transfer the lyrics from the old file to the new file

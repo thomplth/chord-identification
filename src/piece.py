@@ -17,7 +17,7 @@ class Piece:
     def __init__(self, name):
         name = name.split('.')
         self.name = name[0]
-        self.score = converter.parse('../data/score/' + self.name + '.mxl')
+        self.score = converter.parse('../data_KY2001/score/' + self.name + '.mxl')
         # self.len = self.score.duration.quarterLength
 
     # Not sure if we should use int here, alternatively refer self.len
@@ -33,7 +33,7 @@ class Piece:
 
         :rtype: list of tuples of chord name and offset
         """
-        input_path = '../data/data_answer' + '/' + self.name + '.pydata'
+        input_path = '../data_KY2001/data_answer' + '/' + self.name + '.pydata'
         with open(input_path, 'rb') as f:
             return pickle.load(f)
 
@@ -66,4 +66,4 @@ if __name__ == '__main__':
     # print(len(p))
     # print(p.len)
     # p.write()
-    print(p.get_key_signatures())
+    print(p.get_chord_seg_target())
