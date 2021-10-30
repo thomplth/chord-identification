@@ -17,8 +17,8 @@ if __name__ == "__main__":
             note = base_notes[i % base_notes_len]
             interval = intervals[i % intervals_len]
             new_note = music21.pitch.Pitch(note).transpose(interval)
-            # if i < 10:
-            #     print(new_note.name)
+            if i < 10:
+                print(new_note.name)
 
         # Time calculation
         print(
@@ -36,8 +36,8 @@ if __name__ == "__main__":
             note = note_input_convertor(m21_note.name)
             interval = intervals[i % intervals_len]
             new_note = note.get_note_by_interval(interval)
-            # if i < 10:
-            #     print(music21.note.Note(new_note.note_str(False)))
+            if i < 10:
+                print(music21.note.Note(new_note.note_str(False)))
 
         # Time calculation
         print(

@@ -6,8 +6,8 @@ import music21
 # TODO: transfer the lyrics from the old file to the new file
 # filename = "Nocturne_in_E_Major"
 # filename = "Chopin_F._Nocturne_in_E_Major,_Op.26_No.2"
-# stream = load_file("../Minuet_in_F_C.mxl")
-stream = load_file("../data/anonymous_Twinkle_Twinkle.mxl")
+stream = load_file("../Gymnopdie_n1_-_E._Satie.mxl")
+# stream = load_file("../data/" + filename + ".mxl")
 
 chordify_stream = chordify(stream)
 measures_len = len(get_measures(chordify_stream))
@@ -30,4 +30,5 @@ for element in stream.recurse().getElementsByClass("Measure"):
     print("----")
 
 # export_file(stream, "../result/Minuet_in_F_C_test")
-export_file(stream, "../result/anonymous_Twinkle_Twinkle_test")
+# export_file(stream, "../result/anonymous_Twinkle_Twinkle_test")
+export_file(stream, "../result/test1")
