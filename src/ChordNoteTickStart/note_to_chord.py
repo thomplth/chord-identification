@@ -1,6 +1,7 @@
 from constant import *
 from utility import note_input_convertor, invert_interval
 from chord_to_note import pick_chord
+import Note
 import sys
 import time
 from itertools import combinations
@@ -107,7 +108,8 @@ def match_chords_patterns(notes, notes_intervals):
 
 
 # Find chords in 'recursive' way
-def find_chords(notes):
+# If bass_note is required, input the object reference of the bass note. The simple way to do so is put bass_note = notes[0]
+def find_chords(notes, bass_note=None):
     # do sorting
     notes.sort(key=lambda x: (x.alphabet, x.accidental))
     res = []
@@ -119,6 +121,11 @@ def find_chords(notes):
             continue
         # for each combination, search if it satisfy the pattern of chords
         for combo in list(combinations(notes, note_num)):
+            # Check if bass note exists in the combination:
+            if not (bass_note == None):
+                if not (bass_note in combo):
+                    continue
+
             # Then generate the intervals
             notes_intervals = get_adjacent_intervals(combo)
             res += match_chords_patterns(list(combo), notes_intervals)
