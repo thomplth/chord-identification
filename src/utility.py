@@ -8,10 +8,16 @@ def note_input_convertor(input_note_str):
     return Note(note_name, note_accidental.count("#") - note_accidental.count("-"))
 
 
-# Convert Music21.note.Note to Custom Note object
-def note_object_simplifier(m21_notes):
+# Convert Music21.note.Note to note string
+def note_name_simplifier(m21_notes):
     m21_notes_names = [m21_note.name for m21_note in m21_notes]
     unique_notes_names = list(set(m21_notes_names))
+    return unique_notes_names
+
+
+# Convert Music21.note.Note to Custom Note object
+def note_object_simplifier(m21_notes):
+    unique_notes_names = note_name_simplifier(m21_notes)
     return [note_input_convertor(note) for note in unique_notes_names]
 
 

@@ -106,3 +106,5 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
 # GerVI and FrVI special cases:
 MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
 MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]
+
+NOTES_VARIATION_THRESHOLD = 4
