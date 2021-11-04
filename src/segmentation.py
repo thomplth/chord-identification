@@ -31,7 +31,7 @@ def notes_variation(notes):
     return len(list(set(notes)))
 
 
-def merge_segment(segments):
+def merge_chord_segment(segments):
     res = [segments[0]]
     for idx in range(1, len(segments)):
         previous_segment = res.pop()
