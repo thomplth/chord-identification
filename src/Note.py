@@ -35,6 +35,10 @@ class Note:
         # else:
         #     return self.alphabet + "?"
 
+    # Give pitch class of a note
+    def get_pitch_class(self):
+        return (NOTE_DICT[self.alphabet] + self.accidental) % 12
+
     # Modify the accidental manually
     def modify_accidental(self, value):
         self.accidental += value

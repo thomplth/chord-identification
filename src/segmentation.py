@@ -1,6 +1,6 @@
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from Music21Utils.music21_utility import *
-from utility import note_name_simplifier
+from utility import note_name_simplifier, note_input_convertor
 from constant import NOTES_VARIATION_THRESHOLD
 from metric import *
 
@@ -51,3 +51,19 @@ def merge_chord_segment(segments):
             res.append(current_segment)
 
     return res
+
+
+def chromagram(chordify_partial_stream):
+    pitch_class = [0 for i in range(12)]
+    for measure in chordify_partial_stream.recurse().getElementsByClass("Measure"):
+        chords = measure.recurse().getElementsByClass("Chord")
+        if len(chords) > 0:
+            for chord in chords:
+                notes = list(chord.notes)
+                notes_names = note_name_simplifier(notes, False)
+                for name in notes_names:
+                    note_class = note_input_convertor(name).get_pitch_class()
+                    pitch_class[note_class] += 1
+        # print(measure, pitch_class)
+
+    return pitch_class
