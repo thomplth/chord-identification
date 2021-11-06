@@ -6,7 +6,7 @@ from constant import NOTES_VARIATION_THRESHOLD
 from metric import *
 
 
-def segmentation(chordify_stream, time_signature):
+def uniform_segmentation(chordify_stream, time_signature):
     segments = []
     for measure in chordify_stream.recurse().getElementsByClass("Measure"):
         measure_offset = measure.offset
@@ -14,7 +14,6 @@ def segmentation(chordify_stream, time_signature):
         if len(chords) > 0:
             # notes[0].addLyric(str("x"))
             for chord in chords:
-                # uniform segmentation
                 mark = int(chord.offset) - chord.offset % time_signature.numerator == 0
                 chord_offset = measure_offset + int(chord.offset)
 
@@ -80,3 +79,13 @@ def chromagram(partial_stream, steedman=False):
         return [(1.0 if pitch > 0 else 0.0) for pitch in pitch_class]
 
     return pitch_class
+
+
+# for each measure return the chromagram of the measure
+def key_segmentation(stream):
+    result = []
+    for measure in get_measures(stream):
+        chroma = chromagram(measure)
+        # TODO: map the same measure in different stream into the same vector
+        result.append(chroma)
+    return result
