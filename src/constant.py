@@ -107,4 +107,5 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
 MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
 MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]
 
+# the threshold that determine if a segment can be given a chord label
 NOTES_VARIATION_THRESHOLD = 4

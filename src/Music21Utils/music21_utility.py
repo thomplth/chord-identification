@@ -20,6 +20,7 @@ def chordify(whole_stream):
     return whole_stream.chordify()
 
 
+# returns a new Stream that has all sub-containers “flattened” within it
 def flatten(whole_stream):
     return whole_stream.flatten()
 
@@ -53,11 +54,10 @@ def get_initial_time_signature(chordified_stream):
     return times[0]
 
 
+# music21 initial key analyzer
 def analyze_key(stream):
     key = stream.analyze("key")
-    return key
-    # OR: return a tuple (Tonic, major/minor)
-    # return (key.tonic, key.mode)
+    return (key.tonic, key.mode)
 
 
 # for measure in measures[:4]:

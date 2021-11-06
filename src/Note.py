@@ -21,19 +21,6 @@ class Note:
         elif self.accidental < 0:
             accidentals = flat * (-1 * self.accidental)
         return self.alphabet + accidentals
-        # if self.accidental == 1:
-        #     return self.alphabet + sharp
-        # elif self.accidental == 2:
-        #     return self.alphabet + sharp + sharp  # 𝄪
-        # elif self.accidental == 0:
-        #     return self.alphabet
-        # elif self.accidental == -1:
-        #     return self.alphabet + flat
-        # elif self.accidental == -2:
-        #     return self.alphabet + flat + flat  # 𝄫
-        # # Error printing
-        # else:
-        #     return self.alphabet + "?"
 
     # Give pitch class of a note
     def get_pitch_class(self):

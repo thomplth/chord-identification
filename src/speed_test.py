@@ -17,6 +17,7 @@ intervals_len = len(intervals)
 
 if __name__ == "__main__":
 
+    # TEST 1: Note generation by interval test
     trial_num = base_notes_len * intervals_len
 
     def use_music21_interval_test():
@@ -61,6 +62,7 @@ if __name__ == "__main__":
         if not (result1[idx] == result2[idx]):
             print("Error: ", result1[idx], result2[idx])
 
+    # Test 2: Interval calculation test
     trial_num = len(list(combinations(m21_notes, 2)))
     print(trial_num)
 

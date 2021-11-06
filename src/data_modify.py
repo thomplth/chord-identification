@@ -1,7 +1,8 @@
 from Music21Utils.music21_utility import *
 
+# This file is just for retrieved the data for corrupted mxl files
+# which does nothing on the chord identification system
 
-# TODO: transfer the lyrics from the old file to the new file
 filename = "Nocturne_in_E_Major"
 old_stream = load_file("../data/" + filename + ".mxl")
 # filename = "Chopin_F._Nocturne_in_E_Major,_Op.26_No.2"
