@@ -1,5 +1,6 @@
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from Music21Utils.music21_utility import *
+import music21
 from utility import note_name_simplifier, note_input_convertor
 from constant import NOTES_VARIATION_THRESHOLD
 from metric import *
@@ -53,17 +54,29 @@ def merge_chord_segment(segments):
     return res
 
 
-def chromagram(chordify_partial_stream):
-    pitch_class = [0 for i in range(12)]
-    for measure in chordify_partial_stream.recurse().getElementsByClass("Measure"):
-        chords = measure.recurse().getElementsByClass("Chord")
-        if len(chords) > 0:
-            for chord in chords:
-                notes = list(chord.notes)
-                notes_names = note_name_simplifier(notes, False)
-                for name in notes_names:
-                    note_class = note_input_convertor(name).get_pitch_class()
-                    pitch_class[note_class] += 1
-        # print(measure, pitch_class)
+# Steedman means flatten the output vector
+def chromagram(partial_stream, steedman=False):
+    pitch_class = [0.0 for _ in range(12)]
+    for element in list(flatten(partial_stream).elements):
+        m21_notes = []
+        # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
+        if isinstance(element, chord.Chord) and not isinstance(
+            element, harmony.ChordSymbol
+        ):
+            m21_notes = list(element.notes)
+        elif isinstance(element, note.Note):
+            m21_notes = [element]
+        else:
+            continue
+
+        for m21_note in m21_notes:
+            name = m21_note.name
+            duration = m21_note.duration.quarterLength
+            note_class = note_input_convertor(name).get_pitch_class()
+            pitch_class[note_class] += duration
+
+    # flatten vector
+    if steedman:
+        return [(1.0 if pitch > 0 else 0.0) for pitch in pitch_class]
 
     return pitch_class

@@ -14,8 +14,8 @@ filename = "anonymous_Twinkle_Twinkle"
 stream = load_file("../data/" + filename + ".mxl")
 
 chordify_stream = chordify(stream)
+
 time_signature = get_initial_time_signature(chordify_stream)
-# print(time_signature.numerator)
 key_signature = get_initial_key_signature(chordify_stream)
 scale_name = (
     key_signature.tonic.name.lower()
@@ -23,17 +23,17 @@ scale_name = (
     else key_signature.tonic.name.upper()
 )
 print(scale_name)
+chromagram = chromagram(stream.measures(0, 8))
+print(chromagram)
 
-print(chromagram(chordify_stream.measures(0, 8)))
-
-# segments = segmentation(chordify_stream, time_signature)
-# combined_segments = merge_chord_segment(segments)
-# for segment in combined_segments:
-#     # print(segment[0], [note for note in segment[1]], notes_variation(segment[1]))
-#     notes = [note_input_convertor(note) for note in segment[1]]
-#     result = find_chords(notes)
-#     print(">>>", segment[0])
-#     print_chords_names(notes, result, scale_name)
+segments = segmentation(chordify_stream, time_signature)
+combined_segments = merge_chord_segment(segments)
+for segment in combined_segments:
+    # print(segment[0], [note for note in segment[1]], notes_variation(segment[1]))
+    notes = [note_input_convertor(note) for note in segment[1]]
+    result = find_chords(notes)
+    print(">>>", segment[0])
+    print_chords_names(notes, result, scale_name)
 
 
 # export_file(stream, "../result/Minuet_in_F_C_test")

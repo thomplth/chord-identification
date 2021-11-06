@@ -18,7 +18,10 @@ def export_file(whole_stream, path):
 # reduce multiple parts to one part
 def chordify(whole_stream):
     return whole_stream.chordify()
-    # TODO: make the notes closer using closedPosition()
+
+
+def flatten(whole_stream):
+    return whole_stream.flatten()
 
 
 # get the measures (in list) in the stream
