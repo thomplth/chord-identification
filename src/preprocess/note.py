@@ -1,4 +1,4 @@
-from constant import (
+from utility.constant import (
     HEPTATONIC_DICTIONARY as NOTE_DICT,
     MAJOR_SEMITONE_CUMULATIVE_PATTERN as SEMITONES_CP,
 )

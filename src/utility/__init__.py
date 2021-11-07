@@ -1,4 +1,4 @@
-from Note import Note
+from preprocess.note import Note
 
 # Convert the note inputted in string to a Note object
 def note_input_convertor(input_note_str):

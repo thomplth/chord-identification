@@ -1,4 +1,4 @@
-from piece import Piece
+from preprocess.piece import Piece
 
 
 def chord_seg_accuracy_hard(piece, prediction):

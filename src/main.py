@@ -3,11 +3,12 @@ import configparser
 import csv
 import os
 
-from Music21Utils.music21_utility import *
+from utility.m21_utility import *
 # from utility import note_input_convertor
 from segmentation import *
-from key_identification import determine_key
+from identification.key_identification import determine_key
 # from note_to_chord import find_chords, print_chords_names
+
 
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.join(os.path.dirname(__file__), 'config.ini'))

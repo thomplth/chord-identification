@@ -1,4 +1,4 @@
-from constant import *
+from utility.constant import *
 from utility import note_input_convertor
 
 

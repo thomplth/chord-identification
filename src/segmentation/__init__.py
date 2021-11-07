@@ -1,9 +1,9 @@
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
-from Music21Utils.music21_utility import *
+from utility.m21_utility import *
 import music21
 from utility import note_name_simplifier, note_input_convertor
-from constant import NOTES_VARIATION_THRESHOLD
-from metric import *
+from utility.constant import NOTES_VARIATION_THRESHOLD
+from test.metric import *
 import numpy as np
 
 # top-down approach of chord segmentation

@@ -1,4 +1,4 @@
-from Music21Utils.music21_utility import *
+from utility.m21_utility import *
 
 # This file is just for retrieved the data for corrupted mxl files
 # which does nothing on the chord identification system
