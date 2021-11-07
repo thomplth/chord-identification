@@ -4,6 +4,7 @@ import music21
 from utility import note_name_simplifier, note_input_convertor
 from constant import NOTES_VARIATION_THRESHOLD
 from metric import *
+import numpy as np
 
 # top-down approach of chord segmentation
 def uniform_segmentation(chordify_stream, time_signature):
@@ -91,9 +92,14 @@ def chromagram(partial_stream, steedman=False):
 
 # for each measure return the chromagram of the measure
 def key_segmentation(stream):
-    result = []
+    result = {}
     for measure in get_measures(stream):
-        chroma = chromagram(measure)
-        # TODO: map the same measure in different stream into the same vector
-        result.append(chroma)
+        idx = measure.number  # or offset?
+        np_chroma = np.array(chromagram(measure))
+
+        # map the same measure in different stream into the same vector
+        if idx in result:
+            result[idx] = result[idx] + np_chroma
+        else:
+            result[idx] = np_chroma
     return result
