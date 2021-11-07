@@ -75,7 +75,7 @@ def determine_key(measures_dictionary):
     queue = []
     measures_possible_key = {}
     two_measures_chroma = np.zeros(12)
-    # four_measures_chroma = np.zeros(12)
+    four_measures_chroma = np.zeros(12)
 
     # identification of keys
     for idx, chroma in measures_dictionary.items():
@@ -86,23 +86,23 @@ def determine_key(measures_dictionary):
         measures_possible_key[idx] = [key_1_measure]
 
         two_measures_chroma += chroma
-        # four_measures_chroma += chroma
+        four_measures_chroma += chroma
 
         # Determine key within TWO measures
-        if len(queue) == 2:
+        if len(queue) >= 2:
             key_2_measure = find_key(two_measures_chroma)
             for i in queue:
                 measures_possible_key[i].append(key_2_measure)
-            old_measure_idx = queue.pop(0)
-            two_measures_chroma -= measures_dictionary[old_measure_idx]
+            # old_measure_idx = queue.pop(0)
+            two_measures_chroma -= measures_dictionary[queue[0]]
 
         # Determine key within FOUR measures
-        # if len(queue) == 4:
-        #     key_4_measure = find_key(four_measures_chroma)
-        #     for i in queue:
-        #         measures_possible_key[i].append(key_4_measure)
-        #     old_measure_idx = queue.pop(0)
-        #     four_measures_chroma -= measures_dictionary[old_measure_idx]
+        if len(queue) == 4:
+            key_4_measure = find_key(four_measures_chroma)
+            for i in queue:
+                measures_possible_key[i].append(key_4_measure)
+            old_measure_idx = queue.pop(0)
+            four_measures_chroma -= measures_dictionary[old_measure_idx]
 
     # selection of key
     measures_key = {}

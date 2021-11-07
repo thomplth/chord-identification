@@ -12,7 +12,7 @@ start_time = time.time()
 # stream = load_file("../Gymnopdie_n1_-_E._Satie.mxl")
 # stream = load_file("../Minuet_in_F_C.mxl")
 filename = "anonymous_Twinkle_Twinkle"
-# filename = "Chopin_F._Nocturne_in_E_Minor,_Op.72_No.1"
+filename = "Chopin_F._Nocturne_in_E_Minor,_Op.72_No.1"
 stream = load_file("../data/" + filename + ".mxl")
 
 chordify_stream = chordify(stream)
