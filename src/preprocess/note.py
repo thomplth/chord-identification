@@ -1,6 +1,8 @@
 from utility.constant import (
     HEPTATONIC_DICTIONARY as NOTE_DICT,
     MAJOR_SEMITONE_CUMULATIVE_PATTERN as SEMITONES_CP,
+    SEMITONE_TO_INTERVAL_DICTIONARY,
+    INTERVAL_TO_SEMITONE_DICTIONARY,
 )
 
 
@@ -31,6 +33,7 @@ class Note:
         self.accidental += value
         return self
 
+    # TODO: Determine if should remove as it is OLD METHOD
     # It also includes prefect interval
     # distance is 1 - 7, meaning from prefect unison, P1,  to major seventh, M7
     def get_note_by_major_interval(self, distance):
@@ -47,29 +50,55 @@ class Note:
     # Here is the general one
     # quality: M (major), m (minor), P (perfect), A (augmented), d (diminished)
     def get_note_by_interval(self, interval):
-        quality = interval[0]
-        distance = int(interval[1])
-        if distance < 1 or distance > 8:
-            print("Distance Error in get_note_by_interval.")
-        if not quality in ["M", "m", "P", "A", "d"]:
-            print("Quality Error in get_note_by_interval.")
-        new_note = self.get_note_by_major_interval((distance - 1) % 7 + 1)
+        def new_method():
+            if interval in INTERVAL_TO_SEMITONE_DICTIONARY:
+                alphabetical_distance = int(interval[1])
+                semitone_difference = INTERVAL_TO_SEMITONE_DICTIONARY[interval]
 
-        if quality == "A":
-            new_note.modify_accidental(1)
-        elif distance in [2, 3, 6, 7]:
-            if quality == "m":
-                new_note.modify_accidental(-1)
-            elif quality == "d":
-                new_note.modify_accidental(-2)
-            elif not quality == "M":
-                print("Wrong interval name!")
-        else:
-            if quality == "d":
-                new_note.modify_accidental(-1)
-            elif not quality == "P":
-                print("Wrong interval name!")
-        return new_note
+                new_alphabet = chr(
+                    (ord(self.alphabet) - ord("A") + alphabetical_distance - 1) % 7
+                    + ord("A")
+                )
+                new_accidental = (
+                    self.get_pitch_class()
+                    + semitone_difference
+                    - NOTE_DICT[new_alphabet]
+                )
+                if new_accidental > 11:
+                    new_accidental -= 12
+
+                return Note(new_alphabet, new_accidental)
+            else:
+                print("Error in get_note_by_interval.")
+                return Note("?", 0)
+
+        # OLD METHOD
+        def old_method():
+            quality = interval[0]
+            distance = int(interval[1])
+            if distance < 1 or distance > 8:
+                print("Distance Error in get_note_by_interval.")
+            if not quality in ["M", "m", "P", "A", "d"]:
+                print("Quality Error in get_note_by_interval.")
+            new_note = self.get_note_by_major_interval((distance - 1) % 7 + 1)
+
+            if quality == "A":
+                new_note.modify_accidental(1)
+            elif distance in [2, 3, 6, 7]:
+                if quality == "m":
+                    new_note.modify_accidental(-1)
+                elif quality == "d":
+                    new_note.modify_accidental(-2)
+                elif not quality == "M":
+                    print("Wrong interval name!")
+            else:
+                if quality == "d":
+                    new_note.modify_accidental(-1)
+                elif not quality == "P":
+                    print("Wrong interval name!")
+            return new_note
+
+        return new_method()
 
     # Given two notes with ordering, return the interval
     def get_interval(self, upper_note):

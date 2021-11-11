@@ -1,5 +1,6 @@
 from utility.constant import *
 from utility import note_input_convertor
+import time
 
 import sys
 
@@ -13,8 +14,8 @@ def pick_chord(tonic, chord, is_major):
     for interval in chord_intervals:
         next_note = base_note.get_note_by_interval(interval)
         # If you get some strange notes, just DO NOT return that chord
-        if next_note.accidental > 2 or next_note.accidental < -2:
-            return None
+        # if next_note.accidental > 2 or next_note.accidental < -2:
+        #     return None
         chord_notes.append(next_note)
         base_note = next_note
     return chord_notes
@@ -40,6 +41,7 @@ def print_all_chords(tonic, is_major):
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     input_major = sys.argv[1]
     tonic = note_input_convertor(input_major)
     is_major = input_major[0].upper() == input_major[0]
@@ -50,3 +52,9 @@ if __name__ == "__main__":
         print_all_chords(tonic, is_major)
     else:
         print_chord(tonic, input_chord, is_major)
+
+    # Time calculation
+    print(
+        "--- Without using music21 library: Used %s seconds ---"
+        % (time.time() - start_time)
+    )

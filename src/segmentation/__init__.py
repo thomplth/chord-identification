@@ -1,4 +1,3 @@
-# from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from utility.m21_utility import *
 import music21
 from utility import note_name_simplifier, note_input_convertor

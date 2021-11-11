@@ -13,6 +13,26 @@ MAJOR_SEMITONE_PATTERN = [2, 2, 1, 2, 2, 2]
 # only natural minor is listed
 MINOR_SEMITONE_PATTERN = [2, 1, 2, 2, 1, 2]
 
+# Dictionary to convert semitone to interval
+SEMITONE_TO_INTERVAL_DICTIONARY = {0: ["P1", "d2"]}
+SEMITONE_TO_INTERVAL_DICTIONARY[1] = ["m2", "A1"]
+SEMITONE_TO_INTERVAL_DICTIONARY[2] = ["M2", "d3"]
+SEMITONE_TO_INTERVAL_DICTIONARY[3] = ["m3", "A2"]
+SEMITONE_TO_INTERVAL_DICTIONARY[4] = ["M3", "d4"]
+SEMITONE_TO_INTERVAL_DICTIONARY[5] = ["P4", "A3"]
+SEMITONE_TO_INTERVAL_DICTIONARY[6] = ["d5", "A4"]
+SEMITONE_TO_INTERVAL_DICTIONARY[7] = ["P5", "d6"]
+SEMITONE_TO_INTERVAL_DICTIONARY[8] = ["m6", "A5"]
+SEMITONE_TO_INTERVAL_DICTIONARY[9] = ["M6", "d7"]
+SEMITONE_TO_INTERVAL_DICTIONARY[10] = ["m7", "A6"]
+SEMITONE_TO_INTERVAL_DICTIONARY[11] = ["M7", "d8"]
+SEMITONE_TO_INTERVAL_DICTIONARY[12] = ["A7"]
+
+INTERVAL_TO_SEMITONE_DICTIONARY = {}
+for semitone, intervals in SEMITONE_TO_INTERVAL_DICTIONARY.items():
+    for interval in intervals:
+        INTERVAL_TO_SEMITONE_DICTIONARY[interval] = semitone
+
 # Key: chord name, value: array of intervals, where the first is the interval between the tonic and the first note,
 # and the rest are the interval between the previous and the next note
 MAJOR_CHORD_DICTIONARY = {"I": ["P1", "M3", "m3"]}
@@ -55,26 +75,7 @@ MINOR_CHORD_DICTIONARY["VII"] = ["m7", "M3", "m3"]
 MINOR_CHORD_DICTIONARY["VIIdim"] = MAJOR_CHORD_DICTIONARY["VIIdim"]
 MINOR_CHORD_DICTIONARY["VIIdim7"] = MAJOR_CHORD_DICTIONARY["VIIdim7"]
 
-# General one
-# CHORD_DICTIONARY = MAJOR_CHORD_DICTIONARY.copy()
-# for chord, pattern in MINOR_CHORD_DICTIONARY.items():
-#     if chord not in CHORD_DICTIONARY:
-#         CHORD_DICTIONARY[chord] = pattern
-
 # Dictionary for note to chord
-# CHORD_FINDER_DICTIONARY = {}
-# for chord, pattern in CHORD_DICTIONARY.items():
-#     chord_pattern = tuple(pattern[1:])
-#     # print(chord, pattern[0], chord_pattern)
-#     if chord_pattern in CHORD_FINDER_DICTIONARY:
-#         CHORD_FINDER_DICTIONARY[chord_pattern].append(
-#             {"chord": chord, "tonic_interval": pattern[0]}
-#         )
-#     else:
-#         CHORD_FINDER_DICTIONARY[chord_pattern] = [
-#             {"chord": chord, "tonic_interval": pattern[0]}
-#         ]
-
 MAJOR_CHORD_FINDER_DICTIONARY = {}
 for chord, pattern in MAJOR_CHORD_DICTIONARY.items():
     chord_pattern = tuple(pattern[1:])
