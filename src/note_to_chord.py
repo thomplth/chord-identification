@@ -1,7 +1,8 @@
 from utility.constant import *
 from utility import note_input_convertor, invert_interval
 from chord_to_note import pick_chord
-from preprocess.note import Note
+
+# from preprocess.note import Note
 import sys
 import time
 from itertools import combinations
