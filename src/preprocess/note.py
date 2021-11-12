@@ -33,9 +33,9 @@ class Note:
         self.accidental += value
         return self
 
-    # TODO: Determine if should remove as it is OLD METHOD
+    # TODO: Can omit it
     # It also includes prefect interval
-    # distance is 1 - 7, meaning from prefect unison, P1,  to major seventh, M7
+    # distance is 1 - 7, meaning from prefect unison, P1, to major seventh, M7
     def get_note_by_major_interval(self, distance):
         new_alphabet = chr(
             (ord(self.alphabet) - ord("A") + distance - 1) % 7 + ord("A")
@@ -64,15 +64,18 @@ class Note:
                     + semitone_difference
                     - NOTE_DICT[new_alphabet]
                 )
-                if new_accidental > 11:
-                    new_accidental -= 12
+
+                accidental_range = 4
+                new_accidental = (
+                    new_accidental + accidental_range
+                ) % 12 - accidental_range
 
                 return Note(new_alphabet, new_accidental)
             else:
                 print("Error in get_note_by_interval.")
                 return Note("?", 0)
 
-        # OLD METHOD
+        # TODO: OLD METHOD. Can omit it
         def old_method():
             quality = interval[0]
             distance = int(interval[1])
@@ -102,29 +105,47 @@ class Note:
 
     # Given two notes with ordering, return the interval
     def get_interval(self, upper_note):
-        distance = (ord(upper_note.alphabet) - ord(self.alphabet)) % 7 + 1
-        accidental = (
-            (NOTE_DICT[upper_note.alphabet] - NOTE_DICT[self.alphabet]) % 12
-            + upper_note.accidental
-            - self.accidental
-            - SEMITONES_CP[distance - 1]
-        )
-        quality = "?"
-        if accidental == 1:
-            quality = "A"
-        elif distance in [2, 3, 6, 7]:
-            if accidental == -1:
-                quality = "m"
-            elif accidental == -2:
-                quality = "d"
-            elif accidental == 0:
-                quality = "M"
-        elif distance in [1, 4, 5]:
-            if accidental == -1:
-                quality = "d"
-                if distance == 1:
-                    distance = 8
-            elif accidental == 0:
-                quality = "P"
+        def old_method():
+            distance = (ord(upper_note.alphabet) - ord(self.alphabet)) % 7 + 1
+            accidental = (
+                (NOTE_DICT[upper_note.alphabet] - NOTE_DICT[self.alphabet]) % 12
+                + upper_note.accidental
+                - self.accidental
+                - SEMITONES_CP[distance - 1]
+            )
+            quality = "?"
+            if accidental == 1:
+                quality = "A"
+            elif distance in [2, 3, 6, 7]:
+                if accidental == -1:
+                    quality = "m"
+                elif accidental == -2:
+                    quality = "d"
+                elif accidental == 0:
+                    quality = "M"
+            elif distance in [1, 4, 5]:
+                if accidental == -1:
+                    quality = "d"
+                    if distance == 1:
+                        distance = 8
+                elif accidental == 0:
+                    quality = "P"
 
-        return quality + str(distance)
+            return quality + str(distance)
+
+        def new_method():
+            alphabetical_distance = (
+                ord(upper_note.alphabet) - ord(self.alphabet)
+            ) % 7 + 1
+            semitone_difference = (
+                upper_note.get_pitch_class() - self.get_pitch_class()
+            ) % 12
+            intervals = SEMITONE_TO_INTERVAL_DICTIONARY[semitone_difference]
+
+            # print(alphabetical_distance, semitone_difference, intervals)
+            for interval in intervals:
+                if int(interval[1]) == alphabetical_distance:
+                    return interval
+            return "?0"
+
+        return new_method()
