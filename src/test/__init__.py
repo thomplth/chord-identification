@@ -1,3 +1,7 @@
+if __name__ == "__main__":
+    import os, sys
+    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 from preprocess.piece import Piece
 
 

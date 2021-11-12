@@ -1,3 +1,7 @@
+if __name__ == "__main__":
+    import os, sys
+    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 from utility.constant import (
     HEPTATONIC_DICTIONARY as NOTE_DICT,
     MAJOR_SEMITONE_CUMULATIVE_PATTERN as SEMITONES_CP,
@@ -99,3 +103,4 @@ class Note:
                 quality = "P"
 
         return quality + str(distance)
+

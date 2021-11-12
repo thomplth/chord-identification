@@ -1,9 +1,12 @@
+if __name__ == "__main__":
+    import os, sys
+    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from utility.m21_utility import *
 import music21
 from utility import note_name_simplifier, note_input_convertor
 from utility.constant import NOTES_VARIATION_THRESHOLD
-from test.metric import *
 import numpy as np
 
 # top-down approach of chord segmentation

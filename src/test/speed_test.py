@@ -1,5 +1,10 @@
+if __name__ == "__main__":
+    import os, sys
+    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 from utility import note_input_convertor
 import music21
+
 import time
 from itertools import combinations
 
