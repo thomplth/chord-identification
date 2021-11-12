@@ -33,20 +33,19 @@ def find_key(measure_chromagram):
         mean_scale = np.mean(scale_profile)
         value_scales = []
 
-        coverage = []
+        coverage = range(12)  # []
         # if efficiency is a concern, we only do max of 9 instead of 12
-        if isFast:
-            # choose C, E (Eb for minor), G
-            # pitches_class = list(max_3_indices)
-            # coverage = pitches_class + [(pitch + 7) % 12 for pitch in pitches_class]
-            # if isMajor:
-            #     coverage = coverage + [(pitch + 4) % 12 for pitch in pitches_class]
-            # else:
-            #     coverage = coverage + [(pitch + 3) % 12 for pitch in pitches_class]
-            # coverage = list(set(coverage))
-            pass
-        else:
-            coverage = range(12)
+        # if isFast:
+        # choose C, E (Eb for minor), G
+        # pitches_class = list(max_3_indices)
+        # coverage = pitches_class + [(pitch + 7) % 12 for pitch in pitches_class]
+        # if isMajor:
+        #     coverage = coverage + [(pitch + 4) % 12 for pitch in pitches_class]
+        # else:
+        #     coverage = coverage + [(pitch + 3) % 12 for pitch in pitches_class]
+        # coverage = list(set(coverage))
+        # else:
+        #     coverage = range(12)
 
         for idx in coverage:
             rolled_chromagram = np.roll(measure_chromagram, -1 * idx)

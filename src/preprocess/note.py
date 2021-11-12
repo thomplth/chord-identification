@@ -28,11 +28,6 @@ class Note:
     def get_pitch_class(self):
         return (NOTE_DICT[self.alphabet] + self.accidental) % 12
 
-    # Modify the accidental manually
-    def modify_accidental(self, value):
-        self.accidental += value
-        return self
-
     # TODO: Can omit it
     # It also includes prefect interval
     # distance is 1 - 7, meaning from prefect unison, P1, to major seventh, M7
@@ -86,17 +81,17 @@ class Note:
             new_note = self.get_note_by_major_interval((distance - 1) % 7 + 1)
 
             if quality == "A":
-                new_note.modify_accidental(1)
+                new_note.accidental += 1
             elif distance in [2, 3, 6, 7]:
                 if quality == "m":
-                    new_note.modify_accidental(-1)
+                    new_note.accidental -= 1
                 elif quality == "d":
-                    new_note.modify_accidental(-2)
+                    new_note.accidental -= 2
                 elif not quality == "M":
                     print("Wrong interval name!")
             else:
                 if quality == "d":
-                    new_note.modify_accidental(-1)
+                    new_note.accidental -= 1
                 elif not quality == "P":
                     print("Wrong interval name!")
             return new_note
@@ -133,6 +128,7 @@ class Note:
 
             return quality + str(distance)
 
+        # TODO: Is new METHOD faster?
         def new_method():
             alphabetical_distance = (
                 ord(upper_note.alphabet) - ord(self.alphabet)

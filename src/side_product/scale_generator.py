@@ -10,7 +10,7 @@ def get_scale(tonic, is_major):
         last_note = scale[-1]
         new_note = last_note.get_note_by_major_interval(2)
         if semitone == 1:
-            new_note = new_note.modify_accidental(-1)
+            new_note.accidental -= 1
         scale.append(new_note)
     return scale
 

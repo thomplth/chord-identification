@@ -4,18 +4,20 @@ import csv
 import os
 
 from utility.m21_utility import *
+
 # from utility import note_input_convertor
 from segmentation import *
 from identification.key_identification import determine_key
+
 # from note_to_chord import find_chords, print_chords_names
 
 
 CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
+CONFIG.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
-INPUT_PATH = CONFIG['locations']['input_path']
-OUTPUT_PATH = CONFIG['locations']['output_path']
-CSV_PATH = CONFIG['locations']['csv_path']
+INPUT_PATH = CONFIG["locations"]["input_path"]
+OUTPUT_PATH = CONFIG["locations"]["output_path"]
+CSV_PATH = CONFIG["locations"]["csv_path"]
 
 
 def main():
@@ -40,9 +42,9 @@ def main():
     for k, v in measures_key.items():
         print(k, v)
 
-    export_csv(measures_key, 'key_segmentations', filename)
+    # export_csv(measures_key, "key_segmentations", filename)
 
-    # if False:
+    # if True:
     #     segments = uniform_segmentation(chordify_stream, time_signature)
     #     combined_segments = merge_chord_segment(segments)
     #     # print(combined_segments)
@@ -52,15 +54,14 @@ def main():
     #         print(">>>", segment[0], segment[1], notes_variation(segment[1]))
     #         print_chords_names(notes, result, "")
 
-
     # export_file(stream, "../result/Minuet_in_F_C_test")
     # export_file(stream, "../result/anonymous_Twinkle_Twinkle_test")
     # export_file(chordify_stream, "../result/test2")
 
 
 def export_csv(outdict, dirname, filename):
-    path = os.path.join(CSV_PATH, dirname, filename + '.csv')
-    file = open(path, 'w', newline='')
+    path = os.path.join(CSV_PATH, dirname, filename + ".csv")
+    file = open(path, "w", newline="")
     writer = csv.writer(file)
 
     for k, v in outdict.items():
