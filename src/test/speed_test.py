@@ -1,6 +1,7 @@
 if __name__ == "__main__":
     import os, sys
-    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+    sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility import note_input_convertor
 import music21
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 
     # Test 2: Interval calculation test
     trial_num = len(list(combinations(m21_notes, 2)))
-    print(trial_num)
+    # print(trial_num)
 
     def use_music21_interval_test2():
         start_time1 = time.time()
