@@ -11,9 +11,15 @@ from utility.constant import (
 
 
 class Note:
-    def __init__(self, alphabet, accidental):
+    def __init__(self, alphabet="?", accidental=0):
         self.alphabet = alphabet
         self.accidental = accidental
+
+    # determine if two notes are equal
+    def is_equal(self, other_note):
+        return (self.alphabet == other_note.alphabet) and (
+            self.accidental == other_note.accidental
+        )
 
     # Use string format to represent the note
     def note_str(self, isPrintedInDos=True):

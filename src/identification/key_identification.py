@@ -28,8 +28,8 @@ def find_key(measure_chromagram):
 
     mean_chromagram = np.mean(measure_chromagram)
 
-    def get_correlation_values(isMajor, isFast=False):
-        scale_profile = major_profile if isMajor else minor_profile
+    def get_correlation_values(is_major, isFast=False):
+        scale_profile = major_profile if is_major else minor_profile
         mean_scale = np.mean(scale_profile)
         value_scales = []
 
@@ -39,7 +39,7 @@ def find_key(measure_chromagram):
         # choose C, E (Eb for minor), G
         # pitches_class = list(max_3_indices)
         # coverage = pitches_class + [(pitch + 7) % 12 for pitch in pitches_class]
-        # if isMajor:
+        # if is_major:
         #     coverage = coverage + [(pitch + 4) % 12 for pitch in pitches_class]
         # else:
         #     coverage = coverage + [(pitch + 3) % 12 for pitch in pitches_class]
@@ -59,7 +59,7 @@ def find_key(measure_chromagram):
             correlation_value = (
                 correlation_value_numerator / correlation_value_denominator
             )
-            value_scales.append((correlation_value, idx, isMajor))
+            value_scales.append((correlation_value, idx, is_major))
         return value_scales
 
     possible_key = max(

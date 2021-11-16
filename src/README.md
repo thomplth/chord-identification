@@ -25,12 +25,12 @@
   ('m3', 'M3', 'm3') [{'chord': 'II7', 'tonic_interval': 'M2'}]
   ('M3', 'm3', 'm3') [{'chord': 'V7', 'tonic_interval': 'P5'}]
   ('M3', 'm3', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
-  ('M3', 'M2', 'M3') [{'chord': 'FrVI', 'tonic_interval': 'm6'}]
-  ('M3', 'A4') [{'chord': 'ItVI', 'tonic_interval': 'm6'}]
+  ('M3', 'M2', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
+  ('M3', 'A4') [{'chord': 'ItaVI', 'tonic_interval': 'm6'}]
   ('m3', 'm3') [{'chord': 'VIIdim', 'tonic_interval': 'M7'}]
   ('m3', 'm3', 'm3') [{'chord': 'VIIdim7', 'tonic_interval': 'M7'}]
   ('P5', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
-  ('A4', 'M3') [{'chord': 'FrVI', 'tonic_interval': 'm6'}]
+  ('A4', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
   ```
   - MINOR_CHORD_FINDER_DICTIONARY result:
   ```
@@ -40,9 +40,9 @@
   ('m3', 'm3', 'M3') [{'chord': 'II7', 'tonic_interval': 'M2'}]
   ('M3', 'm3', 'm3') [{'chord': 'V7', 'tonic_interval': 'P5'}]
   ('M3', 'm3', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
-  ('M3', 'M2', 'M3') [{'chord': 'FrVI', 'tonic_interval': 'm6'}]
-  ('M3', 'A4') [{'chord': 'ItVI', 'tonic_interval': 'm6'}]
+  ('M3', 'M2', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
+  ('M3', 'A4') [{'chord': 'ItaVI', 'tonic_interval': 'm6'}]
   ('m3', 'm3', 'm3') [{'chord': 'VIIdim7', 'tonic_interval': 'M7'}]
   ('P5', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
-  ('A4', 'M3') [{'chord': 'FrVI', 'tonic_interval': 'm6'}]
+  ('A4', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
   ```

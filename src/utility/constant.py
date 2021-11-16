@@ -10,8 +10,7 @@ HEPTATONIC_DICTIONARY["A"] = MAJOR_SEMITONE_CUMULATIVE_PATTERN[5]
 HEPTATONIC_DICTIONARY["B"] = MAJOR_SEMITONE_CUMULATIVE_PATTERN[6]
 
 MAJOR_SEMITONE_PATTERN = [2, 2, 1, 2, 2, 2]
-# only natural minor is listed
-MINOR_SEMITONE_PATTERN = [2, 1, 2, 2, 1, 2]
+MINOR_SEMITONE_PATTERN = [2, 1, 2, 2, 1, 2]  # only natural minor is listed
 
 # Dictionary to convert semitone to interval
 SEMITONE_TO_INTERVAL_DICTIONARY = {0: ["P1", "d2", "A7"]}
@@ -47,8 +46,8 @@ MAJOR_CHORD_DICTIONARY["V"] = ["P5", "M3", "m3"]
 MAJOR_CHORD_DICTIONARY["V7"] = ["P5", "M3", "m3", "m3"]
 MAJOR_CHORD_DICTIONARY["bVI"] = ["m6", "M3", "m3"]
 MAJOR_CHORD_DICTIONARY["GerVI"] = ["m6", "M3", "m3", "A2"]
-MAJOR_CHORD_DICTIONARY["FrVI"] = ["m6", "M3", "M2", "M3"]
-MAJOR_CHORD_DICTIONARY["ItVI"] = ["m6", "M3", "A4"]
+MAJOR_CHORD_DICTIONARY["FreVI"] = ["m6", "M3", "M2", "M3"]
+MAJOR_CHORD_DICTIONARY["ItaVI"] = ["m6", "M3", "A4"]
 MAJOR_CHORD_DICTIONARY["VI"] = ["M6", "m3", "M3"]
 # MAJOR_CHORD_DICTIONARY["VI7"] = ["M6", "m3", "M3", "m3"]
 MAJOR_CHORD_DICTIONARY["VIIdim"] = ["M7", "m3", "m3"]
@@ -68,8 +67,8 @@ MINOR_CHORD_DICTIONARY["V+"] = MAJOR_CHORD_DICTIONARY["V"]
 MINOR_CHORD_DICTIONARY["V+7"] = MAJOR_CHORD_DICTIONARY["V7"]
 MINOR_CHORD_DICTIONARY["VI"] = MAJOR_CHORD_DICTIONARY["bVI"]
 MINOR_CHORD_DICTIONARY["GerVI"] = MAJOR_CHORD_DICTIONARY["GerVI"]
-MINOR_CHORD_DICTIONARY["FrVI"] = MAJOR_CHORD_DICTIONARY["FrVI"]
-MINOR_CHORD_DICTIONARY["ItVI"] = MAJOR_CHORD_DICTIONARY["ItVI"]
+MINOR_CHORD_DICTIONARY["FreVI"] = MAJOR_CHORD_DICTIONARY["FreVI"]
+MINOR_CHORD_DICTIONARY["ItaVI"] = MAJOR_CHORD_DICTIONARY["ItaVI"]
 MINOR_CHORD_DICTIONARY["VII"] = ["m7", "M3", "m3"]
 MINOR_CHORD_DICTIONARY["VIIdim"] = MAJOR_CHORD_DICTIONARY["VIIdim"]
 MINOR_CHORD_DICTIONARY["VIIdim7"] = MAJOR_CHORD_DICTIONARY["VIIdim7"]
@@ -87,9 +86,9 @@ for chord, pattern in MAJOR_CHORD_DICTIONARY.items():
         MAJOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
             {"chord": chord, "tonic_interval": pattern[0]}
         ]
-# GerVI and FrVI special cases:
+# GerVI and FreVI special cases:
 MAJOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
-MAJOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]
+MAJOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FreVI", "tonic_interval": "m6"}]
 
 MINOR_CHORD_FINDER_DICTIONARY = {}
 for chord, pattern in MINOR_CHORD_DICTIONARY.items():
@@ -103,9 +102,9 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
         MINOR_CHORD_FINDER_DICTIONARY[chord_pattern] = [
             {"chord": chord, "tonic_interval": pattern[0]}
         ]
-# GerVI and FrVI special cases:
+# GerVI and FreVI special cases:
 MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
-MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FrVI", "tonic_interval": "m6"}]
+MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FreVI", "tonic_interval": "m6"}]
 
 # the threshold that determine if a segment can be given a chord label
 NOTES_VARIATION_THRESHOLD = 4
