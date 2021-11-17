@@ -24,28 +24,14 @@ def select_key_profile(profile="Temperley"):
 # Key finding algo.
 def find_key(measure_chromagram):
     major_profile, minor_profile = select_key_profile()
-    # max_3_indices = np.argpartition(measure_chromagram, -3)[-3:]
-
     mean_chromagram = np.mean(measure_chromagram)
 
-    def get_correlation_values(is_major, isFast=False):
+    def get_correlation_values(is_major):
         scale_profile = major_profile if is_major else minor_profile
         mean_scale = np.mean(scale_profile)
         value_scales = []
 
-        coverage = range(12)  # []
-        # if efficiency is a concern, we only do max of 9 instead of 12
-        # if isFast:
-        # choose C, E (Eb for minor), G
-        # pitches_class = list(max_3_indices)
-        # coverage = pitches_class + [(pitch + 7) % 12 for pitch in pitches_class]
-        # if is_major:
-        #     coverage = coverage + [(pitch + 4) % 12 for pitch in pitches_class]
-        # else:
-        #     coverage = coverage + [(pitch + 3) % 12 for pitch in pitches_class]
-        # coverage = list(set(coverage))
-        # else:
-        #     coverage = range(12)
+        coverage = range(12)
 
         for idx in coverage:
             rolled_chromagram = np.roll(measure_chromagram, -1 * idx)
@@ -77,8 +63,9 @@ def determine_key(measures_dictionary):
     four_measures_chroma = np.zeros(12)
 
     # identification of keys
-    for idx, chroma in measures_dictionary.items():
-        queue.append(idx)
+    for idx, segment in measures_dictionary.items():
+        chroma = segment["chroma"]
+        queue.append(segment["chroma"])
 
         # Determine key within ONE measure
         key_1_measure = find_key(chroma)
@@ -90,23 +77,24 @@ def determine_key(measures_dictionary):
         # Determine key within TWO measures
         if len(queue) >= 2:
             key_2_measure = find_key(two_measures_chroma)
-            for i in queue:
+            for i in range(idx, idx - 2, -1):
                 measures_possible_key[i].append(key_2_measure)
-            # old_measure_idx = queue.pop(0)
-            two_measures_chroma -= measures_dictionary[queue[0]]
+            two_measures_chroma -= queue[0]
 
         # Determine key within FOUR measures
         if len(queue) == 4:
             key_4_measure = find_key(four_measures_chroma)
-            for i in queue:
+            for i in range(idx, idx - 4, -1):
                 measures_possible_key[i].append(key_4_measure)
-            old_measure_idx = queue.pop(0)
-            four_measures_chroma -= measures_dictionary[old_measure_idx]
+            old_measure_chroma = queue.pop(0)
+            four_measures_chroma -= old_measure_chroma
 
     # selection of key
     measures_key = {}
     for idx, keys in measures_possible_key.items():
         occurrence_count = Counter(keys)
+        measure_offset = measures_dictionary[idx]["offset"]
         # Here assume if 2 keys having same count, choose key_1_measure -> key_2_measure -> key_4_measure
-        measures_key[idx] = occurrence_count.most_common(1)[0][0]
+        measures_key[measure_offset] = occurrence_count.most_common(1)[0][0]
+    # print(measures_key)
     return measures_key

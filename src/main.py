@@ -8,8 +8,7 @@ from utility.m21_utility import *
 # from utility import note_input_convertor
 from segmentation import *
 from identification.key_identification import determine_key
-
-# from note_to_chord import find_chords, print_chords_names
+from identification.note_to_chord import find_chords, print_chords_names
 
 
 CONFIG = configparser.ConfigParser()
@@ -29,18 +28,14 @@ def main():
     stream = load_file("../data/" + filename + ".mxl")
     chordify_stream = chordify(stream)
 
-    # time_signature = get_initial_time_signature(chordify_stream)
+    time_signature = get_initial_time_signature(chordify_stream)
     key_signature = get_initial_key_signature(chordify_stream)
-    scale_name = (
-        key_signature.tonic.name.lower()
-        if key_signature.type == "minor"
-        else key_signature.tonic.name.upper()
-    )
+    # initial_scale = Scale(key_signature.tonic.name)
+    # print("Assume all measures are in ", scale_name)
 
-    print("Assume all measures are in ", scale_name)
     measures_key = determine_key(key_segmentation(stream))
-    for k, v in measures_key.items():
-        print(k, v)
+    # for k, v in measures_key.items():
+    #     print(k, v)
 
     # export_csv(measures_key, "key_segmentations", filename)
 

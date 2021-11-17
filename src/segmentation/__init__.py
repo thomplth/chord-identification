@@ -1,6 +1,7 @@
 if __name__ == "__main__":
     import os, sys
-    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+    sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from utility.m21_utility import *
@@ -97,12 +98,14 @@ def chromagram(partial_stream, steedman=False):
 def key_segmentation(stream):
     result = {}
     for measure in get_measures(stream):
-        idx = measure.number  # or offset?
+        idx = measure.number
         np_chroma = np.array(chromagram(measure))
 
         # map the same measure in different stream into the same vector
         if idx in result:
-            result[idx] = result[idx] + np_chroma
+            # print(result[idx][0], result[idx][1:])
+            result[idx]["chroma"] += np_chroma
         else:
-            result[idx] = np_chroma
+            result[idx] = {"chroma": np_chroma, "offset": measure.offset}
+
     return result
