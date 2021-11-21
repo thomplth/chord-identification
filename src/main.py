@@ -26,26 +26,30 @@ def main():
     # stream = load_file("../Gymnopdie_n1_-_E._Satie.mxl")
     # stream = load_file("../Minuet_in_F_C.mxl")
     # filename = "anonymous_Twinkle_Twinkle"
-    filename = "Chopin_F._Nocturne_in_E_Minor,_Op.72_No.1"
+    filename = "Bartok_B._Sonatina_Movement_1"
 
-    stream = load_file("../data/" + filename + ".mxl")
-    chordify_stream = chordify(stream)
+    stream = load_file("../data/testing/" + filename + ".mxl")
+    # chordify_stream = chordify(stream)
+    flatten_stream = flatten(stream)
 
-    time_signature = get_initial_time_signature(chordify_stream)
-    key_signature = get_initial_key_signature(chordify_stream)
+    time_signature = get_initial_time_signature(flatten_stream)
+    print(time_signature)
+    # key_signature = get_initial_key_signature(flatten_stream)
     # initial_scale = Scale(key_signature.tonic.name)
     # print("Assume all measures are in ", scale_name)
 
-    measures_key = determine_key_by_adjacent(key_segmentation(stream))
+    # measures_key = determine_key_by_adjacent(key_segmentation(stream))
     # measures_key = determine_key_solo(key_segmentation(stream))
-    # for k, v in measures_key.items():
-    #     print(k, v)
-    print(measures_key)
+    # print(measures_key)
 
     # export_csv(measures_key, "key_segmentations", filename)
+    # stream.show("text")
 
-    # if True:
-    #     segments = uniform_segmentation(chordify_stream, time_signature)
+    if True:
+        notes_in_measures = get_notes_in_measures(stream)
+        segments = uniform_segmentation(notes_in_measures, time_signature)
+        print(segments)
+        # pass
     #     combined_segments = merge_chord_segment(segments)
     #     # print(combined_segments)
     #     for segment in combined_segments[:2]:

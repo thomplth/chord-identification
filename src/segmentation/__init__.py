@@ -12,31 +12,64 @@ import numpy as np
 
 # top-down approach of chord segmentation
 def uniform_segmentation(chordify_stream, time_signature):
-    segments = []
-    for measure in chordify_stream.recurse().getElementsByClass("Measure"):
-        measure_offset = measure.offset
-        chords = measure.recurse().getElementsByClass("Chord")
-        if len(chords) > 0:
-            # notes[0].addLyric(str("x"))
-            for chord in chords:
-                # mark if the chords are on beat
-                mark = int(chord.offset) - chord.offset % time_signature.numerator == 0
-                chord_offset = measure_offset + int(chord.offset)
+    def old():
+        segments = []
+        for measure in chordify_stream.recurse().getElementsByClass("Measure"):
+            measure_offset = measure.offset
+            chords = measure.recurse().getElementsByClass("Chord")
+            if len(chords) > 0:
+                # notes[0].addLyric(str("x"))
+                for chord in chords:
+                    # mark if the chords are on beat
+                    mark = (
+                        int(chord.offset) - chord.offset % time_signature.numerator == 0
+                    )
+                    chord_offset = measure_offset + int(chord.offset)
 
-                notes = list(chord.notes)
-                # if the chord is not on beat, merge the chord with the previous on beat chord
-                if not mark:
-                    same_segment = segments.pop()
-                    notes = same_segment[1] + notes
+                    notes = list(chord.notes)
+                    # if the chord is not on beat, merge the chord with the previous on beat chord
+                    if not mark:
+                        same_segment = segments.pop()
+                        notes = same_segment[1] + notes
 
-                segments.append((chord_offset, notes))
-    # the return is the list of the tuple of (segment offset, [lists of note names (NOT Note object)])
-    return [(segment[0], note_name_simplifier(segment[1])) for segment in segments]
+                    segments.append((chord_offset, notes))
+        # the return is the list of the tuple of (segment offset, [lists of note names (NOT Note object)])
+        return [(segment[0], note_name_simplifier(segment[1])) for segment in segments]
+
+    def new():
+        notes_in_measures = chordify_stream
+        res = []
+        for measure_offset, notes in notes_in_measures.items():
+            offsets_notes_dictionary = {}
+            # duration calculation
+            for m21_note in notes:
+                name = m21_note.name
+                note_offset = int(m21_note.offset) + measure_offset
+                duration = m21_note.duration.quarterLength
+                if duration > 0:
+                    if not (note_offset in offsets_notes_dictionary):
+                        offsets_notes_dictionary[note_offset] = {}
+                    if not (name in offsets_notes_dictionary):
+                        offsets_notes_dictionary[note_offset][name] = 0
+                    offsets_notes_dictionary[note_offset][name] += duration
+
+            # normalization
+            for offset in offsets_notes_dictionary.keys():
+                total = sum(offsets_notes_dictionary[offset].values())
+                for note in offsets_notes_dictionary[offset].keys():
+                    offsets_notes_dictionary[offset][note] = (
+                        offsets_notes_dictionary[offset][note] / total
+                    )
+            res.extend(list(offsets_notes_dictionary.items()))
+        res.sort(key=lambda tup: tup[0])
+        return res
+
+    return new()
 
 
 # define note variation as the number of pitch class of a set of notes
-def notes_variation(notes):
-    return len(list(set(notes)))
+def notes_variation(notes_names):
+    return len(list(set(notes_names)))
 
 
 # bottom-up approach of chord segmentation, segments = return of uniform_segmentation()

@@ -15,9 +15,9 @@ class Piece:
     """
 
     def __init__(self, name):
-        name = name.split('.')
+        name = name.split(".")
         self.name = name[0]
-        self.score = converter.parse('../data_KY2001/score/' + self.name + '.mxl')
+        self.score = converter.parse("../../data/" + self.name + ".mxl")
         # self.len = self.score.duration.quarterLength
 
     # Not sure if we should use int here, alternatively refer self.len
@@ -33,8 +33,8 @@ class Piece:
 
         :rtype: list of tuples of chord name and offset
         """
-        input_path = '../data_KY2001/data_answer' + '/' + self.name + '.pydata'
-        with open(input_path, 'rb') as f:
+        input_path = "../data_KY2001/data_answer" + "/" + self.name + ".pydata"
+        with open(input_path, "rb") as f:
             return pickle.load(f)
 
     def get_key_signatures(self):
@@ -53,17 +53,18 @@ class Piece:
                 pass
         return keysigs
 
-    def write(self, path='../result/'):
-        path += self.name + '.mxl'
-        self.score.write('mxl', fp=path)
+    def write(self, path="../result/"):
+        path += self.name + ".mxl"
+        self.score.write("mxl", fp=path)
 
     def show(self):
         self.score.show()
 
 
-if __name__ == '__main__':
-    p = Piece('Twinkle-Twinkle')
+if __name__ == "__main__":
+    p = Piece("anonymous_Twinkle_Twinkle")
+    print(p.score)
     # print(len(p))
     # print(p.len)
     # p.write()
-    print(p.get_chord_seg_target())
+    # print(p.get_chord_seg_target())

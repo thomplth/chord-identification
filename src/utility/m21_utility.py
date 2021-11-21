@@ -34,6 +34,35 @@ def get_measures(chordified_stream):
     return measures
 
 
+def get_notes_in_measures(stream):
+    measures = get_measures(stream)
+    res = {}
+    for measure in measures:
+        for element in list(flatten(measure).elements):
+            m21_notes = []
+            # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
+            # so they should be ignored
+            if isinstance(element, chord.Chord) and not isinstance(
+                element, harmony.ChordSymbol
+            ):
+                m21_notes_temp = list(element.notes)
+                # the offset of notes in chord is relative to chord
+                for n in m21_notes_temp:
+                    n.offset += element.offset
+                m21_notes.extend(m21_notes_temp)
+            elif isinstance(element, note.Note):
+                m21_notes.append(element)
+            else:
+                continue
+
+            index = measure.offset
+            if index in res:
+                res[index].extend(m21_notes)
+            else:
+                res[index] = m21_notes
+    return res
+
+
 # get the key signature at the beginning
 def get_initial_key_signature(chordified_stream):
     keys = [
