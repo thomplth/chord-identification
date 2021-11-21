@@ -154,6 +154,7 @@ MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = 0.65
 
 # the threshold that determine if a segment can be given a chord label
 NOTES_VARIATION_THRESHOLD = 4
+NOTES_FREQUENCY_THRESHOLD = 0.2
 
 # Key profile dictionary
 KEY_PROFILE_DICTIONARY = {}

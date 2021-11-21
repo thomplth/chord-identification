@@ -7,7 +7,7 @@ if __name__ == "__main__":
 from utility.m21_utility import *
 import music21
 from utility import note_name_simplifier, note_input_convertor
-from utility.constant import NOTES_VARIATION_THRESHOLD
+from utility.constant import NOTES_VARIATION_THRESHOLD, NOTES_FREQUENCY_THRESHOLD
 import numpy as np
 
 # top-down approach of chord segmentation
@@ -72,28 +72,70 @@ def notes_variation(notes_names):
     return len(list(set(notes_names)))
 
 
+def is_excess_notes_variation(notes_dictionary):
+    notes = list(notes_dictionary.items())
+    notes.sort(key=lambda tup: tup[1], reverse=True)
+    return not (
+        (
+            len(notes) <= NOTES_VARIATION_THRESHOLD
+            or (
+                notes[NOTES_VARIATION_THRESHOLD - 1][1] >= NOTES_FREQUENCY_THRESHOLD
+                and notes[NOTES_VARIATION_THRESHOLD][1] < NOTES_FREQUENCY_THRESHOLD
+            )
+        )
+    )
+
+
+def notes_dictionary_sum(notes_dictionary_1, notes_dictionary_2):
+    for key, value in notes_dictionary_2.items():
+        if not key in notes_dictionary_1:
+            notes_dictionary_1[key] = 0
+        notes_dictionary_1[key] = value
+    total = sum(notes_dictionary_1.values())
+    for note in notes_dictionary_1.keys():
+        notes_dictionary_1[note] = notes_dictionary_1[note] / total
+    return notes_dictionary_1
+
+
 # bottom-up approach of chord segmentation, segments = return of uniform_segmentation()
 def merge_chord_segment(segments):
     res = [segments[0]]
     for idx in range(1, len(segments)):
         previous_segment = res.pop()
         current_segment = segments[idx]
-        # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
-        if (
-            notes_variation(previous_segment[1] + current_segment[1])
-            <= NOTES_VARIATION_THRESHOLD
-        ):
-            res.append(
-                (
-                    previous_segment[0],
-                    list(set(previous_segment[1] + current_segment[1])),
-                )
-            )
-        # else don't combine
-        else:
-            res.append(previous_segment)
-            res.append(current_segment)
 
+        def old():
+            # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
+            if (
+                notes_variation(previous_segment[1] + current_segment[1])
+                <= NOTES_VARIATION_THRESHOLD
+            ):
+                res.append(
+                    (
+                        previous_segment[0],
+                        list(set(previous_segment[1] + current_segment[1])),
+                    )
+                )
+            # else don't combine
+            else:
+                res.append(previous_segment)
+                res.append(current_segment)
+
+        def new():
+            # print("###", previous_segment, current_segment)
+            # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
+            merged_segment = notes_dictionary_sum(
+                previous_segment[1], current_segment[1]
+            )
+            # print(">>>", merged_segment, is_excess_notes_variation(merged_segment))
+            if not is_excess_notes_variation(merged_segment):
+                res.append((previous_segment[0], merged_segment))
+            # else don't combine
+            else:
+                res.append(previous_segment)
+                res.append(current_segment)
+
+        new()
     return res
 
 
@@ -136,7 +178,6 @@ def key_segmentation(stream):
 
         # map the same measure in different stream into the same vector
         if idx in result:
-            # print(result[idx][0], result[idx][1:])
             result[idx]["chroma"] += np_chroma
         else:
             result[idx] = {"chroma": np_chroma, "offset": measure.offset}

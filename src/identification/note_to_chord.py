@@ -3,6 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
+from music21.search.segment import scoreSimilarity
 from utility.constant import *
 from utility import note_input_convertor, invert_interval
 
@@ -117,11 +118,19 @@ def find_chords_two_notes(notes, notes_intervals, scale):
     return res
 
 
-def match_chords_patterns(notes, notes_intervals, scale):
+def match_chords_patterns(notes_freq, scale):
     # base case: notes = 2
-    notes_num = len(notes)
+    notes_num = len(notes_freq)
+
+    # get notes and similarity score
+    notes = [note_freq[0] for note_freq in notes_freq]
+    similarity_score = sum([note_freq[1] for note_freq in notes_freq])
+    # Then generate the intervals
+    notes_intervals = get_adjacent_intervals(notes)
+
     if notes_num == 2:
-        return find_chords_two_notes(notes, notes_intervals, scale)
+        chords = find_chords_two_notes(notes, notes_intervals, scale)
+        return [(chord, similarity_score) for chord in chords]
 
     # If the notes satisfy the chord pattern , get the chord
     res = []
@@ -131,36 +140,29 @@ def match_chords_patterns(notes, notes_intervals, scale):
             rotated_intervals = notes_intervals[-idx:] + notes_intervals[:-idx]
 
             # the last interval is ignored as it is the difference between last and first notes
-            res += search_chord_dictionary(
+            chords = search_chord_dictionary(
                 rotated_notes[0], rotated_intervals[0 : notes_num - 1], scale
             )
+            res.extend([(chord, similarity_score) for chord in chords])
 
     return res
 
 
 # Find chords in 'recursive' way
-# If bass_note is required, input the object reference of the bass note. The simple way to do so is put bass_note = notes[0]
-def find_chords(notes, scale, bass_note=None):
+def find_chords(notes_freq, scale=Scale()):
 
     # do sorting
-    notes.sort(key=lambda x: (x.alphabet, x.accidental))
+    notes_freq.sort(key=lambda x: (x[0].alphabet, x[0].accidental))
     res = []
 
     # drop a note if previous combinations have no result
-    for note_num in range(len(notes), 1, -1):
+    for note_num in range(len(notes_freq), 1, -1):
         # cannot have chord with more than 4 notes
         if note_num > 4:
             continue
         # for each combination, search if it satisfy the pattern of chords
-        for combo in list(combinations(notes, note_num)):
-            # Check if bass note exists in the combination:
-            if not (bass_note == None):
-                if not (bass_note in combo):
-                    continue
-
-            # Then generate the intervals
-            notes_intervals = get_adjacent_intervals(combo)
-            res += match_chords_patterns(list(combo), notes_intervals, scale)
+        for combo in list(combinations(notes_freq, note_num)):
+            res += match_chords_patterns(list(combo), scale)
         # if drop several notes to get result, stop searching
         if len(res) > 0:
             break

@@ -5,13 +5,13 @@ import os
 
 from utility.m21_utility import *
 
-# from utility import note_input_convertor
 from segmentation import *
 from identification.key_identification import (
     determine_key_by_adjacent,
     determine_key_solo,
 )
-from identification.note_to_chord import find_chords, print_chords_names
+from identification.note_to_chord import find_chords
+from identification.result_combination import *
 
 
 CONFIG = configparser.ConfigParser()
@@ -23,12 +23,11 @@ CSV_PATH = CONFIG["locations"]["csv_path"]
 
 
 def main():
-    # stream = load_file("../Gymnopdie_n1_-_E._Satie.mxl")
-    # stream = load_file("../Minuet_in_F_C.mxl")
-    # filename = "anonymous_Twinkle_Twinkle"
-    filename = "Bartok_B._Sonatina_Movement_1"
-
-    stream = load_file("../data/testing/" + filename + ".mxl")
+    filename = "Beethoven_L.V._Moonlight_Sonata_First_Movement"
+    filename = "anonymous_Twinkle_Twinkle"
+    stream = load_file("../data/" + filename + ".mxl")
+    # filename = "Bartok_B._Sonatina_Movement_1"
+    # stream = load_file("../data/testing/" + filename + ".mxl")
     # chordify_stream = chordify(stream)
     flatten_stream = flatten(stream)
 
@@ -38,29 +37,37 @@ def main():
     # initial_scale = Scale(key_signature.tonic.name)
     # print("Assume all measures are in ", scale_name)
 
-    # measures_key = determine_key_by_adjacent(key_segmentation(stream))
-    # measures_key = determine_key_solo(key_segmentation(stream))
-    # print(measures_key)
+    def get_measures_key():
+        measures_key = determine_key_by_adjacent(key_segmentation(stream))
+        # measures_key = determine_key_solo(key_segmentation(stream))
+        print(measures_key)
+        return measures_key
 
-    # export_csv(measures_key, "key_segmentations", filename)
-    # stream.show("text")
+    get_measures_key()
 
-    if True:
+    def get_beats_chord():
         notes_in_measures = get_notes_in_measures(stream)
         segments = uniform_segmentation(notes_in_measures, time_signature)
-        print(segments)
-        # pass
-    #     combined_segments = merge_chord_segment(segments)
-    #     # print(combined_segments)
-    #     for segment in combined_segments[:2]:
-    #         notes = [note_input_convertor(note) for note in segment[1]]
-    #         result = find_chords(notes)
-    #         print(">>>", segment[0], segment[1], notes_variation(segment[1]))
-    #         print_chords_names(notes, result, "")
+        combined_segments = merge_chord_segment(segments)
+
+        res = []
+        for segment in combined_segments:
+            # print(segment)
+            notes_frequencies = [
+                (note_input_convertor(note_name), v)
+                for note_name, v in segment[1].items()
+            ]
+            res.append((segment[0], find_chords(notes_frequencies)))
+        print(res)
+        return res
+
+    get_beats_chord()
 
     # export_file(stream, "../result/Minuet_in_F_C_test")
     # export_file(stream, "../result/anonymous_Twinkle_Twinkle_test")
     # export_file(chordify_stream, "../result/test2")
+    # export_csv(measures_key, "key_segmentations", filename)
+    # stream.show("text")
 
 
 def export_csv(outdict, dirname, filename):
