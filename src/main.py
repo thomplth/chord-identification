@@ -28,7 +28,7 @@ def main():
     stream = load_file("../data/" + filename + ".mxl")
     # filename = "Bartok_B._Sonatina_Movement_1"
     # stream = load_file("../data/testing/" + filename + ".mxl")
-    # chordify_stream = chordify(stream)
+    chordify_stream = chordify(stream)
     flatten_stream = flatten(stream)
 
     time_signature = get_initial_time_signature(flatten_stream)
@@ -39,19 +39,17 @@ def main():
 
     def get_measures_key():
         measures_key = determine_key_by_adjacent(key_segmentation(stream))
-        print("------------")
-        print(measures_key)
-        measures_key = determine_key_solo(key_segmentation(stream))
-        print(measures_key)
-        print("------------")
+        # measures_key = determine_key_solo(key_segmentation(stream))
         return measures_key
 
     keys = get_measures_key()
 
     def get_beats_chord():
-        notes_in_measures = get_notes_in_measures(stream)
+        # notes_in_measures = get_notes_in_measures(stream)
+        notes_in_measures = get_notes_in_measures(chordify_stream)
         segments = uniform_segmentation(notes_in_measures, time_signature)
         combined_segments = merge_chord_segment(segments)
+        # print(combined_segments)
 
         res = []
         for segment in combined_segments:

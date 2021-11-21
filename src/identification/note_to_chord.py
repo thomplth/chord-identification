@@ -164,8 +164,9 @@ def find_chords(notes_freq, scale=Scale()):
         for combo in list(combinations(notes_freq, note_num)):
             res += match_chords_patterns(list(combo), scale)
         # if drop several notes to get result, stop searching
-        if len(res) > 0:
-            break
+        # TODO: Determine if the break is needed
+        # if len(res) > 0:
+        #     break
 
     return res
 

@@ -102,6 +102,6 @@ def determine_key_by_adjacent(measures_dictionary):
                 result_dict[key_score[0]] = key_score[1]
 
         measures_key.append(
-            {"offset": measure_offset, "corr_values": result_dict.items()}
+            {"offset": measure_offset, "corr_values": list(result_dict.items())}
         )
     return measures_key

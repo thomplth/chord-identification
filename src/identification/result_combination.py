@@ -7,13 +7,14 @@ from utility.constant import (
 def calculate_choice_scores(key_dict, chord, base_score):
     roman = chord["chord"]
     scale = chord["scale"].get_pitch_scale()
-    score = base_score * key_dict[scale]
+    if not scale in key_dict:
+        return (0, chord)
     chord_score = (
         MAJOR_CHORD_FREQUENCY_DICTIONARY[roman]
         if scale[1]
         else MINOR_CHORD_FREQUENCY_DICTIONARY[roman]
     )
-    return (score * chord_score, chord)
+    return (base_score * key_dict[scale] * chord_score, chord)
 
 
 def determine_chord(keys, chords):

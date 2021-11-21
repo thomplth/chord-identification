@@ -37,9 +37,8 @@ def uniform_segmentation(chordify_stream, time_signature):
         return [(segment[0], note_name_simplifier(segment[1])) for segment in segments]
 
     def new():
-        notes_in_measures = chordify_stream
         res = []
-        for measure_offset, notes in notes_in_measures.items():
+        for measure_offset, notes in chordify_stream.items():
             offsets_notes_dictionary = {}
             # duration calculation
             for m21_note in notes:
@@ -49,7 +48,7 @@ def uniform_segmentation(chordify_stream, time_signature):
                 if duration > 0:
                     if not (note_offset in offsets_notes_dictionary):
                         offsets_notes_dictionary[note_offset] = {}
-                    if not (name in offsets_notes_dictionary):
+                    if not (name in offsets_notes_dictionary[note_offset]):
                         offsets_notes_dictionary[note_offset][name] = 0
                     offsets_notes_dictionary[note_offset][name] += duration
 
@@ -60,6 +59,7 @@ def uniform_segmentation(chordify_stream, time_signature):
                     offsets_notes_dictionary[offset][note] = (
                         offsets_notes_dictionary[offset][note] / total
                     )
+
             res.extend(list(offsets_notes_dictionary.items()))
         res.sort(key=lambda tup: tup[0])
         return res

@@ -38,7 +38,7 @@ def get_notes_in_measures(stream):
     measures = get_measures(stream)
     res = {}
     for measure in measures:
-        for element in list(flatten(measure).elements):
+        for element in list(measure.elements):
             m21_notes = []
             # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
             # so they should be ignored
