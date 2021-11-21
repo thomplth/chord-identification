@@ -1,3 +1,5 @@
+import numpy as np
+
 MAJOR_SEMITONE_CUMULATIVE_PATTERN = [0, 2, 4, 5, 7, 9, 11]
 
 # Key: note name, value: distance (number of semitone) between C in ascending order
@@ -50,9 +52,9 @@ MAJOR_CHORD_DICTIONARY["FreVI"] = ["m6", "M3", "M2", "M3"]
 MAJOR_CHORD_DICTIONARY["ItaVI"] = ["m6", "M3", "A4"]
 MAJOR_CHORD_DICTIONARY["VI"] = ["M6", "m3", "M3"]
 # MAJOR_CHORD_DICTIONARY["VI7"] = ["M6", "m3", "M3", "m3"]
-MAJOR_CHORD_DICTIONARY["VIIdim"] = ["M7", "m3", "m3"]
-# MAJOR_CHORD_DICTIONARY["VIIdim5"] = ["M7", "m3", "m3", "M3"]  # Half-dim 7th
-MAJOR_CHORD_DICTIONARY["VIIdim7"] = ["M7", "m3", "m3", "m3"]  # Dim 7th
+MAJOR_CHORD_DICTIONARY["DimVII"] = ["M7", "m3", "m3"]
+# MAJOR_CHORD_DICTIONARY["DimVII5"] = ["M7", "m3", "m3", "M3"]  # Half-dim 7th
+MAJOR_CHORD_DICTIONARY["DimVII7"] = ["M7", "m3", "m3", "m3"]  # Dim 7th
 
 MINOR_CHORD_DICTIONARY = {"I": ["P1", "m3", "M3"]}
 MINOR_CHORD_DICTIONARY["I+"] = MAJOR_CHORD_DICTIONARY["I"]
@@ -70,8 +72,8 @@ MINOR_CHORD_DICTIONARY["GerVI"] = MAJOR_CHORD_DICTIONARY["GerVI"]
 MINOR_CHORD_DICTIONARY["FreVI"] = MAJOR_CHORD_DICTIONARY["FreVI"]
 MINOR_CHORD_DICTIONARY["ItaVI"] = MAJOR_CHORD_DICTIONARY["ItaVI"]
 MINOR_CHORD_DICTIONARY["VII"] = ["m7", "M3", "m3"]
-MINOR_CHORD_DICTIONARY["VIIdim"] = MAJOR_CHORD_DICTIONARY["VIIdim"]
-MINOR_CHORD_DICTIONARY["VIIdim7"] = MAJOR_CHORD_DICTIONARY["VIIdim7"]
+MINOR_CHORD_DICTIONARY["DimVII"] = MAJOR_CHORD_DICTIONARY["DimVII"]
+MINOR_CHORD_DICTIONARY["DimVII7"] = MAJOR_CHORD_DICTIONARY["DimVII7"]
 
 # Dictionary for note to chord
 MAJOR_CHORD_FINDER_DICTIONARY = {}
@@ -126,9 +128,9 @@ MAJOR_CHORD_FREQUENCY_DICTIONARY["FreVI"] = 0.65
 MAJOR_CHORD_FREQUENCY_DICTIONARY["ItaVI"] = 0.65
 MAJOR_CHORD_FREQUENCY_DICTIONARY["VI"] = 0.9
 MAJOR_CHORD_FREQUENCY_DICTIONARY["VI7"] = 0.35
-MAJOR_CHORD_FREQUENCY_DICTIONARY["VIIdim"] = 0.9
-MAJOR_CHORD_FREQUENCY_DICTIONARY["VIIdim5"] = 0.35
-MAJOR_CHORD_FREQUENCY_DICTIONARY["VIIdim7"] = 0.65
+MAJOR_CHORD_FREQUENCY_DICTIONARY["DimVII"] = 0.9
+MAJOR_CHORD_FREQUENCY_DICTIONARY["DimVII5"] = 0.35
+MAJOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = 0.65
 
 MINOR_CHORD_FREQUENCY_DICTIONARY = {"I": 0.9}
 MINOR_CHORD_FREQUENCY_DICTIONARY["I+"] = 0.35
@@ -146,9 +148,58 @@ MINOR_CHORD_FREQUENCY_DICTIONARY["GerVI"] = 0.65
 MINOR_CHORD_FREQUENCY_DICTIONARY["FreVI"] = 0.65
 MINOR_CHORD_FREQUENCY_DICTIONARY["ItaVI"] = 0.65
 MINOR_CHORD_FREQUENCY_DICTIONARY["VII"] = 0.35
-MINOR_CHORD_FREQUENCY_DICTIONARY["VIIdim"] = 0.9
-MINOR_CHORD_FREQUENCY_DICTIONARY["VIIdim7"] = 0.65
+MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII"] = 0.9
+MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = 0.65
 
 
 # the threshold that determine if a segment can be given a chord label
 NOTES_VARIATION_THRESHOLD = 4
+
+# Key profile dictionary
+KEY_PROFILE_DICTIONARY = {}
+KEY_PROFILE_DICTIONARY["Krumhansl-Kessler"] = (
+    np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88]),
+    np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17]),
+)
+KEY_PROFILE_DICTIONARY["Temperley"] = (
+    np.array([5.0, 2.0, 3.5, 2.0, 4.5, 4.0, 2.0, 4.5, 2.0, 3.5, 1.5, 4.0]),
+    np.array([5.0, 2.0, 3.5, 4.5, 2.0, 4.0, 2.0, 4.5, 3.5, 2.0, 1.5, 4.0]),
+)
+KEY_PROFILE_DICTIONARY["Steedman"] = (
+    np.array([1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]),
+    np.array([1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.5, 0.5]),
+)
+KEY_PROFILE_DICTIONARY["Aarden-Essen"] = (
+    np.array(
+        [
+            17.7661,
+            0.145624,
+            14.9265,
+            0.160186,
+            19.8049,
+            11.3587,
+            0.291248,
+            22.062,
+            0.145624,
+            8.15494,
+            0.232998,
+            4.95122,
+        ]
+    ),
+    np.array(
+        [
+            18.2648,
+            0.737619,
+            14.0499,
+            16.8599,
+            0.702494,
+            14.4362,
+            0.702494,
+            18.6161,
+            4.56621,
+            1.93186,
+            7.37619,
+            1.75623,
+        ]
+    ),
+)

@@ -7,7 +7,10 @@ from utility.m21_utility import *
 
 # from utility import note_input_convertor
 from segmentation import *
-from identification.key_identification import determine_key
+from identification.key_identification import (
+    determine_key_by_adjacent,
+    determine_key_solo,
+)
 from identification.note_to_chord import find_chords, print_chords_names
 
 
@@ -33,9 +36,11 @@ def main():
     # initial_scale = Scale(key_signature.tonic.name)
     # print("Assume all measures are in ", scale_name)
 
-    measures_key = determine_key(key_segmentation(stream))
+    measures_key = determine_key_by_adjacent(key_segmentation(stream))
+    # measures_key = determine_key_solo(key_segmentation(stream))
     # for k, v in measures_key.items():
     #     print(k, v)
+    print(measures_key)
 
     # export_csv(measures_key, "key_segmentations", filename)
 
