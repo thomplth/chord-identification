@@ -38,9 +38,12 @@ def main():
     # print("Assume all measures are in ", scale_name)
 
     def get_measures_key():
-        # measures_key = determine_key_by_adjacent(key_segmentation(stream))
+        measures_key = determine_key_by_adjacent(key_segmentation(stream))
+        print("------------")
+        print(measures_key)
         measures_key = determine_key_solo(key_segmentation(stream))
-        # print(measures_key)
+        print(measures_key)
+        print("------------")
         return measures_key
 
     keys = get_measures_key()

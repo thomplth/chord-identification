@@ -38,8 +38,8 @@ def find_key(measure_chromagram, need_all=False):
     if need_all:
         return all_keys_corr_values
     else:
-        possible_key = max(all_keys_corr_values, key=lambda i: i[0])[1:]
-        return possible_key
+        all_keys_corr_values.sort(key=lambda i: i[1], reverse=True)
+        return all_keys_corr_values[0]
 
 
 # determine the key by consider that measure only
@@ -91,16 +91,17 @@ def determine_key_by_adjacent(measures_dictionary):
 
     # selection of key
     measures_key = []
-    for idx, keys in measures_possible_key.items():
-        occurrence_frequency = Counter(keys)
-        for k in occurrence_frequency.keys():
-            occurrence_frequency[k] = occurrence_frequency[k] / len(keys)
-
+    for idx, keys_scores in measures_possible_key.items():
         measure_offset = measures_dictionary[idx]["offset"]
-        # Here assume if 2 keys having same count, choose key_1_measure -> key_2_measure -> key_4_measure
-        # measures_key[measure_offset] = occurrence_count.most_common(1)[0][0] # give the common one
+        result_dict = {}
+        # choose the segment which has the highest corr values
+        for key_score in keys_scores:
+            if not key_score[0] in result_dict:
+                result_dict[key_score[0]] = 0
+            if result_dict[key_score[0]] < key_score[1]:
+                result_dict[key_score[0]] = key_score[1]
+
         measures_key.append(
-            {"offset": measure_offset, "frequency": occurrence_frequency.items()}
+            {"offset": measure_offset, "corr_values": result_dict.items()}
         )
-    # print(measures_key)
     return measures_key
