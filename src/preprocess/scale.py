@@ -39,6 +39,10 @@ class Scale:
 
         return Scale(tonic_note=relative_tonic, is_major=not self.is_major)
 
+    # sometime we are just interested in the pitch of the tonic
+    def get_pitch_scale(self):
+        return (self.tonic.get_pitch_class(), self.is_major)
+
 
 if __name__ == "__main__":
     s = Scale("E", -1, True)

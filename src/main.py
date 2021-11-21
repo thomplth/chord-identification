@@ -32,18 +32,18 @@ def main():
     flatten_stream = flatten(stream)
 
     time_signature = get_initial_time_signature(flatten_stream)
-    print(time_signature)
+    # print(time_signature)
     # key_signature = get_initial_key_signature(flatten_stream)
     # initial_scale = Scale(key_signature.tonic.name)
     # print("Assume all measures are in ", scale_name)
 
     def get_measures_key():
-        measures_key = determine_key_by_adjacent(key_segmentation(stream))
-        # measures_key = determine_key_solo(key_segmentation(stream))
-        print(measures_key)
+        # measures_key = determine_key_by_adjacent(key_segmentation(stream))
+        measures_key = determine_key_solo(key_segmentation(stream))
+        # print(measures_key)
         return measures_key
 
-    get_measures_key()
+    keys = get_measures_key()
 
     def get_beats_chord():
         notes_in_measures = get_notes_in_measures(stream)
@@ -58,25 +58,33 @@ def main():
                 for note_name, v in segment[1].items()
             ]
             res.append((segment[0], find_chords(notes_frequencies)))
-        print(res)
+        # print(res)
         return res
 
-    get_beats_chord()
+    chords = get_beats_chord()
+    result = determine_chord(keys, chords)
 
     # export_file(stream, "../result/Minuet_in_F_C_test")
     # export_file(stream, "../result/anonymous_Twinkle_Twinkle_test")
     # export_file(chordify_stream, "../result/test2")
-    # export_csv(measures_key, "key_segmentations", filename)
+    export_csv(result, "result", filename)
     # stream.show("text")
 
 
-def export_csv(outdict, dirname, filename):
+def export_csv(out_list, dirname, filename):
     path = os.path.join(CSV_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
     writer = csv.writer(file)
 
-    for k, v in outdict.items():
-        writer.writerow((k, v))
+    for segment in out_list:
+        writer.writerow(
+            (
+                segment["offset"],
+                segment["chord"]["chord"],
+                segment["chord"]["scale"].scale_str(),
+                segment["score"],
+            )
+        )
 
     file.close()
 

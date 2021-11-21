@@ -29,7 +29,9 @@ def find_key(measure_chromagram, need_all=False):
                 * np.sum((scale_profile - mean_scale) ** 2)
             )
             correlation_value = corr_value_numerator / corr_value_denominator
-            value_scales.append((correlation_value, idx, is_major))
+            # corr_value is meaningless for negative number, so convert the range to [0,1]
+            correlation_value = correlation_value / 2 + 0.5
+            value_scales.append(((idx, is_major), correlation_value))
         return value_scales
 
     all_keys_corr_values = get_correlation_values(True) + get_correlation_values(False)
