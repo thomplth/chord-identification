@@ -8,7 +8,7 @@ def get_scale(tonic, is_major):
     scale_pattern = MAJOR_SEMITONE_PATTERN if is_major else MINOR_SEMITONE_PATTERN
     for semitone in scale_pattern:
         last_note = scale[-1]
-        new_note = last_note.get_note_by_major_interval(2)
+        new_note = last_note.get_note_by_interval("M2")
         if semitone == 1:
             new_note.accidental -= 1
         scale.append(new_note)

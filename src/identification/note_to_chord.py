@@ -40,7 +40,7 @@ def get_adjacent_intervals(notes):
     return res
 
 
-def search_chord_dictionary(first_note, target, scale):
+def search_chord_dictionary(first_note, target, pitch_scale):
     res = []
 
     def search_one_dictionary(is_major):
@@ -57,7 +57,10 @@ def search_chord_dictionary(first_note, target, scale):
                         tonic_note=first_note.get_note_by_interval(tonic_interval),
                         is_major=is_major,
                     )
-                    if chord_scale.is_equal(scale) or scale.tonic.alphabet == "?":
+                    # if chord_scale.is_equal(scale) or scale.tonic.alphabet == "?":
+                    if pitch_scale == None or (
+                        pitch_scale == chord_scale.get_pitch_scale()
+                    ):
                         res.append(
                             {
                                 "chord": option["chord"],
@@ -69,40 +72,42 @@ def search_chord_dictionary(first_note, target, scale):
 
     search_one_dictionary(True)
     search_one_dictionary(False)
+
     return res
 
 
 # find chords
-def find_chords_two_notes(notes, notes_intervals, scale):
+def find_chords_two_notes(notes, notes_intervals, pitch_scale):
     # print(notes, notes_intervals)
     res = []
     for idx in range(len(notes_intervals)):
         interval = notes_intervals[idx]
         if interval == "M3":
-            res += search_chord_dictionary(notes[idx], ["M3", "m3"], scale)
+            res += search_chord_dictionary(notes[idx], ["M3", "m3"], pitch_scale)
         elif interval == "m3":
-            res += search_chord_dictionary(notes[idx], ["m3", "M3"], scale)
-            res += search_chord_dictionary(notes[idx], ["m3", "m3"], scale)
+            res += search_chord_dictionary(notes[idx], ["m3", "M3"], pitch_scale)
+            res += search_chord_dictionary(notes[idx], ["m3", "m3"], pitch_scale)
         # elif interval == "M2":
         #     res.append({"chord": "FreVI", "tonic": notes[idx], "is_major": True})
         #     res.append({"chord": "FreVI", "tonic": notes[idx], "is_major": False})
         # elif interval == "A2":
-        #     tonic = notes[idx].get_note_by_major_interval(6)
+        #     tonic = notes[idx].get_note_by_interval("M6")
         #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
         #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
         # elif interval == "A4":
         #     res.append({"chord": "ItaVI", "tonic": notes[idx], "is_major": True})
         #     res.append({"chord": "ItaVI", "tonic": notes[idx], "is_major": False})
         elif interval == "d5":
-            res += search_chord_dictionary(notes[idx], ["m3", "m3"], scale)
+            res += search_chord_dictionary(notes[idx], ["m3", "m3"], pitch_scale)
         elif interval == "P5":
-            res += search_chord_dictionary(notes[idx], ["M3", "m3"], scale)
-            res += search_chord_dictionary(notes[idx], ["m3", "M3"], scale)
+            res += search_chord_dictionary(notes[idx], ["M3", "m3"], pitch_scale)
+            res += search_chord_dictionary(notes[idx], ["m3", "M3"], pitch_scale)
         elif interval == "A6":
-            tonic = notes[idx].get_note_by_major_interval(3)
+            tonic = notes[idx].get_note_by_interval("M3")
             # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": True})
             # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": False})
-            if scale.tonic.is_equal(tonic):
+            # if scale.tonic.is_equal(tonic):
+            if pitch_scale[0] == tonic.get_pitch_class():
                 res.append({"chord": "ItaVI", "scale": Scale(tonic, True)})
                 res.append({"chord": "ItaVI", "scale": Scale(tonic, False)})
 
@@ -118,7 +123,7 @@ def find_chords_two_notes(notes, notes_intervals, scale):
     return res
 
 
-def match_chords_patterns(notes_freq, scale):
+def match_chords_patterns(notes_freq, pitch_scale):
     # base case: notes = 2
     notes_num = len(notes_freq)
 
@@ -129,7 +134,7 @@ def match_chords_patterns(notes_freq, scale):
     notes_intervals = get_adjacent_intervals(notes)
 
     if notes_num == 2:
-        chords = find_chords_two_notes(notes, notes_intervals, scale)
+        chords = find_chords_two_notes(notes, notes_intervals, pitch_scale)
         return [(chord, similarity_score) for chord in chords]
 
     # If the notes satisfy the chord pattern , get the chord
@@ -141,7 +146,7 @@ def match_chords_patterns(notes_freq, scale):
 
             # the last interval is ignored as it is the difference between last and first notes
             chords = search_chord_dictionary(
-                rotated_notes[0], rotated_intervals[0 : notes_num - 1], scale
+                rotated_notes[0], rotated_intervals[0 : notes_num - 1], pitch_scale
             )
             res.extend([(chord, similarity_score) for chord in chords])
 
@@ -149,7 +154,7 @@ def match_chords_patterns(notes_freq, scale):
 
 
 # Find chords in 'recursive' way
-def find_chords(notes_freq, scale=Scale()):
+def find_chords(notes_freq, pitch_scale=None):
 
     # do sorting
     notes_freq.sort(key=lambda x: (x[0].alphabet, x[0].accidental))
@@ -162,7 +167,7 @@ def find_chords(notes_freq, scale=Scale()):
             continue
         # for each combination, search if it satisfy the pattern of chords
         for combo in list(combinations(notes_freq, note_num)):
-            res += match_chords_patterns(list(combo), scale)
+            res += match_chords_patterns(list(combo), pitch_scale)
         # if drop several notes to get result, stop searching
         # TODO: Determine if the break is needed
         # if len(res) > 0:
@@ -208,7 +213,7 @@ if __name__ == "__main__":
     else:
         input_notes.append(scale)
         scale = ""
-    target_scale = Scale()
+    target_scale = None
     if not scale == "":
         target_tonic = note_input_convertor(scale)
         target_scale = Scale(tonic_note=target_tonic, is_major=scale.isupper())
