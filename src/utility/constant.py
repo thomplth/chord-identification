@@ -110,10 +110,10 @@ MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FreVI", "tonic_interval"
 
 # chord frequency dictionary
 PROBABILITY_DICTIONARY = {
-    "often": 0.5625,
-    "common": 0.3125,
-    "seldom": 0.1875,
-    "rare": 0.125,
+    "often": 8.0 / 15,
+    "common": 4.0 / 15,
+    "seldom": 2.0 / 15,
+    "rare": 1.0 / 15,
 }
 MAJOR_CHORD_FREQUENCY_DICTIONARY = {"I": PROBABILITY_DICTIONARY["often"]}
 MAJOR_CHORD_FREQUENCY_DICTIONARY["I7"] = PROBABILITY_DICTIONARY["rare"]

@@ -25,19 +25,18 @@ directory = "../data/"
 
 
 def get_files(filename=None):
-    # TODO: Debug the following files:
-    all_scores = [
-        "Bach_J.S._Musette_in_D_Major_(BWV_Anh_126).mxl",  # list index out of range
-        "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl",  # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
-        "Clayderman_R._Mariage_d_amour.mxl",  # list index out of range
-    ]
     all_scores = [f for f in os.listdir(directory) if os.path.isfile(directory + f)]
+    all_scores.remove(
+        "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl"
+    )
+    # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
     if filename in all_scores:
         return [filename]
     return all_scores
 
 
 def export_csv(out_list, dirname, filename):
+
     path = os.path.join(CSV_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
     writer = csv.writer(file)
@@ -56,11 +55,11 @@ def export_csv(out_list, dirname, filename):
 
 
 def main():
-    score_files = get_files("anonymous_Twinkle_Twinkle.mxl")
+    score_files = get_files()  # "Chopin_F._Etude_in_G-Flat_Major,_Op.10_No.5.mxl"
 
     for score_file in score_files:
         try:
-            print(">>:" + score_file)
+            print(">> Currently handling:" + score_file)
             stream = load_file(directory + score_file)
             chordify_stream = chordify(stream)
             flatten_stream = flatten(stream)

@@ -2,6 +2,7 @@ from utility.constant import (
     MAJOR_CHORD_FREQUENCY_DICTIONARY,
     MINOR_CHORD_FREQUENCY_DICTIONARY,
 )
+from statistics import mean
 
 
 def find_scale_in_chord_segment(keys, chord_segment):
@@ -60,14 +61,24 @@ def determine_chord(keys, chords):
         res = []
         for chord in chords:
             offset = chord[0]
-            possible_chord = max(chord[1], key=lambda item: chord[1])
-            res.append(
-                {
-                    "offset": offset,
-                    "chord": possible_chord[0],
-                    "score": possible_chord[1],
-                }
-            )
-        print(res)
+            # ignore if cannot find a chord with a key
+            if len(chord[1]) > 0:
+                possible_chord = max(chord[1], key=lambda item: chord[1])
+                key_score = mean(
+                    [
+                        score
+                        for key, score in chord[1]
+                        if key["scale"].is_equal(possible_chord[0]["scale"])
+                    ]
+                )
+                # key_score = possible_chord[1]
+                res.append(
+                    {
+                        "offset": offset,
+                        "chord": possible_chord[0],
+                        "score": key_score,
+                    }
+                )
+        # print(res)
 
     return res
