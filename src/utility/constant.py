@@ -240,7 +240,7 @@ if partial_record:
     MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = 0.006
 
 # the threshold that determine if a segment can be given a chord label
-NOTES_VARIATION_THRESHOLD = 3
+NOTES_VARIATION_THRESHOLD = 4
 NOTES_FREQUENCY_THRESHOLD = 0.2
 
 # Key profile dictionary

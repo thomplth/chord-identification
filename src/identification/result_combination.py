@@ -24,11 +24,11 @@ def calculate_choice_scores(key_dict, chord, base_score):
     if not scale in key_dict:
         return (0, chord)
     chord_score = 1
-    # chord_score = (
-    #     MAJOR_CHORD_FREQUENCY_DICTIONARY[roman]
-    #     if scale[1]
-    #     else MINOR_CHORD_FREQUENCY_DICTIONARY[roman]
-    # )
+    chord_score = (
+        MAJOR_CHORD_FREQUENCY_DICTIONARY[roman]
+        if scale[1]
+        else MINOR_CHORD_FREQUENCY_DICTIONARY[roman]
+    )
     return (base_score * key_dict[scale] * chord_score, chord)
 
 
