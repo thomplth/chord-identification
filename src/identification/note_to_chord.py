@@ -107,7 +107,7 @@ def find_chords_two_notes(notes, notes_intervals, pitch_scale):
             # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": True})
             # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": False})
             # if scale.tonic.is_equal(tonic):
-            if pitch_scale[0] == tonic.get_pitch_class():
+            if pitch_scale == None or pitch_scale[0] == tonic.get_pitch_class():
                 res.append({"chord": "ItaVI", "scale": Scale(tonic, True)})
                 res.append({"chord": "ItaVI", "scale": Scale(tonic, False)})
 
