@@ -22,7 +22,7 @@ OUTPUT_PATH = CONFIG["locations"]["output_path"]
 CSV_PATH = CONFIG["locations"]["csv_path"]
 
 directory = "../data/"
-KeyThenChordMode = True
+KeyThenChordMode = False
 
 
 def get_files(filename=None):
@@ -56,7 +56,9 @@ def export_csv(out_list, dirname, filename):
 
 
 def main():
-    score_files = get_files()  # "Chopin_F._Etude_in_G-Flat_Major,_Op.10_No.5.mxl"
+    score_files = get_files(
+        "anonymous_Twinkle_Twinkle.mxl"
+    )  # "Chopin_F._Etude_in_G-Flat_Major,_Op.10_No.5.mxl"
 
     for score_file in score_files:
         try:
@@ -118,6 +120,7 @@ def main():
                     notes_in_measures = get_notes_in_measures(chordify_stream)
                     segments = uniform_segmentation(notes_in_measures, time_signature)
                     combined_segments = merge_chord_segment(segments)
+                    print(combined_segments[:2])
 
                     res = []
                     for segment in combined_segments:
@@ -130,7 +133,6 @@ def main():
 
                 chords = get_beats_chord()
                 result = determine_chord(keys, chords)
-                print(result)
                 export_csv(result, "result", score_file.removesuffix(".mxl"))
 
         except Exception as error:

@@ -87,14 +87,15 @@ def is_excess_notes_variation(notes_dictionary):
 
 
 def notes_dictionary_sum(notes_dictionary_1, notes_dictionary_2):
+    new_notes_dict = notes_dictionary_1.copy()
     for key, value in notes_dictionary_2.items():
-        if not key in notes_dictionary_1:
-            notes_dictionary_1[key] = 0
-        notes_dictionary_1[key] = value
-    total = sum(notes_dictionary_1.values())
-    for note in notes_dictionary_1.keys():
-        notes_dictionary_1[note] = notes_dictionary_1[note] / total
-    return notes_dictionary_1
+        if not key in new_notes_dict:
+            new_notes_dict[key] = 0
+        new_notes_dict[key] = value
+    total = sum(new_notes_dict.values())
+    for note in new_notes_dict.keys():
+        new_notes_dict[note] = new_notes_dict[note] / total
+    return new_notes_dict
 
 
 # bottom-up approach of chord segmentation, segments = return of uniform_segmentation()
@@ -127,7 +128,6 @@ def merge_chord_segment(segments):
             merged_segment = notes_dictionary_sum(
                 previous_segment[1], current_segment[1]
             )
-            # print(">>>", merged_segment, is_excess_notes_variation(merged_segment))
             if not is_excess_notes_variation(merged_segment):
                 res.append((previous_segment[0], merged_segment))
             # else don't combine
