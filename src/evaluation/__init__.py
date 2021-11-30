@@ -4,36 +4,40 @@ if __name__ == "__main__":
 
 from preprocess.piece import Piece
 
+class Metric:
 
-def chord_seg_accuracy_hard(piece, prediction):
-    """
-    Naive scoring method for chord segmentation.
-    Only checks portion of correct slicing.
+    def __init__(self):
+        pass
 
-    :rtype: score in 0-1 range
-    """
+    def chord_seg_accuracy_hard(piece, prediction):
+        """
+        Naive scoring method for chord segmentation.
+        Only checks portion of correct slicing.
 
-    target = piece.get_chord_seg_target()
-    aligned = 0
-    segments = min(len(prediction), len(target))
-    for i in range(segments):
-        if prediction[i] == target[i][1]:
-            aligned += 1
+        :rtype: score in 0-1 range
+        """
 
-    return round(aligned / len(target), 4)
+        target = piece.get_chord_seg_target()
+        aligned = 0
+        segments = min(len(prediction), len(target))
+        for i in range(segments):
+            if prediction[i] == target[i][1]:
+                aligned += 1
 
-
-def chord_seg_accuracy(piece, prediction):
-    pass
-
-
-def key_seg_accuracy(piece, prediction):
-    pass
+        return round(aligned / len(target), 4)
 
 
-if __name__ == "__main__":
-    p = Piece('Twinkle-Twinkle')
-    print(chord_seg_accuracy_hard(p, [0.0, 4.0, 6.0, 8.0, 10.0, 11.0]))
+    def chord_seg_accuracy(piece, prediction):
+        pass
+
+
+    def key_seg_accuracy(piece, prediction):
+        pass
+
+
+# if __name__ == "__main__":
+#     p = Piece('Twinkle-Twinkle')
+#     print(chord_seg_accuracy_hard(p, [0.0, 4.0, 6.0, 8.0, 10.0, 11.0]))
 
 """ reference for
 >>> music21.music21.converter.subConverters.ConverterMusicXML
