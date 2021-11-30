@@ -22,7 +22,7 @@ OUTPUT_PATH = CONFIG["locations"]["output_path"]
 CSV_PATH = CONFIG["locations"]["csv_path"]
 
 directory = "../data/"
-KeyThenChordMode = True
+KeyThenChordMode = False
 
 
 def get_files(filename=None):
@@ -56,7 +56,7 @@ def export_csv(out_list, dirname, filename):
 
 
 def main():
-    score_files = get_files()  # "Chopin_F._Etude_in_G-Flat_Major,_Op.10_No.5.mxl"
+    score_files = get_files()  #
 
     for score_file in score_files:
         try:

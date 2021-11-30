@@ -34,18 +34,11 @@ def calculate_choice_scores(key_dict, chord, base_score):
 
 def determine_chord(keys, chords):
     if not keys == None:
-        keys_change_num = len(keys)
-        key_ptr = 0
-        scale_score_dict = dict(keys[0]["corr_values"])
         res = []
 
         for chord in chords:
             offset = chord[0]
-            while (
-                key_ptr < keys_change_num - 1 and offset >= keys[key_ptr + 1]["offset"]
-            ):
-                key_ptr += 1
-                scale_score_dict = dict(keys[key_ptr]["corr_values"])
+            scale_score_dict = find_scale_in_chord_segment(keys, chord)
 
             scores_chords = [
                 calculate_choice_scores(
@@ -53,10 +46,13 @@ def determine_chord(keys, chords):
                 )
                 for possible_chord in chord[1]
             ]
-            scores_chords.sort(key=lambda i: i[0], reverse=True)
-
-            chord_score, chosen_chord = scores_chords[0]
-            res.append({"offset": offset, "chord": chosen_chord, "score": chord_score})
+            # ignore if cannot find a chord with a key
+            if len(scores_chords) > 0:
+                scores_chords.sort(key=lambda i: i[0], reverse=True)
+                chord_score, chosen_chord = scores_chords[0]
+                res.append(
+                    {"offset": offset, "chord": chosen_chord, "score": chord_score}
+                )
     else:
         res = []
         for chord in chords:
