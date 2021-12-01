@@ -155,7 +155,7 @@ MINOR_CHORD_FREQUENCY_DICTIONARY["VII"] = PROBABILITY_DICTIONARY["seldom"]
 MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII"] = PROBABILITY_DICTIONARY["often"]
 MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = PROBABILITY_DICTIONARY["common"]
 
-partial_record = True
+partial_record = False
 if partial_record:
     major_left = 0.307
     MAJOR_CHORD_FREQUENCY_DICTIONARY = {"I": 0.273}
@@ -240,7 +240,7 @@ if partial_record:
     MINOR_CHORD_FREQUENCY_DICTIONARY["DimVII7"] = 0.006
 
 # the threshold that determine if a segment can be given a chord label
-NOTES_VARIATION_THRESHOLD = 3
+NOTES_VARIATION_THRESHOLD = 4
 NOTES_FREQUENCY_THRESHOLD = 0.2
 
 # Key profile dictionary

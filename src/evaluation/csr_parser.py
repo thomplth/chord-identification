@@ -1,5 +1,6 @@
 import csv
 import pickle
+from music21 import converter, stream
 # from utility.constant import (
 #     HEPTATONIC_DICTIONARY,
 #     SEMITONE_TO_INTERVAL_DICTIONARY,
@@ -14,48 +15,70 @@ No Common = No Commonity of Chord, Simple Common = x/15 distribution one, Comple
 4th number: note duration theshold
 """
 
+
 class Metric:
-    
+
     def __init__(self):
         self.ground_truth = []
         self.result = []
 
+    def get_length(self, filename):
+        score = converter.parse(filename + ".mxl")
+        self.length = score.duration.quarterLength
+
     def CSR(self):
         if not self.ground_truth or not self.result:
             return False
-        # gt_start = 0.0
-        res_start, res_end = 0.0, self.result[0][2]
         match_duration = 0.0
         res_idx = 0
-        for segment in self.ground_truth:
-            gt_end = segment[2]
-            while True:
-                if self.result[res_idx][0] == segment[0] and self.result[res_idx][1] == segment[1]:
-                    match_duration += res_end - res_start
-                else:
-                    print(f'Unmatched result from {round(res_start, 2)}: <{self.result[res_idx][0]}-{segment[0]}>, <{self.result[res_idx][1]}-{segment[1]}>')
-                
-                if res_idx+1 >= len(self.result):
-                    break
-                if self.result[res_idx+1][2] < gt_end:
-                    res_start = res_end
-                    res_idx += 1
-                    res_end = self.result[res_idx][2]
-                else:
-                    break
-            # gt_start = gt_end
-        return match_duration / self.ground_truth[-1][2]
+        for gt_idx, segment in enumerate(self.ground_truth):
+            gt_start = segment[2]
+            if gt_idx+1 < len(self.ground_truth):
+                    gt_end = self.ground_truth[gt_idx+1][2]
+            else:
+                gt_end = self.length
 
-    def parse_result(self, filename):
+            while True:
+                res_start = max(self.result[res_idx][2], gt_start)
+                if res_idx+1 < len(self.result):
+                    res_end = self.result[res_idx+1][2]
+                else:
+                    res_end = self.length
+
+                if self.result[res_idx][0] == segment[0] and self.result[res_idx][1] == segment[1]:
+                    match_duration += min(res_end - res_start, gt_end - res_start)
+                    # print(f'Matched at {gt_start} for {res_start} - {res_end}')
+                else:
+                    if self.result[res_idx][1] == segment[1]:
+                        print(f'Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>')
+                    elif self.result[res_idx][0] == segment[0]:
+                        print(f'Unmatched result at {res_start}: <{self.result[res_idx][1]}-{segment[1]}>')
+                    else:
+                        print(f'Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>, <{self.result[res_idx][1]}-{segment[1]}>')
+
+                if gt_end == res_end:
+                    res_idx += 1
+                    break
+                elif gt_end < res_end:
+                    break
+                else:
+                    res_idx += 1
+
+        return match_duration / self.length
+
+    def parse_result(self, filename, seventh=True):
         with open(filename + '.csv', newline='') as f:
             reader = csv.reader(f)
             data = [tuple(row) for row in reader]
         for row in data:
             try:
-                numeral = row[1].split('7')[0]
+                if seventh:
+                    numeral = row[1]
+                else:
+                    numeral = row[1].split('7')[0]
                 offset = float(row[0])
             except ValueError:
-                x, y = map(int, row[0].split('/')) # int or float? int now
+                x, y = map(int, row[0].split('/'))  # int or float? int now
                 offset = x / y
             self.result.append((numeral, row[2], offset))
 
@@ -71,6 +94,14 @@ class Metric:
         a, b = chord.split('(')
         scale = a[:-1]
         numeral = b[:-1]
+        if len(scale) > 1:
+            if scale[1] == 'b':
+                scale = scale[0] + '-'
+            elif scale[1] == '#':
+                scale = scale[0] + '#'
+            else:
+                print(scale)
+
         if a[-1] == 'M':
             scale = scale + ' Major'
         else:
@@ -79,7 +110,61 @@ class Metric:
 
 
 if __name__ == "__main__":
+    name20 = 'Étude_in_C_Minor'
+    name21 = 'Chopin_F._Etude_in_C_Minor,_Op.25_No.12_(Ocean)'
+    
+    res = []
+    for i in [3, 4]:
+        for j in [1, 2]:
+            m = Metric()
+            m.get_length('data/' + name21)
+            m.parse_ground_truth('data/ground_truth/' + name20)
+            m.parse_result(f'result/csv/result_KTC_NoCommon_{i}_.{j}/' + name21)
+            a = m.CSR()
+
+            m2 = Metric()
+            m2.get_length('data/' + name21)
+            m2.parse_ground_truth('data/ground_truth/' + name20)
+            m2.parse_result(f'result/csv/result_KTC_NoCommon_{i}_.{j}/' + name21, seventh=False)
+            b = m2.CSR()
+            res.append((f'KTC_NoCommon_{i}_.{j}/', (a, b)))
+
     m = Metric()
-    m.parse_ground_truth('data/ground_truth/Twinkle-Twinkle')
-    m.parse_result('result/csv/result_KTC_NoCommon_3_.1/anonymous_Twinkle_Twinkle')
-    print(m.CSR())
+    m.get_length('data/' + name21)
+    m.parse_ground_truth('data/ground_truth/' + name20)
+    m.parse_result('result/csv/result_KTC_ComplexCommon_4_.2/' + name21)
+    a = m.CSR()
+    m2 = Metric()
+    m2.get_length('data/' + name21)
+    m2.parse_ground_truth('data/ground_truth/' + name20)
+    m2.parse_result('result/csv/result_KTC_ComplexCommon_4_.2/' + name21)
+    b = m2.CSR()
+    res.append(('KTC_ComplexCommon_4_.2', (a, b)))
+
+    m = Metric()
+    m.get_length('data/' + name21)
+    m.parse_ground_truth('data/ground_truth/' + name20)
+    m.parse_result('result/csv/result_KAC_NoCommon_4_.2/' + name21)
+    a = m.CSR()
+    m2 = Metric()
+    m2.get_length('data/' + name21)
+    m2.parse_ground_truth('data/ground_truth/' + name20)
+    m2.parse_result('result/csv/result_KAC_NoCommon_4_.2/' + name21)
+    b = m2.CSR()
+    res.append(('KAC_NoCommon_4_.2', (a, b)))
+
+    m = Metric()
+    m.get_length('data/' + name21)
+    m.parse_ground_truth('data/ground_truth/' + name20)
+    m.parse_result('result/csv/result_KAC_SimpleCommon_4_.2/' + name21)
+    a = m.CSR()
+    m2 = Metric()
+    m2.get_length('data/' + name21)
+    m2.parse_ground_truth('data/ground_truth/' + name20)
+    m2.parse_result('result/csv/result_KAC_SimpleCommon_4_.2/' + name21)
+    b = m2.CSR()
+    res.append(('KAC_SimpleCommon_4_.2', (a, b)))
+
+    print(name21)
+    for k, t in res:
+        print(k, t)
