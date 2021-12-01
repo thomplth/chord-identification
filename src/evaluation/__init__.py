@@ -1,38 +1,38 @@
-if __name__ == "__main__":
-    import os, sys
-    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+# if __name__ == "__main__":
+#     import os, sys
+#     sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from preprocess.piece import Piece
+# from preprocess.piece import Piece
 
-class Metric:
+# class Metric:
 
-    def __init__(self):
-        pass
+#     def __init__(self):
+#         pass
 
-    def chord_seg_accuracy_hard(piece, prediction):
-        """
-        Naive scoring method for chord segmentation.
-        Only checks portion of correct slicing.
+#     def chord_seg_accuracy_hard(piece, prediction):
+#         """
+#         Naive scoring method for chord segmentation.
+#         Only checks portion of correct slicing.
 
-        :rtype: score in 0-1 range
-        """
+#         :rtype: score in 0-1 range
+#         """
 
-        target = piece.get_chord_seg_target()
-        aligned = 0
-        segments = min(len(prediction), len(target))
-        for i in range(segments):
-            if prediction[i] == target[i][1]:
-                aligned += 1
+#         target = piece.get_chord_seg_target()
+#         aligned = 0
+#         segments = min(len(prediction), len(target))
+#         for i in range(segments):
+#             if prediction[i] == target[i][1]:
+#                 aligned += 1
 
-        return round(aligned / len(target), 4)
-
-
-    def chord_seg_accuracy(piece, prediction):
-        pass
+#         return round(aligned / len(target), 4)
 
 
-    def key_seg_accuracy(piece, prediction):
-        pass
+#     def chord_seg_accuracy(piece, prediction):
+#         pass
+
+
+#     def key_seg_accuracy(piece, prediction):
+#         pass
 
 
 # if __name__ == "__main__":
