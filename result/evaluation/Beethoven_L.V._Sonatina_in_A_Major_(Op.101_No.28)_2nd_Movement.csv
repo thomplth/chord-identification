@@ -1,0 +1,9 @@
+Mode,Param,Strict,Relaxed
+KTC,NoCommon_3_.1,-1,-1
+KTC,NoCommon_3_.2,-1,-1
+KTC,NoCommon_4_.1,-1,-1
+KTC,NoCommon_4_.2,-1,-1
+KTC,ComplexCommon_4_.2,-1,-1
+KTC,SimpleCommon_4_.2,-1,-1
+KAC,NoCommon_4_.2,-1,-1
+KAC,SimpleCommon_4_.2,-1,-1
