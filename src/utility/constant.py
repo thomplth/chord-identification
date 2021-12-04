@@ -108,6 +108,18 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
 MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
 MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FreVI", "tonic_interval": "m6"}]
 
+# chord form dictionary
+CHORD_FORM_DICTIONARY = {}
+CHORD_FORM_DICTIONARY[("M3", "m3")] = "Major"
+CHORD_FORM_DICTIONARY[("m3", "M3")] = "Minor"
+CHORD_FORM_DICTIONARY[("m3", "m3")] = "Diminished"
+CHORD_FORM_DICTIONARY[("m3", "M3", "m3")] = "Minor seventh"
+CHORD_FORM_DICTIONARY[("M3", "m3", "m3")] = "Dominant seventh"
+CHORD_FORM_DICTIONARY[("m3", "m3", "m3")] = "Diminished seventh"
+CHORD_FORM_DICTIONARY[("M3", "m3", "A2")] = "German sixth"
+CHORD_FORM_DICTIONARY[("M3", "M2", "M3")] = "French sixth"
+CHORD_FORM_DICTIONARY[("M3", "A4")] = "Italian sixth"
+
 # chord frequency dictionary
 PROBABILITY_DICTIONARY = {
     "often": 8.0 / 15,
