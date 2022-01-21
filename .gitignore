@@ -134,3 +134,4 @@ dmypy.json
 
 # APFS
 .DS_Store
+_ref/
