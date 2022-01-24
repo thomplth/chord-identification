@@ -17,16 +17,14 @@ from identification.result_combination import *
 CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
-INPUT_PATH = CONFIG["locations"]["input_path"]
-OUTPUT_PATH = CONFIG["locations"]["output_path"]
+DATA_PATH = CONFIG["locations"]["data_path"]
+RESULT_PATH = CONFIG["locations"]["result_path"]
 CSV_PATH = CONFIG["locations"]["csv_path"]
-
-directory = "../data/"
-KeyThenChordMode = False
+KeyThenChordMode = CONFIG["param"]["KeyThenChord"]
 
 
 def get_files(filename=None):
-    all_scores = [f for f in os.listdir(directory) if os.path.isfile(directory + f)]
+    all_scores = [f for f in os.listdir(DATA_PATH) if os.path.isfile(DATA_PATH + f)]
     all_scores.remove(
         "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl"
     )
@@ -61,7 +59,7 @@ def main():
     for score_file in score_files:
         try:
             print(">> Currently handling:" + score_file)
-            stream = load_file(directory + score_file)
+            stream = load_file(DATA_PATH + score_file)
             chordify_stream = chordify(stream)
             flatten_stream = flatten(stream)
 
