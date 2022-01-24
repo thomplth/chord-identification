@@ -7,6 +7,7 @@
 import csv
 import pickle
 from music21 import converter, stream
+
 # from utility.constant import (
 #     HEPTATONIC_DICTIONARY,
 #     SEMITONE_TO_INTERVAL_DICTIONARY,
@@ -22,13 +23,12 @@ No Common = No Commonity of Chord, Simple Common = x/15 distribution one, Comple
 4th number: note duration theshold
 """
 
-SCORE_PATH = '../data'
-GT_PATH = '../data/ground_truth'
-RESULT_PATH = '../csv'
+SCORE_PATH = "../data"
+GT_PATH = "../data/ground_truth"
+RESULT_PATH = "../csv"
 
 
 class Metric:
-
     def __init__(self, name20, name21):
         self.ground_truth = self._parse_ground_truth(name20)
         # self.result = self._parse_result(name21)
@@ -40,7 +40,7 @@ class Metric:
 
     def _parse_result(self, filename, seventh=True):
         res = []
-        with open(RESULT_PATH + filename + '.csv', newline='') as f:
+        with open(RESULT_PATH + filename + ".csv", newline="") as f:
             reader = csv.reader(f)
             data = [tuple(row) for row in reader]
 
@@ -49,10 +49,10 @@ class Metric:
                 if seventh:
                     numeral = row[1]
                 else:
-                    numeral = row[1].split('7')[0]
+                    numeral = row[1].split("7")[0]
                 offset = float(row[0])
             except ValueError:
-                x, y = map(int, row[0].split('/'))  # int or float? int now
+                x, y = map(int, row[0].split("/"))  # int or float? int now
                 offset = x / y
             res.append((numeral, row[2], offset))
 
@@ -60,7 +60,7 @@ class Metric:
 
     def _parse_ground_truth(self, filename):
         res = []
-        with open(GT_PATH + filename + '.pydata', 'rb') as f:
+        with open(GT_PATH + filename + ".pydata", "rb") as f:
             data = pickle.load(f)
 
         for chord, offset in data:
@@ -70,21 +70,21 @@ class Metric:
         return res
 
     def convert_chord_name(self, chord):
-        a, b = chord.split('(')
+        a, b = chord.split("(")
         scale = a[:-1]
         numeral = b[:-1]
         if len(scale) > 1:
-            if scale[1] == 'b':
-                scale = scale[0] + '-'
-            elif scale[1] == '#':
-                scale = scale[0] + '#'
+            if scale[1] == "b":
+                scale = scale[0] + "-"
+            elif scale[1] == "#":
+                scale = scale[0] + "#"
             else:
                 print(scale)
 
-        if a[-1] == 'M':
-            scale = scale + ' Major'
+        if a[-1] == "M":
+            scale = scale + " Major"
         else:
-            scale = scale.lower() + ' Minor'
+            scale = scale.lower() + " Minor"
         return numeral, scale
 
     def chord_perfect_match(piece, prediction):
@@ -120,8 +120,8 @@ class Metric:
         # Calculate relative correct overlap with ground truth data as basis
         for gt_idx, segment in enumerate(self.ground_truth):
             gt_start = segment[2]
-            if gt_idx+1 < len(self.ground_truth):
-                gt_end = self.ground_truth[gt_idx+1][2]
+            if gt_idx + 1 < len(self.ground_truth):
+                gt_end = self.ground_truth[gt_idx + 1][2]
             else:
                 gt_end = self.length
 
@@ -129,25 +129,30 @@ class Metric:
             # End if result segment time exceed GT
             while True:
                 res_start = max(self.result[res_idx][2], gt_start)
-                if res_idx+1 < len(self.result):
-                    res_end = self.result[res_idx+1][2]
+                if res_idx + 1 < len(self.result):
+                    res_end = self.result[res_idx + 1][2]
                 else:
                     res_end = self.length
 
-                if self.result[res_idx][0] == segment[0] and self.result[res_idx][1] == segment[1]:
-                    match_duration += min(res_end -
-                                          res_start, gt_end - res_start)
+                if (
+                    self.result[res_idx][0] == segment[0]
+                    and self.result[res_idx][1] == segment[1]
+                ):
+                    match_duration += min(res_end - res_start, gt_end - res_start)
                     # print(f'Matched at {gt_start} for {res_start} - {res_end}')
                 else:
                     if self.result[res_idx][1] == segment[1]:
                         print(
-                            f'Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>')
+                            f"Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>"
+                        )
                     elif self.result[res_idx][0] == segment[0]:
                         print(
-                            f'Unmatched result at {res_start}: <{self.result[res_idx][1]}-{segment[1]}>')
+                            f"Unmatched result at {res_start}: <{self.result[res_idx][1]}-{segment[1]}>"
+                        )
                     else:
                         print(
-                            f'Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>, <{self.result[res_idx][1]}-{segment[1]}>')
+                            f"Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>, <{self.result[res_idx][1]}-{segment[1]}>"
+                        )
 
                 if gt_end == res_end:
                     res_idx += 1
@@ -161,55 +166,55 @@ class Metric:
 
 
 if __name__ == "__main__":
-    name20 = 'Étude_in_C_Minor'
-    name21 = 'Chopin_F._Etude_in_C_Minor,_Op.25_No.12_(Ocean)'
+    name20 = "Étude_in_C_Minor"
+    name21 = "Chopin_F._Etude_in_C_Minor,_Op.25_No.12_(Ocean)"
 
     res = []
     for i in [3, 4]:
         for j in [1, 2]:
             m = Metric(name20, name21)
-            m.parse_ground_truth('data/ground_truth/' + name20)
-            m.parse_result(
-                f'result/csv/result_KTC_NoCommon_{i}_.{j}/' + name21)
+            m.parse_ground_truth("data/ground_truth/" + name20)
+            m.parse_result(f"result/csv/result_KTC_NoCommon_{i}_.{j}/" + name21)
             a = m.chord_symbol_recall()
 
             m2 = Metric()
-            m2.get_length('data/' + name21)
-            m2.parse_ground_truth('data/ground_truth/' + name20)
+            m2.get_length("data/" + name21)
+            m2.parse_ground_truth("data/ground_truth/" + name20)
             m2.parse_result(
-                f'result/csv/result_KTC_NoCommon_{i}_.{j}/' + name21, seventh=False)
+                f"result/csv/result_KTC_NoCommon_{i}_.{j}/" + name21, seventh=False
+            )
             b = m2.chord_symbol_recall()
-            res.append((f'KTC_NoCommon_{i}_.{j}/', (a, b)))
+            res.append((f"KTC_NoCommon_{i}_.{j}/", (a, b)))
 
     m = Metric()
-    m.parse_ground_truth('data/ground_truth/' + name20)
-    m.parse_result('result/csv/result_KTC_ComplexCommon_4_.2/' + name21)
+    m.parse_ground_truth("data/ground_truth/" + name20)
+    m.parse_result("result/csv/result_KTC_ComplexCommon_4_.2/" + name21)
     a = m.chord_symbol_recall()
     m2 = Metric()
-    m2.parse_ground_truth('data/ground_truth/' + name20)
-    m2.parse_result('result/csv/result_KTC_ComplexCommon_4_.2/' + name21)
+    m2.parse_ground_truth("data/ground_truth/" + name20)
+    m2.parse_result("result/csv/result_KTC_ComplexCommon_4_.2/" + name21)
     b = m2.chord_symbol_recall()
-    res.append(('KTC_ComplexCommon_4_.2', (a, b)))
+    res.append(("KTC_ComplexCommon_4_.2", (a, b)))
 
     m = Metric()
-    m.parse_ground_truth('data/ground_truth/' + name20)
-    m.parse_result('result/csv/result_KAC_NoCommon_4_.2/' + name21)
+    m.parse_ground_truth("data/ground_truth/" + name20)
+    m.parse_result("result/csv/result_KAC_NoCommon_4_.2/" + name21)
     a = m.chord_symbol_recall()
     m2 = Metric()
-    m2.parse_ground_truth('data/ground_truth/' + name20)
-    m2.parse_result('result/csv/result_KAC_NoCommon_4_.2/' + name21)
+    m2.parse_ground_truth("data/ground_truth/" + name20)
+    m2.parse_result("result/csv/result_KAC_NoCommon_4_.2/" + name21)
     b = m2.chord_symbol_recall()
-    res.append(('KAC_NoCommon_4_.2', (a, b)))
+    res.append(("KAC_NoCommon_4_.2", (a, b)))
 
     m = Metric()
-    m.parse_ground_truth('data/ground_truth/' + name20)
-    m.parse_result('result/csv/result_KAC_SimpleCommon_4_.2/' + name21)
+    m.parse_ground_truth("data/ground_truth/" + name20)
+    m.parse_result("result/csv/result_KAC_SimpleCommon_4_.2/" + name21)
     a = m.chord_symbol_recall()
     m2 = Metric()
-    m2.parse_ground_truth('data/ground_truth/' + name20)
-    m2.parse_result('result/csv/result_KAC_SimpleCommon_4_.2/' + name21)
+    m2.parse_ground_truth("data/ground_truth/" + name20)
+    m2.parse_result("result/csv/result_KAC_SimpleCommon_4_.2/" + name21)
     b = m2.chord_symbol_recall()
-    res.append(('KAC_SimpleCommon_4_.2', (a, b)))
+    res.append(("KAC_SimpleCommon_4_.2", (a, b)))
 
     print(name21)
     for k, t in res:
