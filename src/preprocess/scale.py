@@ -4,15 +4,20 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 
-from preprocess.note import Note
+# from preprocess.note import Note
+from note import Note
 
 
 class Scale:
     def __init__(
-        self, tonic_alphabet="?", tonic_accidental=0, is_major=True, tonic_note=None
+        self,
+        tonic_alphabet: str = "?",
+        tonic_accidental: int = 0,
+        is_major: bool = True,
+        tonic_note: Note = None,
     ):
         self.tonic = (
-            Note(tonic_alphabet, tonic_accidental) if tonic_note == None else tonic_note
+            Note(tonic_alphabet, tonic_accidental) if tonic_note is None else tonic_note
         )
         self.is_major = is_major
 

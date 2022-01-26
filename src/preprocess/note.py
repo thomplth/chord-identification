@@ -11,7 +11,7 @@ from utility.constant import (
 
 
 class Note:
-    def __init__(self, alphabet="?", accidental=0):
+    def __init__(self, alphabet: str = "?", accidental: int = 0):
         self.alphabet = alphabet
         self.accidental = accidental
 
@@ -22,7 +22,7 @@ class Note:
         )
 
     # Use string format to represent the note
-    def note_str(self, isPrintedInDos=True):
+    def note_str(self, isPrintedInDos: bool = True):
         # If print in DOS, keep the representation as good as possible;
         # If used by music21, keep the alignment with music21
         sharp = "♯" if isPrintedInDos else "#"
