@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from scale import Scale
+from preprocess.scale import Scale
 from chord_to_note import pick_chord
 from utility.constant import (
     MAJOR_CHORD_DICTIONARY,

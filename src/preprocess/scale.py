@@ -4,8 +4,9 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 
-# from preprocess.note import Note
-from note import Note
+from preprocess.note import Note
+
+# from note import Note
 
 
 class Scale:

@@ -5,10 +5,31 @@ if __name__ == "__main__":
 
 # from ..ChordNoteTickStart.constant import MAJOR_SEMITONE_CUMULATIVE_PATTERN
 from utility.m21_utility import *
-import music21
 from utility import note_name_simplifier, note_input_convertor
 from utility.constant import NOTES_VARIATION_THRESHOLD, NOTES_FREQUENCY_THRESHOLD
 import numpy as np
+
+# note dict: note name -> duration
+Note_dict = dict[str, float]
+
+# normalization of note dictionary
+def normalize_note_dictionary(notes_dict: Note_dict):
+    total = sum(notes_dict.values())
+    normalized_dict: Note_dict = notes_dict.copy()
+    for note in normalized_dict.keys():
+        normalized_dict[note] = normalized_dict[note] / total
+    return normalized_dict
+
+
+# sum up two note dictionary
+def sum_note_dictionary(notes_dictionary_1: Note_dict, notes_dictionary_2: Note_dict):
+    new_notes_dict: Note_dict = notes_dictionary_1.copy()
+    for key, value in notes_dictionary_2.items():
+        if not key in new_notes_dict:
+            new_notes_dict[key] = 0
+        new_notes_dict[key] = value
+    return new_notes_dict
+
 
 # top-down approach of chord segmentation
 def uniform_segmentation(chordify_stream, time_signature):
@@ -51,14 +72,7 @@ def uniform_segmentation(chordify_stream, time_signature):
                     if not (name in offsets_notes_dictionary[note_offset]):
                         offsets_notes_dictionary[note_offset][name] = 0
                     offsets_notes_dictionary[note_offset][name] += duration
-
-            # normalization
-            for offset in offsets_notes_dictionary.keys():
-                total = sum(offsets_notes_dictionary[offset].values())
-                for note in offsets_notes_dictionary[offset].keys():
-                    offsets_notes_dictionary[offset][note] = (
-                        offsets_notes_dictionary[offset][note] / total
-                    )
+                    # no normalization
 
             res.extend(list(offsets_notes_dictionary.items()))
         res.sort(key=lambda tup: tup[0])
@@ -67,35 +81,25 @@ def uniform_segmentation(chordify_stream, time_signature):
     return new()
 
 
-# define note variation as the number of pitch class of a set of notes
-def notes_variation(notes_names):
-    return len(list(set(notes_names)))
-
-
-def is_excess_notes_variation(notes_dictionary):
-    notes = list(notes_dictionary.items())
+def is_excess_notes_variation(notes_dictionary: Note_dict):
+    # First normalization the notes dictionary
+    normalized_notes_dict: Note_dict = normalize_note_dictionary(notes_dictionary)
+    notes = list(normalized_notes_dict.items())
+    # Then sort acc. to the ranking
     notes.sort(key=lambda tup: tup[1], reverse=True)
+
+    # The variation does not excess if:
     return not (
         (
+            # too few notes, OR
             len(notes) <= NOTES_VARIATION_THRESHOLD
+            # the notes distribution is satisfied
             or (
                 notes[NOTES_VARIATION_THRESHOLD - 1][1] >= NOTES_FREQUENCY_THRESHOLD
                 and notes[NOTES_VARIATION_THRESHOLD][1] < NOTES_FREQUENCY_THRESHOLD
             )
         )
     )
-
-
-def notes_dictionary_sum(notes_dictionary_1, notes_dictionary_2):
-    new_notes_dict = notes_dictionary_1.copy()
-    for key, value in notes_dictionary_2.items():
-        if not key in new_notes_dict:
-            new_notes_dict[key] = 0
-        new_notes_dict[key] = value
-    total = sum(new_notes_dict.values())
-    for note in new_notes_dict.keys():
-        new_notes_dict[note] = new_notes_dict[note] / total
-    return new_notes_dict
 
 
 # bottom-up approach of chord segmentation, segments = return of uniform_segmentation()
@@ -105,38 +109,18 @@ def merge_chord_segment(segments):
         previous_segment = res.pop()
         current_segment = segments[idx]
 
-        def old():
-            # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
-            if (
-                notes_variation(previous_segment[1] + current_segment[1])
-                <= NOTES_VARIATION_THRESHOLD
-            ):
-                res.append(
-                    (
-                        previous_segment[0],
-                        list(set(previous_segment[1] + current_segment[1])),
-                    )
-                )
-            # else don't combine
-            else:
-                res.append(previous_segment)
-                res.append(current_segment)
+        # print("###", previous_segment, current_segment)
+        # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
+        merged_segment = sum_note_dictionary(previous_segment[1], current_segment[1])
+        if not is_excess_notes_variation(merged_segment):
+            res.append((previous_segment[0], merged_segment))
+        # else don't combine
+        else:
+            res.extend([previous_segment, current_segment])
 
-        def new():
-            # print("###", previous_segment, current_segment)
-            # combine the previous segment if the total variation of notes of two segments are fewer than the threshold
-            merged_segment = notes_dictionary_sum(
-                previous_segment[1], current_segment[1]
-            )
-            if not is_excess_notes_variation(merged_segment):
-                res.append((previous_segment[0], merged_segment))
-            # else don't combine
-            else:
-                res.append(previous_segment)
-                res.append(current_segment)
-
-        new()
-    return res
+    # normalize all segments at last
+    res2 = [(ele[0], normalize_note_dictionary(ele[1])) for ele in res]
+    return res2
 
 
 # Steedman means whether the output vector is flatten

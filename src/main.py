@@ -26,7 +26,9 @@ KeyThenChordMode = CONFIG["param"]["KeyThenChord"]
 def get_files(filename=None):
     # for x in os.listdir(DATA_PATH):
     #     print(x)
-    all_scores = [f for f in os.listdir(DATA_PATH) if os.path.isfile(os.path.join(DATA_PATH, f))]
+    all_scores = [
+        f for f in os.listdir(DATA_PATH) if os.path.isfile(os.path.join(DATA_PATH, f))
+    ]
     all_scores.remove(
         "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl"
     )
@@ -48,7 +50,7 @@ def export_csv(out_list, dirname, filename):
                 segment["offset"],
                 segment["chord"]["chord"],
                 segment["chord"]["scale"].scale_str(),
-                segment["score"],
+                round(segment["score"], 6),
             )
         )
 
