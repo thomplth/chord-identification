@@ -11,12 +11,19 @@ from utility.constant import (
 
 
 class Note:
-    def __init__(self, alphabet: str = "?", accidental: int = 0):
-        self.alphabet = alphabet
-        self.accidental = accidental
+    def __init__(self, alphabet: str = "C", accidental: int = 0):
+        self.alphabet = "C"
+        if alphabet in ["A", "B", "C", "D", "E", "F", "G"]:
+            self.alphabet = alphabet
+        self.accidental = 0
+        if accidental in range(-2, 3):
+            self.accidental = accidental
 
     # determine if two notes are equal
     def is_equal(self, other_note):
+        """
+        :other_note: Note object
+        """
         return (self.alphabet == other_note.alphabet) and (
             self.accidental == other_note.accidental
         )
@@ -36,10 +43,16 @@ class Note:
 
     # Give pitch class of a note
     def get_pitch_class(self):
+        """
+        :return type: int range [1:11]
+        """
         return (HEPTATONIC_DICTIONARY[self.alphabet] + self.accidental) % 12
 
     # quality: M (major), m (minor), P (perfect), A (augmented), d (diminished)
     def get_note_by_interval(self, interval):
+        """
+        :interval: char[2], where char[0] = quality, char[1] = int range [1:7]
+        """
         if interval in INTERVAL_TO_SEMITONE_DICTIONARY:
             alphabetical_distance = int(interval[1])
             semitone_difference = INTERVAL_TO_SEMITONE_DICTIONARY[interval]
@@ -64,6 +77,9 @@ class Note:
 
     # Given two notes with ordering, return the interval
     def get_interval(self, upper_note):
+        """
+        :upper_note: Note object
+        """
         alphabetical_distance = (ord(upper_note.alphabet) - ord(self.alphabet)) % 7 + 1
         semitone_difference = (
             upper_note.get_pitch_class() - self.get_pitch_class()

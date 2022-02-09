@@ -33,8 +33,36 @@ for semitone, intervals in SEMITONE_TO_INTERVAL_DICTIONARY.items():
     for interval in intervals:
         INTERVAL_TO_SEMITONE_DICTIONARY[interval] = semitone
 
+# chord form dictionary
+CHORD_FORM_NAME_DICTIONARY = {("M3", "m3"): "Major"}
+CHORD_FORM_NAME_DICTIONARY[("m3", "M3")] = "Minor"
+CHORD_FORM_NAME_DICTIONARY[("m3", "m3")] = "Diminished"
+CHORD_FORM_NAME_DICTIONARY[("M3", "m3", "M3")] = "Major seventh"  # can omit
+CHORD_FORM_NAME_DICTIONARY[("m3", "M3", "m3")] = "Minor seventh"
+CHORD_FORM_NAME_DICTIONARY[("M3", "m3", "m3")] = "Dominant seventh"
+CHORD_FORM_NAME_DICTIONARY[("m3", "m3", "m3")] = "Diminished seventh"
+CHORD_FORM_NAME_DICTIONARY[("M3", "m3", "A2")] = "German sixth"
+CHORD_FORM_NAME_DICTIONARY[("M3", "M2", "M3")] = "French sixth"
+CHORD_FORM_NAME_DICTIONARY[("M3", "A4")] = "Italian sixth"
+
+CHORD_FORM_INTERVAL_DICTIONARY = {}
+for intervals, name in CHORD_FORM_NAME_DICTIONARY.items():
+    CHORD_FORM_INTERVAL_DICTIONARY[name] = intervals
+
 # Key: chord name, value: array of intervals, where the first is the interval between the tonic and the first note,
 # and the rest are the interval between the previous and the next note
+# TODO
+CHORD_ROMAN_LEXICON = ["I", "I7", "i"]  # tonic: I
+CHORD_ROMAN_LEXICON.extend(["bII", "ii", "ii7", "iidim", "iidim7"])  # supertonic: II
+CHORD_ROMAN_LEXICON.extend(["iii", "iii7", "III"])  # mediant: III
+CHORD_ROMAN_LEXICON.extend(["IV", "IV7", "iv"])  # subdominant: IV
+CHORD_ROMAN_LEXICON.extend(["V", "V7", "v"])  # dominant: V
+CHORD_ROMAN_LEXICON.extend(
+    ["bVI", "GerVI", "FreVI", "ItaVI", "vi", "vi7", "VI"]
+)  # sub-mediant: VI
+CHORD_ROMAN_LEXICON.extend(["VII", "viidim", "viidim5", "viidim7"])  # leading note: VII
+
+
 MAJOR_CHORD_DICTIONARY = {"I": ["P1", "M3", "m3"]}
 # MAJOR_CHORD_DICTIONARY["I7"] = ["P1", "M3", "m3", "M3"]  # can delete
 MAJOR_CHORD_DICTIONARY["bII"] = ["m2", "M3", "m3"]
@@ -52,9 +80,9 @@ MAJOR_CHORD_DICTIONARY["FreVI"] = ["m6", "M3", "M2", "M3"]
 MAJOR_CHORD_DICTIONARY["ItaVI"] = ["m6", "M3", "A4"]
 MAJOR_CHORD_DICTIONARY["VI"] = ["M6", "m3", "M3"]
 # MAJOR_CHORD_DICTIONARY["VI7"] = ["M6", "m3", "M3", "m3"]
-MAJOR_CHORD_DICTIONARY["DimVII"] = ["M7", "m3", "m3"]
+MAJOR_CHORD_DICTIONARY["VIIdim"] = ["M7", "m3", "m3"]
 # MAJOR_CHORD_DICTIONARY["DimVII5"] = ["M7", "m3", "m3", "M3"]  # Half-dim 7th
-MAJOR_CHORD_DICTIONARY["DimVII7"] = ["M7", "m3", "m3", "m3"]  # Dim 7th
+MAJOR_CHORD_DICTIONARY["VIIdim7"] = ["M7", "m3", "m3", "m3"]  # Dim 7th
 
 MINOR_CHORD_DICTIONARY = {"I": ["P1", "m3", "M3"]}
 MINOR_CHORD_DICTIONARY["I+"] = MAJOR_CHORD_DICTIONARY["I"]
@@ -72,8 +100,8 @@ MINOR_CHORD_DICTIONARY["GerVI"] = MAJOR_CHORD_DICTIONARY["GerVI"]
 MINOR_CHORD_DICTIONARY["FreVI"] = MAJOR_CHORD_DICTIONARY["FreVI"]
 MINOR_CHORD_DICTIONARY["ItaVI"] = MAJOR_CHORD_DICTIONARY["ItaVI"]
 MINOR_CHORD_DICTIONARY["VII"] = ["m7", "M3", "m3"]
-MINOR_CHORD_DICTIONARY["DimVII"] = MAJOR_CHORD_DICTIONARY["DimVII"]
-MINOR_CHORD_DICTIONARY["DimVII7"] = MAJOR_CHORD_DICTIONARY["DimVII7"]
+MINOR_CHORD_DICTIONARY["VIIdim"] = MAJOR_CHORD_DICTIONARY["VIIdim"]
+MINOR_CHORD_DICTIONARY["VIIdim7"] = MAJOR_CHORD_DICTIONARY["VIIdim7"]
 
 # Dictionary for note to chord
 MAJOR_CHORD_FINDER_DICTIONARY = {}
@@ -108,17 +136,6 @@ for chord, pattern in MINOR_CHORD_DICTIONARY.items():
 MINOR_CHORD_FINDER_DICTIONARY["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
 MINOR_CHORD_FINDER_DICTIONARY["A4", "M3"] = [{"chord": "FreVI", "tonic_interval": "m6"}]
 
-# chord form dictionary
-CHORD_FORM_DICTIONARY = {}
-CHORD_FORM_DICTIONARY[("M3", "m3")] = "Major"
-CHORD_FORM_DICTIONARY[("m3", "M3")] = "Minor"
-CHORD_FORM_DICTIONARY[("m3", "m3")] = "Diminished"
-CHORD_FORM_DICTIONARY[("m3", "M3", "m3")] = "Minor seventh"
-CHORD_FORM_DICTIONARY[("M3", "m3", "m3")] = "Dominant seventh"
-CHORD_FORM_DICTIONARY[("m3", "m3", "m3")] = "Diminished seventh"
-CHORD_FORM_DICTIONARY[("M3", "m3", "A2")] = "German sixth"
-CHORD_FORM_DICTIONARY[("M3", "M2", "M3")] = "French sixth"
-CHORD_FORM_DICTIONARY[("M3", "A4")] = "Italian sixth"
 
 # chord frequency dictionary
 PROBABILITY_DICTIONARY = {

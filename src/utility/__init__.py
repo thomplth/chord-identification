@@ -41,24 +41,3 @@ def invert_interval(interval):
         new_quality = "A"
     new_distance = str((9 - int(distance)))
     return new_quality + new_distance
-
-
-def result_roman_to_jazz(roman, scale_str):
-    # V+,d Minor
-    scale_text = scale_str.split()
-    tonic_str = scale_text[0]
-    isMajor = scale_text[1] == "Major"
-
-    lexicon = MAJOR_CHORD_DICTIONARY if isMajor else MINOR_CHORD_DICTIONARY
-    root_interval = lexicon[roman][0]
-    chord_form = CHORD_FORM_DICTIONARY[tuple(lexicon[roman][1:])]
-    tonic = note_input_convertor(tonic_str).get_note_by_interval(root_interval)
-    return tonic.note_str(False) + " " + chord_form
-    # A Major
-
-
-def ground_truth_roman_to_jazz():
-    # Convert some partial chord with not aligned chord roman
-    pass
-    # use result_roman_to_jazz()
-    pass
