@@ -46,3 +46,10 @@
   ('P5', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
   ('A4', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
   ```
+
+- Naming convention for the result file
+  - result_KTC_NoCommon_4_.1
+  - KTC = Key then Chord, KAC = Key and Chord (refer to report for details)
+  - No Common = No Commonity of Chord, Simple Common = x/15 distribution one, ComplexCommon = Hybrid distribution
+  - 3rd number is note variation theshold
+  - 4th number: note duration theshold

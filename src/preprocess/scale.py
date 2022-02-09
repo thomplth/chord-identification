@@ -21,6 +21,14 @@ class Scale:
             Note(tonic_alphabet, tonic_accidental) if tonic_note is None else tonic_note
         )
         self.is_major = is_major
+    
+    def __str__(self):
+        scale_mode = "Major" if self.is_major else "Minor"
+        tonic_str = self.tonic.note_str(False)
+        tonic_str = tonic_str.upper() if self.is_major else tonic_str.lower()
+        result = tonic_str + " " + scale_mode
+        return result
+
 
     # determine if two notes are equal
     def is_equal(self, other_scale):
