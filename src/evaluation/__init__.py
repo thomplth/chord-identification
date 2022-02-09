@@ -1,75 +1,70 @@
-# if __name__ == "__main__":
-#     import os, sys
-#     sys.path.insert(1, os.path.join(sys.path[0], '..'))
-
-# from preprocess.piece import Piece
-
+import configparser
+import os
 import csv
-import pickle
-from music21 import converter, stream
+import sys
 
-# from utility.constant import (
-#     HEPTATONIC_DICTIONARY,
-#     SEMITONE_TO_INTERVAL_DICTIONARY,
-#     INTERVAL_TO_SEMITONE_DICTIONARY,
-# )
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
+from preprocess.piece import Piece
 
-"""Naming convention for the result file
-result_KTC_NoCommon_4_.1
-KTC = Key then Chord, KAC = Key and Chord (refer to report for details)
-No Common = No Commonity of Chord, Simple Common = x/15 distribution one, ComplexCommon = Hybrid distribution
-3rd number is note variation theshold
-4th number: note duration theshold
-"""
+CONFIG = configparser.ConfigParser()
+configpath = os.path.dirname(os.path.dirname(__file__))
+CONFIG.read(os.path.join(configpath, "config.ini"))
 
-SCORE_PATH = "../data"
-GT_PATH = "../data/ground_truth"
-RESULT_PATH = "../csv"
+try:
+    DATA_PATH = CONFIG["locations"]["data_path"]
+    RESULT_PATH = CONFIG["locations"]["result_path"]
+except KeyError:
+    print("failed to read config.ini, or invalid index specified")
+    raise SystemExit
 
 
 class Metric:
-    def __init__(self, name20, name21):
-        self.ground_truth = self._parse_ground_truth(name20)
-        # self.result = self._parse_result(name21)
-        self.length = self._get_length(name21)
+    """Supplementary class for evaluation of key and/or chord prediction with established metrics
+    """
 
-    def _get_length(self, filename):
-        score = converter.parse(SCORE_PATH + filename + ".mxl")
-        return score.duration.quarterLength
+    def __init__(self, piece):
+        """
+        :param piece: music piece for evaluation
+        :type piece: Piece object in preprocess package
+        """
+        self.piece = piece
+        self.length = piece.length
+        self.results = {'key': {}, 'chord': {}}
+        self.target = {'key': None, 'chord': None}
 
-    def _parse_result(self, filename, seventh=True):
-        res = []
-        with open(RESULT_PATH + filename + ".csv", newline="") as f:
-            reader = csv.reader(f)
-            data = [tuple(row) for row in reader]
+    # def __parse_result(self, filename, seventh=True):
+    #     res = []
+    #     with open(RESULT_PATH + filename + ".csv", newline="") as f:
+    #         reader = csv.reader(f)
+    #         data = [tuple(row) for row in reader]
 
-        for row in data:
-            try:
-                if seventh:
-                    numeral = row[1]
-                else:
-                    numeral = row[1].split("7")[0]
-                offset = float(row[0])
-            except ValueError:
-                x, y = map(int, row[0].split("/"))  # int or float? int now
-                offset = x / y
-            res.append((numeral, row[2], offset))
+    #     for row in data:
+    #         try:
+    #             if seventh:
+    #                 numeral = row[1]
+    #             else:
+    #                 numeral = row[1].split("7")[0]
+    #             offset = float(row[0])
+    #         except ValueError:
+    #             x, y = map(int, row[0].split("/"))  # int or float? int now
+    #             offset = x / y
+    #         res.append((numeral, row[2], offset))
 
-        return res
+    #     return res
 
-    def _parse_ground_truth(self, filename):
-        res = []
-        with open(GT_PATH + filename + ".pydata", "rb") as f:
-            data = pickle.load(f)
+    # def __parse_ground_truth(self, filename):
+    #     res = []
+    #     with open(GT_PATH + filename + ".pydata", "rb") as f:
+    #         data = pickle.load(f)
 
-        for chord, offset in data:
-            numeral, scale = self.convert_chord_name(chord)
-            res.append((numeral, scale, offset))
+    #     for chord, offset in data:
+    #         numeral, scale = self.convert_chord_name(chord)
+    #         res.append((numeral, scale, offset))
 
-        return res
+    #     return res
 
-    def convert_chord_name(self, chord):
+    def __convert_chord_name(self, chord):
         a, b = chord.split("(")
         scale = a[:-1]
         numeral = b[:-1]
@@ -87,170 +82,174 @@ class Metric:
             scale = scale.lower() + " Minor"
         return numeral, scale
 
-    def chord_perfect_match(piece, prediction):
+    def perfect_matches(self, prediction, type='chord'):
         """Perfect Matches
-        Hard evaluation method for chord segmentation.
-        Only checks the number of correct slicings.
+        Hard evaluation method for key or chord identification and segmentation. Only matches in both identification and segmentation are counted.
 
-        :rtype: float score in 0-1 range
+        :return: number of matches and segments
+        :rtype: tuple of (int, int)
         """
+        target = self.piece.get_ground_truth(type=type)
+        length = min(len(prediction), len(target))
 
-        target = piece.get_chord_seg_target()
-        aligned = 0
-        segments = min(len(prediction), len(target))
-        for i in range(segments):
+        matched = 0
+        for i in range(length):
             if prediction[i] == target[i][1]:
-                aligned += 1
+                matched += 1
 
-        return aligned / len(target)
+        return (matched, length)
 
-    def chord_symbol_recall(self):
-        """Chord Symbol Recall (chord_symbol_recall)
-        Also called Average Overlap Score or Relative Correct Overlap.
+    def directional_hamming_distance(self, prediction, type='chord'):
+        """Lost ._."""
+        pass
+
+    def symbolic_recall(self, prediction, type='chord'):
+        """Chord Symbol Recall (CSR), also known as Average Overlap Score or Relative Correct Overlap
         MIREX has used an approximate chord_symbol_recall calculated by sampling both the ground-truth and the automatic annotations every 10 ms and dividing the number of correctly annotated samples by the total number of samples. Following Christopher Harte (2010, §8.1.2)
 
-        :rtype: float score in 0-1 range
+        :return: score in 0-1 range
+        :rtype: float
         """
-        if not self.ground_truth or not self.result:
-            return False
+        if not self.target[type]:
+            self.target[type] = self.piece.get_ground_truth(type=type)
 
-        match_duration = 0.0
-        res_idx = 0
+        target = self.target[type]
+        matched_duration = 0.0
+        pd_idx = 0
 
-        # Calculate relative correct overlap with ground truth data as basis
-        for gt_idx, segment in enumerate(self.ground_truth):
-            gt_start = segment[2]
-            if gt_idx + 1 < len(self.ground_truth):
-                gt_end = self.ground_truth[gt_idx + 1][2]
+        # Calculate relative matched overlap of prediction (PD) with ground truth (GT) data as basis
+        for gt_idx, target_segment in enumerate(target):
+
+            # Retrieve GT local Start and End offsets
+            gt_start = target_segment[0]
+            if gt_idx + 1 < len(target):
+                gt_end = target[gt_idx + 1][1]
             else:
                 gt_end = self.length
 
-            # Increment matching duration if result chord matches with GT
-            # End if result segment time exceed GT
+            # Increment matching duration if predicted chord matches with GT
+            # End if PD segment time exceed GT
             while True:
-                res_start = max(self.result[res_idx][2], gt_start)
-                if res_idx + 1 < len(self.result):
-                    res_end = self.result[res_idx + 1][2]
-                else:
-                    res_end = self.length
 
-                if (
-                    self.result[res_idx][0] == segment[0]
-                    and self.result[res_idx][1] == segment[1]
-                ):
-                    match_duration += min(res_end - res_start, gt_end - res_start)
-                    # print(f'Matched at {gt_start} for {res_start} - {res_end}')
+                # Retrieve PD local Start and End offsets
+                pd_start = max(prediction[pd_idx]['offset'], gt_start)
+                if pd_idx + 1 < len(prediction):
+                    pd_end = prediction[pd_idx + 1]['offset']
                 else:
-                    if self.result[res_idx][1] == segment[1]:
-                        print(
-                            f"Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>"
-                        )
-                    elif self.result[res_idx][0] == segment[0]:
-                        print(
-                            f"Unmatched result at {res_start}: <{self.result[res_idx][1]}-{segment[1]}>"
-                        )
-                    else:
-                        print(
-                            f"Unmatched result at {res_start}: <{self.result[res_idx][0]}-{segment[0]}>, <{self.result[res_idx][1]}-{segment[1]}>"
-                        )
+                    pd_end = self.length
 
-                if gt_end == res_end:
-                    res_idx += 1
+                # Obtain chord prediction and target
+                predicted_chord = prediction[pd_idx]['chord']['chord']
+                predicted_scale = prediction[pd_idx]['chord']['scale']
+                target_chord = target_segment['chord']
+                target_scale = target_segment['scale']
+
+                # Check if prediction matches with target
+                if (predicted_chord == target_chord and predicted_scale == target_scale):
+                    matched_duration += min(pd_end - pd_start, gt_end - pd_start)
+                    print(f"Matched at {gt_start} for {pd_start} - {pd_end}")
+                else:
+                    print(f"Unmatched prediction at {pd_start}: ")
+                    if predicted_chord != target_chord:
+                        print(f"(predicted) {predicted_chord} (target) {target_chord}")
+                    if predicted_scale != target_scale:
+                        print(f"(predicted) {predicted_scale} (target) {target_scale}")
+
+                if gt_end == pd_end:
+                    pd_idx += 1
                     break
-                elif gt_end < res_end:
+                elif gt_end < pd_end:
                     break
                 else:
-                    res_idx += 1
+                    pd_idx += 1
 
-        return match_duration / self.length
+        return matched_duration / self.length
+
+    def key_symbol_recall(self, prediction):
+        """Implemented Chord Symbol Recall method for Keys
+
+        :return: score in 0-1 range
+        :rtype: float
+        """
+        if not self.target:
+            self.target = self.piece.get_ground_truth(type='key')
+
+        matched_duration = 0.0
+        pd_idx = 0
+
+        # Calculate relative matched overlap of prediction (PD) with ground truth (GT) data as basis
+        for gt_idx, target_segment in enumerate(self.target):
+
+            # Retrieve GT local Start and End offsets
+            gt_start = target_segment[0]
+            if gt_idx + 1 < len(self.target):
+                gt_end = self.target[gt_idx + 1][1]
+            else:
+                gt_end = self.length
+
+            # Increment matching duration if predicted key matches with GT
+            # End if PD segment time exceed GT
+            while True:
+
+                # Retrieve PD local Start and End offsets
+                pd_start = max(prediction[pd_idx]['offset'], gt_start)
+                if pd_idx + 1 < len(prediction):
+                    pd_end = prediction[pd_idx + 1]['offset']
+                else:
+                    pd_end = self.length
+
+                # Obtain key prediction and target
+                predicted_scale = prediction[pd_idx]['chord']['scale']
+                target_scale = target_segment['key']
+
+                # Check if prediction matches with target
+                if (predicted_scale == target_scale):
+                    matched_duration += min(pd_end - pd_start, gt_end - pd_start)
+                    print(f"Matched at {gt_start} for {pd_start} - {pd_end}")
+                else:
+                    print(f"Unmatched prediction at {pd_start}: (predicted) {predicted_scale} (target) {target_scale}")
+
+                if gt_end == pd_end:
+                    pd_idx += 1
+                    break
+                elif gt_end < pd_end:
+                    break
+                else:
+                    pd_idx += 1
+
+        return matched_duration / self.length
+
+    def evaluate(self, prediction, type):
+        """Generate results with all relative evaluation metrics
+
+        :param prediction: ...
+        :type type: ...
+        :param type: 'chord' or 'key' segments, defaults to 'chord'
+        :type type: str, optional
+        """
+        if type == 'chord':
+            self.target['chord'] = self.piece.get_ground_truth()
+
+            self.results['chord']['PM'] = self.perfect_matches(prediction)
+            self.results['chord']['CSR'] = self.symbolic_recall(prediction)
+        elif type == 'key':
+            self.target['key'] = self.piece.get_ground_truth(type='key')
+
+            self.results['key']['PM'] = self.perfect_matches(prediction, type='key')
+            self.results['key']['KSR'] = self.symbolic_recall(prediction, type='key')
+
+    def export_results(self):
+        pass
+
+    def show(self):
+        """Print all test results. Run after evaluate()
+        """
+        pass
 
 
 if __name__ == "__main__":
-    name20 = "Étude_in_C_Minor"
-    name21 = "Chopin_F._Etude_in_C_Minor,_Op.25_No.12_(Ocean)"
+    p = Piece("anonymous_Twinkle_Twinkle")
+    m = Metric(p)
 
-    res = []
-    for i in [3, 4]:
-        for j in [1, 2]:
-            m = Metric(name20, name21)
-            m.parse_ground_truth("data/ground_truth/" + name20)
-            m.parse_result(f"result/csv/result_KTC_NoCommon_{i}_.{j}/" + name21)
-            a = m.chord_symbol_recall()
-
-            m2 = Metric()
-            m2.get_length("data/" + name21)
-            m2.parse_ground_truth("data/ground_truth/" + name20)
-            m2.parse_result(
-                f"result/csv/result_KTC_NoCommon_{i}_.{j}/" + name21, seventh=False
-            )
-            b = m2.chord_symbol_recall()
-            res.append((f"KTC_NoCommon_{i}_.{j}/", (a, b)))
-
-    m = Metric()
-    m.parse_ground_truth("data/ground_truth/" + name20)
-    m.parse_result("result/csv/result_KTC_ComplexCommon_4_.2/" + name21)
-    a = m.chord_symbol_recall()
-    m2 = Metric()
-    m2.parse_ground_truth("data/ground_truth/" + name20)
-    m2.parse_result("result/csv/result_KTC_ComplexCommon_4_.2/" + name21)
-    b = m2.chord_symbol_recall()
-    res.append(("KTC_ComplexCommon_4_.2", (a, b)))
-
-    m = Metric()
-    m.parse_ground_truth("data/ground_truth/" + name20)
-    m.parse_result("result/csv/result_KAC_NoCommon_4_.2/" + name21)
-    a = m.chord_symbol_recall()
-    m2 = Metric()
-    m2.parse_ground_truth("data/ground_truth/" + name20)
-    m2.parse_result("result/csv/result_KAC_NoCommon_4_.2/" + name21)
-    b = m2.chord_symbol_recall()
-    res.append(("KAC_NoCommon_4_.2", (a, b)))
-
-    m = Metric()
-    m.parse_ground_truth("data/ground_truth/" + name20)
-    m.parse_result("result/csv/result_KAC_SimpleCommon_4_.2/" + name21)
-    a = m.chord_symbol_recall()
-    m2 = Metric()
-    m2.parse_ground_truth("data/ground_truth/" + name20)
-    m2.parse_result("result/csv/result_KAC_SimpleCommon_4_.2/" + name21)
-    b = m2.chord_symbol_recall()
-    res.append(("KAC_SimpleCommon_4_.2", (a, b)))
-
-    print(name21)
-    for k, t in res:
-        print(k, t)
-
-
-""" reference for
->>> music21.music21.converter.subConverters.ConverterMusicXML
-
-def parseFile(self, fp: Union[str, pathlib.Path], number=None):
-    # Open from a file path; check to see if there is a pickled
-    # version available and up to date; if so, open that, otherwise
-    # open source.
-    
-    # return fp to load, if pickle needs to be written, fp pickle
-    # this should be able to work on a .mxl file, as all we are doing
-    # here is seeing which is more recent
-    from music21 import converter
-    from music21.musicxml import xmlToM21
-
-    c = xmlToM21.MusicXMLImporter()
-
-    # here, we can see if this is a mxl or similar archive
-    arch = converter.ArchiveManager(fp)
-    if arch.isArchive():
-        archData = arch.getData()
-        c.xmlText = archData
-        c.parseXMLText()
-    else:  # its a file path or a raw musicxml string
-        c.readFile(fp)
-
-    # movement titles can be stored in more than one place in musicxml
-    # manually insert file name as a movementName title if no titles are defined
-    if c.stream.metadata.movementName is None:
-        junk, fn = os.path.split(fp)
-        c.stream.metadata.movementName = fn  # this should become a Path
-    self.stream = c.stream
-    
-"""
+    print(p.get_ground_truth())
+    m.symbolic_recall(p.get_ground_truth())

@@ -37,8 +37,26 @@ def get_files(filename=None):
         return [filename]
     return all_scores
 
+def export_keys(res, dirname, filename):
+    try:
+        out_list = []
+        for offs in res:
+            out_list.append((offs[0], offs[1][0][0]['scale'].scale_str()))
+    except Exception as e:
+        pass
 
-def export_csv(out_list, dirname, filename):
+    path = os.path.join(RESULT_PATH, dirname, filename + ".csv")
+    file = open(path, "w", newline="")
+    writer = csv.writer(file)
+
+    writer.writerow(('offset', 'key'))
+
+    for el in out_list:
+        writer.writerow((el[0], el[1]))
+
+    file.close()
+
+def export_chords(out_list, dirname, filename):
 
     path = os.path.join(CSV_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
@@ -91,15 +109,15 @@ def main():
                     res.append(
                         (segment[0], find_chords(notes_frequencies, possible_key))
                     )
+                    export_keys(result, "result", score_file.removesuffix(".mxl"))
                 else:
                     res.append((segment[0], find_chords(notes_frequencies)))
-            # print(res)
 
             chords = res
             if KeyThenChordMode:
                 keys = None
             result = determine_chord(keys=keys, chords=chords)
-            export_csv(result, "result", score_file.removesuffix(".mxl"))
+            export_chords(result, "result", score_file.removesuffix(".mxl"))
 
         except Exception as error:
             print(error)
