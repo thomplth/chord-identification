@@ -31,10 +31,11 @@ except KeyError:
     print("failed to read config.ini, or invalid index specified")
     raise SystemExit
 
+
 def get_files(filename=None):
     # for x in os.listdir(DATA_PATH):
     #     print(x)
-    all_scores = [f for f in os.listdir(DATA_PATH) if f.endswith('.mxl')]
+    all_scores = [f for f in os.listdir(DATA_PATH) if f.endswith(".mxl")]
     all_scores.remove(
         "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl"
     )
@@ -49,7 +50,7 @@ def export_keys(out_list, dirname, filename):
     file = open(path, "w", newline="")
     writer = csv.writer(file)
 
-    writer.writerow(('offset', 'key'))
+    writer.writerow(("offset", "key"))
 
     for el in out_list:
         writer.writerow((el[0], el[1]))
@@ -109,14 +110,15 @@ def main():
                     key_choices = find_scale_in_chord_segment(keys, segment)
                     possible_key = max(key_choices, key=key_choices.get)
                     res.append(
-                        (segment[0], find_chords(
-                            notes_frequencies, possible_key))
+                        (segment[0], find_chords(notes_frequencies, possible_key))
                     )
                     if ExportKey:
                         try:
                             key_result = []
                             for offs in res:
-                                key_result.append((offs[0], offs[1][0][0]['scale'].scale_str()))
+                                key_result.append(
+                                    (offs[0], offs[1][0][0]["scale"].scale_str())
+                                )
                         except IndexError as ie:
                             pass
                         export_keys(key_result, "keys", score_file.removesuffix(".mxl"))
@@ -151,10 +153,13 @@ if __name__ == "__main__":
     from preprocess.scale import Scale
     from preprocess.chord import Chord, JazzChord
 
-    g = Scale("C", 0, True)
-    # x = Chord(g, numeral="I")
-    j = JazzChord(g, "Go7")
+    g_major = Scale(tonic_alphabet="G", tonic_accidental=0, is_major=True)
+
+    j = JazzChord(scale=g_major, root="B", abbr_form="7")
     print(j.chord_str())
     print(j.get_jazz_representation())
-    print(j.__dict__)
+
+    tonic_chord = Chord(scale=g_major, numeral="I")
+    print(tonic_chord.chord_str())
+    print(tonic_chord.get_jazz_representation())
     print("--- Used %s seconds ---" % (time.time() - start_time))
