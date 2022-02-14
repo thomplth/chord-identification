@@ -25,7 +25,7 @@ class Chord:
 
     # get the jazz representation of a chord
     def get_jazz_representation(self):
-        if self.form == "?":
+        if self.form == "?" or self.numeral == "?":
             return "Undefined"
         dictionary = self.scale.get_chord_dictionary()
         interval = dictionary[self.numeral][0]
@@ -82,11 +82,32 @@ class Chord:
         return result
 
 
+import re
+
+
+def SplitJazzChordProperties(jazz_chord: str):
+    return re.findall("[A-G][#b]?|.*[m|o]7?|7|.*\+6", jazz_chord)
+    # Explain: Return an array with max length of 2, where
+    # 1. root note, which can contain sharp or flat
+    # 2. chord form, which can return 'm', 'm7', 'dim', 'dim7', 'o7', '+6' and '7'
+    #    if a chord is major in form then the length of the array is 1.
+
+
 # A child class is made for initialize the Jazz chord easily
 class JazzChord(Chord):
-    def __init__(self, scale: Scale = None, root: str = "", abbr_form: str = ""):
+    def __init__(self, scale: Scale = None, name: str = ""):
+        chord_props = SplitJazzChordProperties(name)
+        root: str = ""
+        abbr_form: str = ""
+        if len(chord_props) > 0:
+            root = chord_props[0]
+            if len(chord_props) > 1:
+                abbr_form = chord_props[1]
+        print(chord_props)
+
         root_note = note_input_convertor(root)
         tonic_interval = scale.tonic.get_interval(root_note)
+        print(scale.tonic.note_str(), root_note.note_str(), tonic_interval)
 
         def translate_form(abbr: str):
             result: str = "?"
@@ -104,11 +125,11 @@ class JazzChord(Chord):
                 result = "Dominant seventh"
             elif abbr == "o7":
                 result = "Diminished seventh"
-            elif abbr == "It":
+            elif abbr == "It+6":
                 result = "Italian sixth"
-            elif abbr == "Ger":
+            elif abbr == "Ger+6":
                 result = "German sixth"
-            elif abbr == "Fr":
+            elif abbr == "Fr+6":
                 result = "French sixth"
             return result
 
@@ -123,6 +144,7 @@ class JazzChord(Chord):
         possible_chord = []
         if chord_interval in chord_dictionary:
             possible_chord = chord_dictionary[chord_interval]
+        print(possible_chord)
 
         numeral: str = "?"
         for c in possible_chord:
@@ -131,6 +153,8 @@ class JazzChord(Chord):
                 break
 
         super().__init__(scale, numeral)
+        self.root = root  # record only
+        self.form = form  # record only
 
 
 if __name__ == "__main__":
