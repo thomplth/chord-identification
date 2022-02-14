@@ -32,7 +32,7 @@ class Chord:
     def get_jazz_representation(self) -> str:
         if self.form == "Undefined":
             return "Undefined"
-        return self.root.note_str() + " " + self.form
+        return self.root.__str__() + " " + self.form
 
     # determine if two chords are equal
     # support neglect seventh note (on_triad) and Jazz chord comparison (on_jazz)
@@ -62,7 +62,7 @@ class Chord:
                 notes = pick_chord(
                     chord.scale.tonic, chord.numeral, chord.scale.is_major
                 )
-                return tuple([note.note_str() for note in notes[:3]])
+                return tuple([note.__str__() for note in notes[:3]])
 
             self_notes = get_first_three_notes_str(self)
             other_notes = get_first_three_notes_str(other_chord)
@@ -71,8 +71,8 @@ class Chord:
             return flag
 
     # Use string format to represent the chord
-    def chord_str(self, isPrintedInDos: bool = False) -> str:
-        scale_str = self.scale.scale_str(isPrintedInDos)
+    def __str__(self) -> str:
+        scale_str = self.scale.__str__()
         result = self.numeral + " chord in " + scale_str
         return result
 
@@ -109,9 +109,7 @@ class JazzChord(Chord):
         chord_interval = CHORD_INTERVAL_FORM_BIDICT.inverse[form]
 
         chord_dictionary = (
-            MAJOR_CHORD_FINDER_DICT
-            if scale.is_major
-            else MINOR_CHORD_FINDER_DICT
+            MAJOR_CHORD_FINDER_DICT if scale.is_major else MINOR_CHORD_FINDER_DICT
         )
         possible_chord = []
         if chord_interval in chord_dictionary:

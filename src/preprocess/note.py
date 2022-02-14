@@ -20,7 +20,7 @@ class Note:
             self.accidental = accidental
 
     # determine if two notes are equal
-    def is_equal(self, other_note):
+    def is_equal(self, other_note) -> bool:
         """
         :other_note: Note object
         """
@@ -29,11 +29,11 @@ class Note:
         )
 
     # Use string format to represent the note
-    def note_str(self, isPrintedInDos: bool = True):
+    def __str__(self) -> str:
         # If print in DOS, keep the representation as good as possible;
         # If used by music21, keep the alignment with music21
-        sharp = "♯" if isPrintedInDos else "#"
-        flat = "♭" if isPrintedInDos else "-"
+        sharp = "#"  # "♯"
+        flat = "-"  # "♭"
         accidentals = ""
         if self.accidental > 0:
             accidentals = sharp * self.accidental
@@ -42,7 +42,7 @@ class Note:
         return self.alphabet + accidentals
 
     # Give pitch class of a note
-    def get_pitch_class(self):
+    def get_pitch_class(self) -> int:
         """
         :return type: int range [1:11]
         """
@@ -76,7 +76,7 @@ class Note:
             return Note("?", 0)
 
     # Given two notes with ordering, return the interval
-    def get_interval(self, upper_note):
+    def get_interval(self, upper_note) -> str:
         """
         :upper_note: Note object
         """

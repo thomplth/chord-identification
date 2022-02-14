@@ -68,7 +68,7 @@ def export_chords(out_list, dirname, filename):
             (
                 segment["offset"],
                 segment["chord"]["chord"],
-                segment["chord"]["scale"].scale_str(),
+                segment["chord"]["scale"].__str__(),
                 round(segment["score"], 6),
             )
         )
@@ -117,7 +117,7 @@ def main():
                             key_result = []
                             for offs in res:
                                 key_result.append(
-                                    (offs[0], offs[1][0][0]["scale"].scale_str())
+                                    (offs[0], offs[1][0][0]["scale"].__str__())
                                 )
                         except IndexError as ie:
                             pass

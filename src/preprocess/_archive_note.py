@@ -15,7 +15,7 @@ class Note:
         self.accidental = accidental
 
     # Use string format to represent the note
-    def note_str(self, isPrintedInDos=True):
+    def __str__(self, isPrintedInDos=True):
         pass
 
     # It also includes prefect interval

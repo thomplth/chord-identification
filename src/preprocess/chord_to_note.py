@@ -28,7 +28,7 @@ def print_chord(tonic, chord, is_major):
     chord_notes = pick_chord(tonic, chord, is_major)
     if chord_notes != None:
         print(chord, end=" : ")
-        chord_notes_str = [note.note_str() for note in chord_notes]
+        chord_notes_str = [note.__str__() for note in chord_notes]
         print(chord_notes_str)
     else:
         print(
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     tonic = note_input_convertor(input_major)
     is_major = input_major[0].upper() == input_major[0]
     input_chord = sys.argv[2]
-    # print(tonic.note_str(), is_major, input_chord)
+    # print(tonic.__str__(), is_major, input_chord)
 
     if input_chord == "-a":
         print_all_chords(tonic, is_major)

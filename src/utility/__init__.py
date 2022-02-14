@@ -2,9 +2,9 @@ from preprocess.note import Note
 from utility.constant import *
 
 # Convert the note inputted in string to a Note object
-def note_input_convertor(input_note_str):
-    note_name = input_note_str[0].upper()
-    note_accidental = input_note_str[1:]
+def note_input_convertor(input___str__):
+    note_name = input___str__[0].upper()
+    note_accidental = input___str__[1:]
     # Use # for sharp and - for flat (align with music21)
     # also use "b" for flat. Suppose it is invalid to exist "-" and "b" for flat as the same time
     return Note(

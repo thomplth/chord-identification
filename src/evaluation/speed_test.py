@@ -53,7 +53,7 @@ if __name__ == "__main__":
             note = note_input_convertor(m21_note.name)
             interval = intervals[i % intervals_len]
             new_note = note.get_note_by_interval(interval)
-            result.append(new_note.note_str(False))
+            result.append(new_note.__str__())
 
         # Time calculation
         print(

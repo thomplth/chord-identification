@@ -23,15 +23,7 @@ class Scale:
 
     def __str__(self):
         scale_mode = "Major" if self.is_major else "Minor"
-        tonic_str = self.tonic.note_str(False)
-        tonic_str = tonic_str.upper() if self.is_major else tonic_str.lower()
-        result = tonic_str + " " + scale_mode
-        return result
-
-    # Use string format to represent the note
-    def scale_str(self, isPrintedInDos: bool = False):
-        scale_mode = "Major" if self.is_major else "Minor"
-        tonic_str = self.tonic.note_str(isPrintedInDos)
+        tonic_str = self.tonic.__str__()
         tonic_str = tonic_str.upper() if self.is_major else tonic_str.lower()
         result = tonic_str + " " + scale_mode
         return result
@@ -45,24 +37,11 @@ class Scale:
             self.is_major == other_scale.is_major
         )
 
-    # # determine if two scales are relatives major/minor
-    # def is_relative(self, other_scale):
-    #     """
-    #     :other_scale: Scale object
-    #     """
-    #     tonics_difference = self.tonic.get_interval(other_scale.tonic)
-    #     return (tonics_difference == "m3" or tonics_difference == "M6") and (
-    #         self.is_major != other_scale.is_major
-    #     )
-
     # # Give its relative scale of a scale
-    # def get_relative_scale(self):
-    #     if self.is_major:
-    #         relative_tonic = self.tonic.get_note_by_interval("M6")
-    #     else:
-    #         relative_tonic = self.tonic.get_note_by_interval("m3")
-
-    #     return Scale(tonic_note=relative_tonic, is_major=not self.is_major)
+    def get_relative_scale(self):
+        transpose_interval = "M6" if self.is_major else "m3"
+        relative_tonic = self.tonic.get_note_by_interval(transpose_interval)
+        return Scale(tonic_note=relative_tonic, is_major=not self.is_major)
 
     # sometime we are just interested in the pitch of the tonic
     def get_pitch_scale(self):
@@ -75,8 +54,8 @@ class Scale:
 
 if __name__ == "__main__":
     s = Scale("E", -1, True)
-    print(s.scale_str())
+    print(s.__str__())
     u = s.get_relative_scale()
-    print(u.scale_str())
+    print(u.__str__())
     t = Scale("C", 0, False)
     print(u.is_equal(t))

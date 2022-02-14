@@ -16,9 +16,7 @@ from itertools import combinations
 def pick_chord(scale, chord):
     tonic, is_major = scale.tonic, scale.is_major
 
-    chord_intervals = (
-        MAJOR_CHORD_DICT[chord] if is_major else MINOR_CHORD_DICT[chord]
-    )
+    chord_intervals = MAJOR_CHORD_DICT[chord] if is_major else MINOR_CHORD_DICT[chord]
     base_note = tonic
     chord_notes = []
     for interval in chord_intervals:
@@ -43,9 +41,7 @@ def search_chord_dictionary(first_note, target, pitch_scale):
     res = []
 
     def search_one_dictionary(is_major):
-        dictionary = (
-            MAJOR_CHORD_FINDER_DICT if is_major else MINOR_CHORD_FINDER_DICT
-        )
+        dictionary = MAJOR_CHORD_FINDER_DICT if is_major else MINOR_CHORD_FINDER_DICT
         for k, v in dictionary.items():
             chord = list(k)
             isMatchedChord = chord == target
@@ -181,19 +177,19 @@ def find_chords(notes_freq, pitch_scale=None):
 
 # print all right pattern
 def print_chords_names(notes, possible_chords, target_scale):
-    notes_str = [note.note_str() for note in notes]
+    notes_str = [note.__str__() for note in notes]
     total_valid_chords = 0
 
     for ans in possible_chords:
-        # chord_tonic = ans["tonic"].note_str()
+        # chord_tonic = ans["tonic"].__str__()
         # print if there is no specify scale or match the scale
         if target_scale.tonic.alphabet == "?" or target_scale.is_equal(ans["scale"]):
             chord_notes = pick_chord(ans["scale"], ans["chord"])
             # If you get some strange notes, just DO NOT return that chord
             if chord_notes == None:
                 continue
-            chord_notes_str = [note.note_str() for note in chord_notes]
-            print(ans["chord"] + " chord in " + ans["scale"].scale_str(True), end=" ")
+            chord_notes_str = [note.__str__() for note in chord_notes]
+            print(ans["chord"] + " chord in " + ans["scale"].__str__(), end=" ")
             print("Chord notes :", chord_notes_str, end="")
             missing_notes = list(set(chord_notes_str) - set(notes_str))
             if len(missing_notes) > 0:
@@ -225,7 +221,7 @@ if __name__ == "__main__":
     notes = [note_input_convertor(note) for note in input_notes]
 
     # search for the right pattern
-    # print(notes[0].note_str(), notes_intervals)
+    # print(notes[0].__str__(), notes_intervals)
     possible_chords = find_chords(notes, target_scale)
     print_chords_names(notes, possible_chords, target_scale)
 
