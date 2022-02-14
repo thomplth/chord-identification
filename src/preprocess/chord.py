@@ -3,6 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
+from preprocess.note import Note
 from preprocess.scale import Scale
 from preprocess.chord_to_note import pick_chord
 from utility.constant import (
@@ -19,31 +20,19 @@ class Chord:
         self.scale: Scale = Scale() if scale is None else scale
         self.numeral: str = numeral
         dictionary = self.scale.get_chord_dictionary()
-        self.form: str = "?"
+
+        self.form: str = "Undefined"
+        self.root: Note = None
         if numeral in dictionary:
             self.form = CHORD_FORM_NAME_DICTIONARY[tuple(dictionary[numeral][1:])]
+            interval = dictionary[numeral][0]
+            self.root = self.scale.tonic.get_note_by_interval(interval)
 
     # get the jazz representation of a chord
     def get_jazz_representation(self):
-        if self.form == "?" or self.numeral == "?":
+        if self.form == "Undefined":
             return "Undefined"
-        dictionary = self.scale.get_chord_dictionary()
-        interval = dictionary[self.numeral][0]
-        root = self.scale.tonic.get_note_by_interval(interval)
-        return root.note_str() + " " + self.form
-
-    # def result_roman_to_jazz(roman, scale_str):
-    #     # V+,d Minor
-    #     scale_text = scale_str.split()
-    #     tonic_str = scale_text[0]
-    #     isMajor = scale_text[1] == "Major"
-
-    #     lexicon = MAJOR_CHORD_DICTIONARY if isMajor else MINOR_CHORD_DICTIONARY
-    #     root_interval = lexicon[roman][0]
-    #     chord_form = CHORD_FORM_NAME_DICTIONARY[tuple(lexicon[roman][1:])]
-    #     tonic = note_input_convertor(tonic_str).get_note_by_interval(root_interval)
-    #     return tonic.note_str(False) + " " + chord_form
-    #     # A Major
+        return self.root.note_str() + " " + self.form
 
     # determine if two chords are equal
     # support neglect seventh note and Jazz chord comparison
@@ -86,7 +75,7 @@ import re
 
 
 def SplitJazzChordProperties(jazz_chord: str):
-    return re.findall("[A-G][#b]?|.*[m|o]7?|7|.*\+6", jazz_chord)
+    return re.findall("[A-G][#b-]?|.*[m|o]7?|7|.*\+6", jazz_chord)
     # Explain: Return an array with max length of 2, where
     # 1. root note, which can contain sharp or flat
     # 2. chord form, which can return 'm', 'm7', 'dim', 'dim7', 'o7', '+6' and '7'
@@ -103,11 +92,9 @@ class JazzChord(Chord):
             root = chord_props[0]
             if len(chord_props) > 1:
                 abbr_form = chord_props[1]
-        print(chord_props)
 
         root_note = note_input_convertor(root)
         tonic_interval = scale.tonic.get_interval(root_note)
-        print(scale.tonic.note_str(), root_note.note_str(), tonic_interval)
 
         def translate_form(abbr: str):
             result: str = "?"
@@ -144,7 +131,6 @@ class JazzChord(Chord):
         possible_chord = []
         if chord_interval in chord_dictionary:
             possible_chord = chord_dictionary[chord_interval]
-        print(possible_chord)
 
         numeral: str = "?"
         for c in possible_chord:
@@ -153,7 +139,7 @@ class JazzChord(Chord):
                 break
 
         super().__init__(scale, numeral)
-        self.root = root  # record only
+        self.root = root_note  # record only
         self.form = form  # record only
 
 

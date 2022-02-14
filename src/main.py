@@ -153,13 +153,11 @@ if __name__ == "__main__":
     from preprocess.scale import Scale
     from preprocess.chord import Chord, JazzChord
 
-    g_major = Scale(tonic_alphabet="G", tonic_accidental=0, is_major=True)
+    g_major = Scale(tonic_alphabet="C", tonic_accidental=0, is_major=True)
+    print(g_major.scale_str())
 
-    j = JazzChord(scale=g_major, root="B", abbr_form="7")
+    j = JazzChord(scale=g_major, name="Bo7")
     print(j.chord_str())
     print(j.get_jazz_representation())
-
-    tonic_chord = Chord(scale=g_major, numeral="I")
-    print(tonic_chord.chord_str())
-    print(tonic_chord.get_jazz_representation())
+    print(j.__dict__)
     print("--- Used %s seconds ---" % (time.time() - start_time))

@@ -6,7 +6,13 @@ def note_input_convertor(input_note_str):
     note_name = input_note_str[0].upper()
     note_accidental = input_note_str[1:]
     # Use # for sharp and - for flat (align with music21)
-    return Note(note_name, note_accidental.count("#") - note_accidental.count("-"))
+    # also use "b" for flat. Suppose it is invalid to exist "-" and "b" for flat as the same time
+    return Note(
+        note_name,
+        note_accidental.count("#")
+        - note_accidental.count("-")
+        - note_accidental.count("b"),
+    )
 
 
 # Convert Music21.note.Note to note string
