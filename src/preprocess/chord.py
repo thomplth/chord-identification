@@ -6,13 +6,13 @@ if __name__ == "__main__":
 from preprocess.note import Note
 from preprocess.scale import Scale
 from preprocess.chord_to_note import pick_chord
-from utility.constant import (
-    CHORD_FORM_NAME_DICTIONARY,
-    CHORD_FORM_INTERVAL_DICTIONARY,
+from utility import note_input_convertor
+from utility.chord_constant import (
+    CHORD_INTERVAL_FORM_BIDICT,
+    CHORD_FORM_ABBR_BIDICT,
     MAJOR_CHORD_FINDER_DICTIONARY,
     MINOR_CHORD_FINDER_DICTIONARY,
 )
-from utility import note_input_convertor
 
 # All chords in Chord class are in Roman numeral analysis
 class Chord:
@@ -24,31 +24,37 @@ class Chord:
         self.form: str = "Undefined"
         self.root: Note = None
         if numeral in dictionary:
-            self.form = CHORD_FORM_NAME_DICTIONARY[tuple(dictionary[numeral][1:])]
+            self.form = CHORD_INTERVAL_FORM_BIDICT[tuple(dictionary[numeral][1:])]
             interval = dictionary[numeral][0]
             self.root = self.scale.tonic.get_note_by_interval(interval)
 
     # get the jazz representation of a chord
-    def get_jazz_representation(self):
+    def get_jazz_representation(self) -> str:
         if self.form == "Undefined":
             return "Undefined"
         return self.root.note_str() + " " + self.form
 
     # determine if two chords are equal
-    # support neglect seventh note and Jazz chord comparison
-    def is_equal(self, other_chord, on_triad: bool = False, on_jazz: bool = False):
-        flag: bool = True
+    # support neglect seventh note (on_triad) and Jazz chord comparison (on_jazz)
+    # When on_triad and on_jazz = true, only on_jazz works
+    def is_equal(
+        self, other_chord, on_triad: bool = False, on_jazz: bool = False
+    ) -> bool:
+
+        if self.form == "Undefined" or other_chord.form == "Undefined":
+            print("Cannot compare as there is an undefined chord.")
+            return False
 
         if on_jazz:
-            flag = (
+            return (
                 self.get_jazz_representation() == other_chord.get_jazz_representation()
             )
-        else:
-            # not on jazz must have same scale
-            flag = self.scale.is_equal(other_chord.scale)
-            if not flag:
-                return flag
-            flag = self.numeral == other_chord.numeral
+
+        # not on_jazz must have same scale
+        flag: bool = self.scale.is_equal(other_chord.scale)
+        if not flag:
+            return flag
+        flag = self.numeral == other_chord.numeral
 
         if on_triad and not flag:
 
@@ -65,7 +71,7 @@ class Chord:
             return flag
 
     # Use string format to represent the chord
-    def chord_str(self, isPrintedInDos: bool = False):
+    def chord_str(self, isPrintedInDos: bool = False) -> str:
         scale_str = self.scale.scale_str(isPrintedInDos)
         result = self.numeral + " chord in " + scale_str
         return result
@@ -74,7 +80,7 @@ class Chord:
 import re
 
 
-def SplitJazzChordProperties(jazz_chord: str):
+def SplitJazzChordProperties(jazz_chord: str) -> list[str]:
     return re.findall("[A-G][#b-]?|.*[m|o]7?|7|.*\+6", jazz_chord)
     # Explain: Return an array with max length of 2, where
     # 1. root note, which can contain sharp or flat
@@ -96,32 +102,11 @@ class JazzChord(Chord):
         root_note = note_input_convertor(root)
         tonic_interval = scale.tonic.get_interval(root_note)
 
-        def translate_form(abbr: str):
-            result: str = "?"
-            if abbr == "":
-                result = "Major"
-            elif abbr == "m":
-                result = "Minor"
-            elif abbr == "dim":
-                result = "Diminished"
-            elif abbr == "maj7":
-                result = "Major seventh"
-            elif abbr == "m7":
-                result = "Minor seventh"
-            elif abbr == "7":
-                result = "Dominant seventh"
-            elif abbr == "o7":
-                result = "Diminished seventh"
-            elif abbr == "It+6":
-                result = "Italian sixth"
-            elif abbr == "Ger+6":
-                result = "German sixth"
-            elif abbr == "Fr+6":
-                result = "French sixth"
-            return result
-
-        form = translate_form(abbr_form)
-        chord_interval = CHORD_FORM_INTERVAL_DICTIONARY[form]
+        if abbr_form not in CHORD_FORM_ABBR_BIDICT.inverse:
+            super().__init__()
+            return None
+        form = CHORD_FORM_ABBR_BIDICT.inverse[abbr_form]
+        chord_interval = CHORD_INTERVAL_FORM_BIDICT.inverse[form]
 
         chord_dictionary = (
             MAJOR_CHORD_FINDER_DICTIONARY
@@ -139,8 +124,8 @@ class JazzChord(Chord):
                 break
 
         super().__init__(scale, numeral)
-        self.root = root_note  # record only
-        self.form = form  # record only
+        # self.root = root_note  # record only
+        # self.form = form  # record only
 
 
 if __name__ == "__main__":
