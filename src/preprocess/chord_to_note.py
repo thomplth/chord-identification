@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from utility.constant import *
+from utility.chord_constant import MAJOR_CHORD_DICTIONARY, MINOR_CHORD_DICTIONARY
 from utility import note_input_convertor
 import time
 

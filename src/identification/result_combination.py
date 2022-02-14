@@ -1,4 +1,4 @@
-from utility.constant import (
+from utility.chord_constant import (
     MAJOR_CHORD_FREQUENCY_DICTIONARY,
     MINOR_CHORD_FREQUENCY_DICTIONARY,
 )

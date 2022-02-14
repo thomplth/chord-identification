@@ -132,8 +132,9 @@ def main():
                 chord_result = determine_chord(keys=keys, chords=chords)
                 export_chords(chord_result, "chords", score_file.removesuffix(".mxl"))
 
-            metric = Metric(piece)
-            print(metric.symbolic_recall(chord_result), piece.length)
+            # TODO: cannot run for Metric
+            """metric = Metric(piece)
+            print(metric.symbolic_recall(chord_result), piece.length)"""
             # metric.evaluate(key_result, type='key')
             # metric.evaluate(chord_result, type='chord')
             # results.append((score_file, metric))
@@ -151,18 +152,7 @@ if __name__ == "__main__":
     start_time = time.time()
     # main()
     from preprocess.scale import Scale
-    from preprocess.chord import Chord, JazzChord
 
-    g_major = Scale(tonic_alphabet="G", tonic_accidental=0, is_major=True)
-    c_major = Scale(tonic_alphabet="C", tonic_accidental=0, is_major=True)
-    print(g_major.scale_str())
-
-    j = JazzChord(scale=g_major, name="G")
-    j2 = Chord(scale=g_major, numeral="I")
-
-    print(j.__dict__)
-    print(j2.__dict__)
-    print(j2.is_equal(j, False, False))
-    print(j2.is_equal(j, False, True))
-    print(j2.is_equal(j, True, False))
+    c = Scale("C")
+    print(c.__str__())
     print("--- Used %s seconds ---" % (time.time() - start_time))

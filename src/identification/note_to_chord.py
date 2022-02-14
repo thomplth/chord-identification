@@ -3,8 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from music21.search.segment import scoreSimilarity
-from utility.constant import *
+from utility.chord_constant import *
 from utility import note_input_convertor, invert_interval
 
 # from preprocess.note import Note

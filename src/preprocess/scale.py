@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
 
 from preprocess.note import Note
-from utility.constant import MAJOR_CHORD_DICTIONARY, MINOR_CHORD_DICTIONARY
+from utility.chord_constant import MAJOR_CHORD_DICTIONARY, MINOR_CHORD_DICTIONARY
 
 
 class Scale:
@@ -20,7 +20,7 @@ class Scale:
             Note(tonic_alphabet, tonic_accidental) if tonic_note is None else tonic_note
         )
         self.is_major = is_major
-    
+
     def __str__(self):
         scale_mode = "Major" if self.is_major else "Minor"
         tonic_str = self.tonic.note_str(False)
@@ -28,6 +28,13 @@ class Scale:
         result = tonic_str + " " + scale_mode
         return result
 
+    # Use string format to represent the note
+    def scale_str(self, isPrintedInDos: bool = False):
+        scale_mode = "Major" if self.is_major else "Minor"
+        tonic_str = self.tonic.note_str(isPrintedInDos)
+        tonic_str = tonic_str.upper() if self.is_major else tonic_str.lower()
+        result = tonic_str + " " + scale_mode
+        return result
 
     # determine if two scales are equal
     def is_equal(self, other_scale):
@@ -47,14 +54,6 @@ class Scale:
     #     return (tonics_difference == "m3" or tonics_difference == "M6") and (
     #         self.is_major != other_scale.is_major
     #     )
-
-    # Use string format to represent the note
-    def scale_str(self, isPrintedInDos: bool = False):
-        scale_mode = "Major" if self.is_major else "Minor"
-        tonic_str = self.tonic.note_str(isPrintedInDos)
-        tonic_str = tonic_str.upper() if self.is_major else tonic_str.lower()
-        result = tonic_str + " " + scale_mode
-        return result
 
     # # Give its relative scale of a scale
     # def get_relative_scale(self):
