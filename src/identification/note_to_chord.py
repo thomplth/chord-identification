@@ -17,7 +17,7 @@ def pick_chord(scale, chord):
     tonic, is_major = scale.tonic, scale.is_major
 
     chord_intervals = (
-        MAJOR_CHORD_DICTIONARY[chord] if is_major else MINOR_CHORD_DICTIONARY[chord]
+        MAJOR_CHORD_DICT[chord] if is_major else MINOR_CHORD_DICT[chord]
     )
     base_note = tonic
     chord_notes = []
@@ -44,7 +44,7 @@ def search_chord_dictionary(first_note, target, pitch_scale):
 
     def search_one_dictionary(is_major):
         dictionary = (
-            MAJOR_CHORD_FINDER_DICTIONARY if is_major else MINOR_CHORD_FINDER_DICTIONARY
+            MAJOR_CHORD_FINDER_DICT if is_major else MINOR_CHORD_FINDER_DICT
         )
         for k, v in dictionary.items():
             chord = list(k)

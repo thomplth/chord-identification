@@ -150,9 +150,9 @@ def main():
 
 if __name__ == "__main__":
     start_time = time.time()
-    # main()
-    from preprocess.scale import Scale
+    main()
+    # from preprocess.scale import Scale
 
-    c = Scale("C")
-    print(c.__str__())
+    # c = Scale("C")
+    # print(c.__str__())
     print("--- Used %s seconds ---" % (time.time() - start_time))

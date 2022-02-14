@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
 
 from preprocess.note import Note
-from utility.chord_constant import MAJOR_CHORD_DICTIONARY, MINOR_CHORD_DICTIONARY
+from utility.chord_constant import MAJOR_CHORD_DICT, MINOR_CHORD_DICT
 
 
 class Scale:
@@ -70,7 +70,7 @@ class Scale:
 
     # get chords dictionary for the scale
     def get_chord_dictionary(self):
-        return MAJOR_CHORD_DICTIONARY if self.is_major else MINOR_CHORD_DICTIONARY
+        return MAJOR_CHORD_DICT if self.is_major else MINOR_CHORD_DICT
 
 
 if __name__ == "__main__":

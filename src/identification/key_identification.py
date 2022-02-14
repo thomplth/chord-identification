@@ -1,10 +1,10 @@
 import numpy as np
-from utility.constant import KEY_PROFILE_DICTIONARY
+from utility.constant import KEY_PROFILE_DICT
 from collections import Counter
 
 
 def select_key_profile(profile="Aarden-Essen"):
-    return KEY_PROFILE_DICTIONARY[profile]
+    return KEY_PROFILE_DICT[profile]
 
 
 # Key finding algo.

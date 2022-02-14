@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from utility.chord_constant import MAJOR_CHORD_DICTIONARY, MINOR_CHORD_DICTIONARY
+from utility.chord_constant import MAJOR_CHORD_DICT, MINOR_CHORD_DICT
 from utility import note_input_convertor
 import time
 
@@ -11,9 +11,7 @@ import sys
 
 # Given the scale and the chord, output the notes of the chord
 def pick_chord(tonic, chord, is_major):
-    chord_intervals = (
-        MAJOR_CHORD_DICTIONARY[chord] if is_major else MINOR_CHORD_DICTIONARY[chord]
-    )
+    chord_intervals = MAJOR_CHORD_DICT[chord] if is_major else MINOR_CHORD_DICT[chord]
     base_note = tonic
     chord_notes = []
     for interval in chord_intervals:
@@ -40,7 +38,7 @@ def print_chord(tonic, chord, is_major):
 
 
 def print_all_chords(tonic, is_major):
-    chord_dict = MAJOR_CHORD_DICTIONARY if is_major else MINOR_CHORD_DICTIONARY
+    chord_dict = MAJOR_CHORD_DICT if is_major else MINOR_CHORD_DICT
     for chord, _ in chord_dict.items():
         print_chord(tonic, chord, is_major)
 

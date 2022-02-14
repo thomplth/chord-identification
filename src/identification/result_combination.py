@@ -1,6 +1,6 @@
 from utility.chord_constant import (
-    MAJOR_CHORD_FREQUENCY_DICTIONARY,
-    MINOR_CHORD_FREQUENCY_DICTIONARY,
+    MAJOR_CHORD_FREQUENCY_DICT,
+    MINOR_CHORD_FREQUENCY_DICT,
 )
 from statistics import mean
 
@@ -24,9 +24,9 @@ def calculate_choice_scores(key_dict, chord, base_score):
     if not scale in key_dict:
         return (0, chord)
     chord_score = (
-        MAJOR_CHORD_FREQUENCY_DICTIONARY[roman]
+        MAJOR_CHORD_FREQUENCY_DICT[roman]
         if scale[1]
-        else MINOR_CHORD_FREQUENCY_DICTIONARY[roman]
+        else MINOR_CHORD_FREQUENCY_DICT[roman]
     )
     chord_score = 1
     return (base_score * key_dict[scale] * chord_score, chord)

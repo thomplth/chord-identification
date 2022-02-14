@@ -10,8 +10,8 @@ from utility import note_input_convertor
 from utility.chord_constant import (
     CHORD_INTERVAL_FORM_BIDICT,
     CHORD_FORM_ABBR_BIDICT,
-    MAJOR_CHORD_FINDER_DICTIONARY,
-    MINOR_CHORD_FINDER_DICTIONARY,
+    MAJOR_CHORD_FINDER_DICT,
+    MINOR_CHORD_FINDER_DICT,
 )
 
 # All chords in Chord class are in Roman numeral analysis
@@ -109,9 +109,9 @@ class JazzChord(Chord):
         chord_interval = CHORD_INTERVAL_FORM_BIDICT.inverse[form]
 
         chord_dictionary = (
-            MAJOR_CHORD_FINDER_DICTIONARY
+            MAJOR_CHORD_FINDER_DICT
             if scale.is_major
-            else MINOR_CHORD_FINDER_DICTIONARY
+            else MINOR_CHORD_FINDER_DICT
         )
         possible_chord = []
         if chord_interval in chord_dictionary:

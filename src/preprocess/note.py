@@ -4,9 +4,9 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.constant import (
-    HEPTATONIC_DICTIONARY,
-    SEMITONE_TO_INTERVAL_DICTIONARY,
-    INTERVAL_TO_SEMITONE_DICTIONARY,
+    HEPTATONIC_DICT,
+    SEMITONE_INTERVAL_DICT,
+    INTERVAL_SEMITONE_DICT,
 )
 
 
@@ -46,16 +46,16 @@ class Note:
         """
         :return type: int range [1:11]
         """
-        return (HEPTATONIC_DICTIONARY[self.alphabet] + self.accidental) % 12
+        return (HEPTATONIC_DICT[self.alphabet] + self.accidental) % 12
 
     # quality: M (major), m (minor), P (perfect), A (augmented), d (diminished)
     def get_note_by_interval(self, interval):
         """
         :interval: char[2], where char[0] = quality, char[1] = int range [1:7]
         """
-        if interval in INTERVAL_TO_SEMITONE_DICTIONARY:
+        if interval in INTERVAL_SEMITONE_DICT:
             alphabetical_distance = int(interval[1])
-            semitone_difference = INTERVAL_TO_SEMITONE_DICTIONARY[interval]
+            semitone_difference = INTERVAL_SEMITONE_DICT[interval]
 
             new_alphabet = chr(
                 (ord(self.alphabet) - ord("A") + alphabetical_distance - 1) % 7
@@ -64,7 +64,7 @@ class Note:
             new_accidental = (
                 self.get_pitch_class()
                 + semitone_difference
-                - HEPTATONIC_DICTIONARY[new_alphabet]
+                - HEPTATONIC_DICT[new_alphabet]
             )
 
             accidental_range = 4
@@ -84,7 +84,7 @@ class Note:
         semitone_difference = (
             upper_note.get_pitch_class() - self.get_pitch_class()
         ) % 12
-        intervals = SEMITONE_TO_INTERVAL_DICTIONARY[semitone_difference]
+        intervals = SEMITONE_INTERVAL_DICT[semitone_difference]
 
         # print(alphabetical_distance, semitone_difference, intervals)
         for interval in intervals:
