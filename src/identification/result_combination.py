@@ -2,6 +2,8 @@ from utility.chord_constant import (
     MAJOR_CHORD_FREQUENCY_DICT,
     MINOR_CHORD_FREQUENCY_DICT,
 )
+from preprocess.chord import Chord
+from preprocess.scale import Scale
 from statistics import mean
 
 

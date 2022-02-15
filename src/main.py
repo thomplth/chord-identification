@@ -91,15 +91,19 @@ def main():
             time_signature = get_initial_time_signature(flatten_stream)
             # key_signature = get_initial_key_signature(flatten_stream) # Scale(key_signature.tonic.name)
 
-            measures_key = determine_key_by_adjacent(key_segmentation(stream))
+            # Key segmentation and Identification
+            key_segments: Measure_OffsetChroma_dict = key_segmentation(stream)
+            measures_key = determine_key_by_adjacent(key_segments)
             # measures_key = determine_key_solo(key_segmentation(stream))
 
             keys = measures_key
 
+            # Chord segmentation and Identification
             notes_in_measures = get_notes_in_measures(chordify_stream)
-            segments = uniform_segmentation(notes_in_measures, time_signature)
-            combined_segments = merge_chord_segment(segments)
-
+            beat_segments = uniform_segmentation(notes_in_measures, time_signature)
+            combined_segments = merge_chord_segment(beat_segments)
+            return
+            # TODO: data structure check and Chord.class usage
             res = []
             for segment in combined_segments:
                 notes_frequencies = [
@@ -112,6 +116,7 @@ def main():
                     res.append(
                         (segment[0], find_chords(notes_frequencies, possible_key))
                     )
+
                     if ExportKey:
                         try:
                             key_result = []

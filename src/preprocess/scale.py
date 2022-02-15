@@ -5,6 +5,7 @@ if __name__ == "__main__":
 
 
 from preprocess.note import Note
+from utility import Pitch_scale
 from utility.chord_constant import MAJOR_CHORD_DICT, MINOR_CHORD_DICT
 
 
@@ -44,7 +45,7 @@ class Scale:
         return Scale(tonic_note=relative_tonic, is_major=not self.is_major)
 
     # sometime we are just interested in the pitch of the tonic
-    def get_pitch_scale(self):
+    def get_pitch_scale(self) -> Pitch_scale:
         return (self.tonic.get_pitch_class(), self.is_major)
 
     # get chords dictionary for the scale
