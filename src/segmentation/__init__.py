@@ -4,9 +4,8 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.m21_utility import *
-from utility import (
-    note_name_simplifier,
-    note_input_convertor,
+from utility import note_input_convertor
+from utility.entities import (
     Note_duration_dict,
     Measure_OffsetChroma_dict,
     OffsetNoteProfile,

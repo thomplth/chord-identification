@@ -4,7 +4,8 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.chord_constant import *
-from utility import note_input_convertor, invert_interval
+from utility import invert_interval, note_input_convertor
+from utility.entities import Notes_frequencies, Pitch_scale, ChordSimilarityScore
 
 from preprocess.note import Note
 from preprocess.scale import Scale
@@ -120,7 +121,9 @@ def find_chords_two_notes(
     return res
 
 
-def match_chords_patterns(notes_freq, pitch_scale):
+def match_chords_patterns(
+    notes_freq: Notes_frequencies, pitch_scale: Pitch_scale
+) -> list[ChordSimilarityScore]:
     # base case: notes = 2
     notes_num = len(notes_freq)
 
@@ -130,12 +133,15 @@ def match_chords_patterns(notes_freq, pitch_scale):
     # Then generate the intervals
     notes_intervals: list[str] = get_adjacent_intervals(notes)
 
+    found_chords = []
     if notes_num == 2:
         chords = find_chords_two_notes(notes, notes_intervals, pitch_scale)
-        return [(chord, similarity_score) for chord in chords]
+        found_chords = [
+            {"chord": chord, "similarity_score": similarity_score} for chord in chords
+        ]
+        return found_chords
 
     # If the notes satisfy the chord pattern , get the chord
-    res = []
     if notes_num == 3 or notes_num == 4:
         for idx in range(notes_num):
             rotated_notes = notes[-idx:] + notes[:-idx]
@@ -145,17 +151,24 @@ def match_chords_patterns(notes_freq, pitch_scale):
             chords = search_chord_dictionary(
                 rotated_notes[0], rotated_intervals[0 : notes_num - 1], pitch_scale
             )
-            res.extend([(chord, similarity_score) for chord in chords])
+            found_chords.extend(
+                [
+                    {"chord": chord, "similarity_score": similarity_score}
+                    for chord in chords
+                ]
+            )
 
-    return res
+    return found_chords
 
 
 # Find chords in 'recursive' way
-def find_chords(notes_freq, pitch_scale=None):
+def find_chords(
+    notes_freq: Notes_frequencies, pitch_scale: Pitch_scale = None
+) -> list[ChordSimilarityScore]:
 
     # do sorting
     notes_freq.sort(key=lambda x: (x[0].alphabet, x[0].accidental))
-    res = []
+    found_chords: list[ChordSimilarityScore] = []
 
     # drop a note if previous combinations have no result
     for note_num in range(len(notes_freq), 1, -1):
@@ -164,13 +177,13 @@ def find_chords(notes_freq, pitch_scale=None):
             continue
         # for each combination, search if it satisfy the pattern of chords
         for combo in list(combinations(notes_freq, note_num)):
-            res += match_chords_patterns(list(combo), pitch_scale)
+            found_chords.extend(match_chords_patterns(list(combo), pitch_scale))
         # if drop several notes to get result, stop searching
         # TODO: Determine if the break is needed
         # if len(res) > 0:
         #     break
 
-    return res
+    return found_chords
 
 
 # print all right pattern

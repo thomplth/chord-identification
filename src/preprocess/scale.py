@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
 
 from preprocess.note import Note
-from utility import Pitch_scale
+from utility.entities import Pitch_scale
 from utility.chord_constant import MAJOR_CHORD_DICT, MINOR_CHORD_DICT
 
 

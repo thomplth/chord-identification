@@ -67,8 +67,8 @@ def export_chords(out_list, dirname, filename):
         writer.writerow(
             (
                 segment["offset"],
-                segment["chord"]["chord"],
-                segment["chord"]["scale"].__str__(),
+                segment["chord"].numeral,
+                segment["chord"].scale.__str__(),
                 round(segment["score"], 6),
             )
         )
@@ -96,45 +96,49 @@ def main():
             measures_key = determine_key_by_adjacent(key_segments)
             # measures_key = determine_key_solo(key_segmentation(stream))
 
-            keys = measures_key
-
             # Chord segmentation and Identification
             notes_in_measures = get_notes_in_measures(chordify_stream)
             beat_segments = uniform_segmentation(notes_in_measures, time_signature)
             combined_segments = merge_chord_segment(beat_segments)
-            return
-            # TODO: data structure check and Chord.class usage
-            res = []
+
+            offset_chord_choices = []
             for segment in combined_segments:
                 notes_frequencies = [
-                    (note_input_convertor(note_name), v)
-                    for note_name, v in segment[1].items()
+                    (note_input_convertor(note_name), value)
+                    for note_name, value in segment["note_profile"].items()
                 ]
                 if KeyThenChordMode:
-                    key_choices = find_scale_in_chord_segment(keys, segment)
+                    key_choices = find_scale_in_chord_segment(measures_key, segment)
                     possible_key = max(key_choices, key=key_choices.get)
-                    res.append(
-                        (segment[0], find_chords(notes_frequencies, possible_key))
+                    possible_chords = find_chords(notes_frequencies, possible_key)
+                    offset_chord_choices.append(
+                        {"offset": segment["offset"], "chords": possible_chords}
                     )
 
                     if ExportKey:
                         try:
                             key_result = []
-                            for offs in res:
+                            for offs in offset_chord_choices:
                                 key_result.append(
-                                    (offs[0], offs[1][0][0]["scale"].__str__())
+                                    (
+                                        offs["offset"],
+                                        offs["chords"][0]["chord"].scale.__str__(),
+                                    )
                                 )
                         except IndexError as ie:
                             pass
                         export_keys(key_result, "keys", score_file.removesuffix(".mxl"))
                 else:
-                    res.append((segment[0], find_chords(notes_frequencies)))
+                    offset_chord_choices.append(
+                        (segment["offset"], find_chords(notes_frequencies))
+                    )
 
             if ExportChord:
-                chords = res
                 if KeyThenChordMode:
-                    keys = None
-                chord_result = determine_chord(keys=keys, chords=chords)
+                    measures_key = None
+                chord_result = determine_chord(
+                    keys=measures_key, chords=offset_chord_choices
+                )
                 export_chords(chord_result, "chords", score_file.removesuffix(".mxl"))
 
             # TODO: cannot run for Metric

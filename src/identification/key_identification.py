@@ -1,5 +1,5 @@
 import numpy as np
-from utility import (
+from utility.entities import (
     PitchScaleCorrelationValue,
     Measure_OffsetChroma_dict,
     OffsetPitchScaleCorrelationValues,
