@@ -21,6 +21,7 @@ CONFIG.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
 try:
     DATA_PATH = CONFIG["locations"]["data_path"]
+    DATASET_PATH = CONFIG["locations"]["dataset_path"]
     RESULT_PATH = CONFIG["locations"]["result_path"]
     CSV_PATH = CONFIG["locations"]["csv_path"]
 
@@ -33,12 +34,8 @@ except KeyError:
 
 
 def get_files(filename=None):
-    # for x in os.listdir(DATA_PATH):
-    #     print(x)
-    all_scores = [f for f in os.listdir(DATA_PATH) if f.endswith(".mxl")]
-    all_scores.remove(
-        "Beethoven_L.V._Sonatina_in_A-Flat_Major_(Op.110_No.31)_2nd_Movement.mxl"
-    )
+    all_scores = [f for f in os.listdir(DATA_PATH + DATASET_PATH) if f.endswith(".mxl")]
+    print(all_scores)
     # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
     if filename in all_scores:
         return [filename]
@@ -160,8 +157,4 @@ def main():
 if __name__ == "__main__":
     start_time = time.time()
     main()
-    # from preprocess.scale import Scale
-
-    # c = Scale("C")
-    # print(c.__str__())
     print("--- Used %s seconds ---" % (time.time() - start_time))
