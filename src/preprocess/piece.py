@@ -1,3 +1,5 @@
+from logging import exception
+from music21 import converter, stream
 import csv
 import configparser
 import os
@@ -5,7 +7,6 @@ import sys
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from music21 import converter, stream
 
 CONFIG = configparser.ConfigParser()
 configpath = os.path.dirname(os.path.dirname(__file__))
@@ -13,6 +14,8 @@ CONFIG.read(os.path.join(configpath, "config.ini"))
 
 try:
     DATA_PATH = CONFIG["locations"]["data_path"]
+    DATASET_PATH = DATA_PATH + CONFIG["locations"]["dataset_path"]
+    GT_PATH = CONFIG["locations"]["gt_path"]
     RESULT_PATH = CONFIG["locations"]["result_path"]
 except KeyError:
     print("failed to read config.ini, or invalid index specified")
@@ -29,7 +32,7 @@ class Piece:
         :type filename: str
         """
         self.name = filename[:-4] if filename.endswith('.mxl') else filename
-        self.score = converter.parse(os.path.join(DATA_PATH, self.name+'.mxl'))
+        self.score = converter.parse(os.path.join(DATASET_PATH, self.name+'.mxl'))
         self.length = self.score.duration.quarterLength
 
         self.chordified = self.score.chordify()
@@ -101,26 +104,45 @@ class Piece:
             return list(custom_stream.recurse().getElementsByClass('Note'))
 
     def get_ground_truth(self, type='chord'):
-        """Traverse labelled music stream to generates ground truth data for evaluation.
+        """Traverse labelled music stream to generates text-based ground truth data for evaluation.
 
         :param type: 'chord' or 'key' segments, defaults to 'chord'
         :type type: str, optional
-        :return: list of tuples of float, string in (<offset>, <key or chord symbol>)
+        :return: list of tuples of float, string, char, string in (<offset>, <tonic>, <key>, <chord>);
+                 or list of tuples of float, string, char in (<offset>, <tonic>, <key>)
         :rtype: list
         """
         res = []
+        notes = self.get_elements_by_offset(filter=['Note', 'Chord'])
+        # if type == 'chord':
+        # chord_symbols = self.get_elements_by_offset(filter="ChordSymbol")
+        # for offset, el in chord_symbols.items():
+        #     chord = el[0]
+        #     cs = f'{chord.figure}({chord.chordKindStr})'
+        #     res.append((offset, cs))
+
         if type == 'chord':
-            chord_symbols = self.get_elements_by_offset(filter="ChordSymbol")
-            for offset, el in chord_symbols.items():
-                chord = el[0]
-                cs = f'{chord.figure}({chord.chordKindStr})'
-                res.append((offset, cs))
+            for offset, el in notes.items():
+                note = el[0]
+                if note.lyric:
+                    try:
+                        if '(' in note.lyric:
+                            scale = note.lyric.split('(')[0]
+                            chord = note.lyric.split('(')[1][:-1]
+                            res.append((note.offset, scale[:-1], scale[-1], chord))
+                        else:
+                            res.append(
+                                (note.offset, scale[:-1], scale[-1], note.lyric))
+                    except Exception:
+                        print(note.lyric)
         elif type == 'key':
-            notes = self.get_elements_by_offset(filter="Note")
             for offset, el in notes.items():
                 note = el[0]
                 if note.lyric and '(' in note.lyric:
-                    res.append((note.offset, note.lyric.split('(')[0]))
+                    scale = note.lyric.split('(')[0]
+                    res.append((note.offset, scale[:-1], scale[-1]))
+        else:
+            raise ValueError('Type must be either chord or key')
 
         return res
 
@@ -136,44 +158,51 @@ class Piece:
         filepath = os.path.join(path, name)
         self.score.write(type, fp=filepath)
 
+    def _export_ground_truth(self):
+        """Single use function for generating ground truth csv files
+        """
+        try:
+            gt = self.get_ground_truth()
+
+            path = os.path.join(GT_PATH, self.name + ".csv")
+            file = open(path, "w", newline="")
+            writer = csv.writer(file)
+            writer.writerow(("offset", "tonic", "key", "chord"))
+            for segment in gt:
+                writer.writerow(segment)
+            file.close()
+
+            gt = self.get_ground_truth(type='key')
+
+            path = os.path.join(GT_PATH + "_key", self.name + ".csv")
+            file = open(path, "w", newline="")
+            writer = csv.writer(file)
+            writer.writerow(("offset", "tonic", "key"))
+            for segment in gt:
+                writer.writerow(segment)
+            file.close()
+        except Exception:
+            print(self.name)
+            print(gt)
+
     def show(self):
         self.score.show()
 
 
 if __name__ == "__main__":
-    testscore = ['anonymous_Twinkle_Twinkle',
-                 'Chopin_F._Etude_in_F_Minor,_Op.10_No.9',
-                 'Chopin_F._Nocturne_in_F_Minor,_Op.55_No.1',
-                 'Chopin_F._Prelude_in_D-Flat_Major,_Op.28_No.15'
-                 ]
-    
-    # p = Piece("anonymous_Twinkle_Twinkle")
-    # print(p.get_ground_truth(type='key'))
+    # p = Piece("Chopin_F._Waltz_in_A_Minor,_Op.34_No.2")
+    # p.flattened.show()
 
-    # p = Piece("Mozart_W.A._Minuet_in_F_major,_K.2")
-    # print(p.get_ground_truth(type='key'))
+    # for tup in p.get_ground_truth():
+    #     print(tup)
+    # print()
+    # for tup in p.get_ground_truth(type='key'):
+    #     print(tup)
+    # raise SystemExit
 
-    # p = Piece("Mozart_W.A._Minuet_in_F_major,_K.2.mxl")
-    # print(p.get_ground_truth(type='key'))
+    scores = [f for f in os.listdir(DATASET_PATH) if f.endswith(".mxl")]
 
-    for name in testscore:
-        p = Piece(name)
-        print(name)
-        print(p.get_ground_truth(type='key'))
-        print()
-
-    # for name in testscore:
-    #     p = Piece(name)
-
-    #     path = os.path.join(RESULT_PATH, 'keys_gt', name + ".csv")
-    #     file = open(path, "w", newline="")
-    #     writer = csv.writer(file)
-
-    #     writer.writerow(('offset', 'key'))
-
-    #     for el in p.get_ground_truth(type='key'):
-    #         writer.writerow(
-    #             (
-    #                 el[0], el[1]
-    #             )
-    #         )
+    for score in scores:
+        p = Piece(score)
+        print(score, 'processing...')
+        p._export_ground_truth()
