@@ -17,6 +17,7 @@ offset,tonic,key,chord
 43.0,A,M,V
 45.0,A,M,I
 47.0,B,M,IV
+49.0,B,M,V
 51.0,B,M,II
 53.0,G#,m,V+
 55.0,G#,m,I
@@ -37,6 +38,7 @@ offset,tonic,key,chord
 83.0,E,m,IV
 85.0,E,m,V+7
 87.0,E,m,II
+89.0,E,m,I
 91.0,E,m,GerVI
 92.0,E,m,I
 93.0,E,M,V
@@ -60,9 +62,10 @@ offset,tonic,key,chord
 141.5,E,M,I
 145.0,E,M,VI
 147.0,E,M,II
-150.0,E,M,DimVII
-151.0,E,M,I
-152.0,E,M,DimVI
+149.0,G#,M,I
+150.0,G#,M,DimVII
+151.0,G#,M,I
+152.0,G#,M,DimVI
 153.0,C#,m,V+7
 159.0,C#,m,V+7
 161.0,C#,m,I
@@ -144,6 +147,7 @@ offset,tonic,key,chord
 253.5,F#,m,VII
 255.5,F#,m,III
 257.5,C#,m,V+7
+258.5,C#,m,I
 261.5,C#,m,IV
 265.5,C#,m,VI
 267.5,C#,m,III

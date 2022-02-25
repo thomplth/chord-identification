@@ -123,24 +123,24 @@ class Piece:
 
         if type == 'chord':
             for offset, el in notes.items():
-                note = el[0]
-                if note.lyric:
-                    try:
-                        if '(' in note.lyric:
-                            scale = note.lyric.split('(')[0]
-                            chord = note.lyric.split('(')[1][:-1]
-                            res.append((note.offset, scale[:-1], scale[-1], chord))
-                        else:
-                            res.append(
-                                (note.offset, scale[:-1], scale[-1], note.lyric))
-                    except Exception:
-                        print(note.lyric)
+                for note in el:
+                    if note.lyric:
+                        try:
+                            if '(' in note.lyric:
+                                scale = note.lyric.split('(')[0]
+                                chord = note.lyric.split('(')[1][:-1]
+                                res.append((note.offset, scale[:-1], scale[-1], chord))
+                            else:
+                                res.append(
+                                    (note.offset, scale[:-1], scale[-1], note.lyric))
+                        except Exception:
+                            print(note.lyric)
         elif type == 'key':
             for offset, el in notes.items():
-                note = el[0]
-                if note.lyric and '(' in note.lyric:
-                    scale = note.lyric.split('(')[0]
-                    res.append((note.offset, scale[:-1], scale[-1]))
+                for note in el:
+                    if note.lyric and '(' in note.lyric:
+                        scale = note.lyric.split('(')[0]
+                        res.append((note.offset, scale[:-1], scale[-1]))
         else:
             raise ValueError('Type must be either chord or key')
 

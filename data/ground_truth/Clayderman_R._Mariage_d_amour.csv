@@ -11,6 +11,7 @@ offset,tonic,key,chord
 40.0,G,m,V+
 45.0,G,m,I
 49.0,G,m,IV
+53.0,G,m,VII
 57.0,G,m,III
 58.5,G,m,V+
 61.0,G,m,I
@@ -30,10 +31,12 @@ offset,tonic,key,chord
 113.0,G,m,V+
 115.0,G,m,I
 119.0,G,m,IV
+123.0,G,m,VII
 127.0,G,m,III
 129.0,G,m,V+
 131.0,G,m,I
 135.0,G,m,IV
+139.0,G,m,VII
 143.0,G,m,III
 145.0,G,m,V+
 151.0,G,m,I

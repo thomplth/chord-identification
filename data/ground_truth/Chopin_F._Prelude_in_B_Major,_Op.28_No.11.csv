@@ -6,6 +6,8 @@ offset,tonic,key,chord
 28.0,G#,m,V+
 29.0,G#,m,I
 33.0,G#,m,V
+36.0,G#,m,VI
+39.0,G#,m,III
 42.0,B,M,V
 49.0,B,M,I
 51.0,D#,M,DimVII7
@@ -15,5 +17,8 @@ offset,tonic,key,chord
 53.0,B,M,V
 53.5,B,M,I
 54.0,B,M,V7
+60.0,B,M,I
+67.5,G#,m,DimVII7
 69.0,B,M,VI
+70.5,B,M,V
 72.0,B,M,I
