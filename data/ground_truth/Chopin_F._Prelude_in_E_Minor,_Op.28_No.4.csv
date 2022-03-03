@@ -2,7 +2,7 @@ offset,tonic,key,chord
 1.0,E,m,I
 5.0,E,m,II
 7.0,E,m,DimVII7
-9.0,E,m,♭II
+9.0,E,m,bII
 11.0,D,m,I
 12.0,F#,m,DimVII7
 13.0,A,m,V+7
@@ -23,7 +23,7 @@ offset,tonic,key,chord
 45.0,E,m,V+
 49.0,E,m,I
 53.0,E,m,II
-55.0,E,m,♭II
+55.0,E,m,bII
 59.0,A,m,V+7
 61.0,A,m,V7
 62.0,D,m,DimVII7

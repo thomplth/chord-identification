@@ -14,7 +14,7 @@ offset,tonic,key,chord
 38.25,C,m,II
 42.25,C,m,IV
 46.25,C,m,I+
-50.25,C,m,♭II
+50.25,C,m,bII
 54.25,C,m,V+
 58.25,C,m,I+
 64.25,C,m,V+
@@ -60,7 +60,7 @@ offset,tonic,key,chord
 220.5,C,m,I
 224.5,C,m,II
 228.5,C,m,I+
-232.5,C,m,♭II
+232.5,C,m,bII
 240.5,F,m,DimVII
 244.5,F,m,GerVI
 248.5,C,m,V+7

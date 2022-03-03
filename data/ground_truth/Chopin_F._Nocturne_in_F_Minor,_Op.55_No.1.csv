@@ -10,7 +10,7 @@ offset,tonic,key,chord
 20.0,F,m,I
 22.0,F,m,VII
 24.0,F,m,III
-27.0,F,m,♭II
+27.0,F,m,bII
 28.375,F,m,I
 30.375,F,m,V+
 32.375,F,m,I
@@ -26,7 +26,7 @@ offset,tonic,key,chord
 52.375,F,m,I
 54.375,F,m,VII
 56.375,F,m,III
-58.375,F,m,♭II
+58.375,F,m,bII
 5797/96,F,m,I
 5989/96,F,m,V+7
 6181/96,F,m,I
@@ -55,7 +55,7 @@ offset,tonic,key,chord
 11173/96,F,m,I
 11365/96,F,m,VII
 11557/96,F,m,III
-11845/96,F,m,♭II
+11845/96,F,m,bII
 11941/96,F,m,I
 12133/96,F,m,V+7
 12325/96,F,m,I
@@ -85,7 +85,7 @@ offset,tonic,key,chord
 17317/96,F,m,I
 17509/96,F,m,VII
 17701/96,F,m,III
-17893/96,F,m,♭II
+17893/96,F,m,bII
 30143/160,F,m,I
 30623/160,F,m,V+7
 30783/160,F,m,I
@@ -144,16 +144,16 @@ offset,tonic,key,chord
 52543/160,F,m,IV
 52863/160,F,m,V+
 53183/160,F,m,VI
-53503/160,F,m,♭II
+53503/160,F,m,bII
 53663/160,F,m,VI
-53823/160,F,m,♭II
+53823/160,F,m,bII
 53983/160,F,m,VI
 54143/160,F,m,I
 54303/160,F,m,V+7
 54463/160,F,m,I
-54783/160,B♭,m,DimVII7
-55423/160,B♭,m,V+7
-55743/160,B♭,m,I
+54783/160,Bb,m,DimVII7
+55423/160,Bb,m,V+7
+55743/160,Bb,m,I
 56383/160,F,M,DimVII7
 57023/160,F,M,I
 62783/160,F,M,IV

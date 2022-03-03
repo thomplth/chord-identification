@@ -28,7 +28,7 @@ offset,tonic,key,chord
 26.0,C,m,V+7
 27.0,C,m,I
 28.0,C,m,VI
-29.0,C,m,♭II
+29.0,C,m,bII
 30.0,C,m,V+
 31.0,C,m,I
 32.0,C,m,I
@@ -44,6 +44,6 @@ offset,tonic,key,chord
 42.0,C,m,V+7
 43.0,C,m,I
 44.0,C,m,VI
-45.0,C,m,♭II
+45.0,C,m,bII
 46.0,C,m,V+
 47.0,C,m,I
