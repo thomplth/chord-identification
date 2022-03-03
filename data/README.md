@@ -16,3 +16,9 @@ Chopin_F._Prelude_in_G_Major,_Op.28_No.3.mxl
 
 [Issue]
 Chopin_F._Prelude_in_G_Major,_Op.28_No.3
+- missing tonic at offset 0.0
+
+Beethoven_L.V._Sonatina_in_A_Major_(Op.101_No.28)_2nd_Movement
+- erroneously labelled dim7 chords
+
+

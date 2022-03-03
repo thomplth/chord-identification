@@ -114,6 +114,8 @@ class Piece:
         """
         res = []
         notes = self.get_elements_by_offset(filter=['Note', 'Chord'])
+
+        # Archived code for chordsymbol-lookup
         # if type == 'chord':
         # chord_symbols = self.get_elements_by_offset(filter="ChordSymbol")
         # for offset, el in chord_symbols.items():
@@ -121,26 +123,34 @@ class Piece:
         #     cs = f'{chord.figure}({chord.chordKindStr})'
         #     res.append((offset, cs))
 
+        chord, tonic, key = '', '', ''
         if type == 'chord':
             for offset, el in notes.items():
                 for note in el:
                     if note.lyric:
                         try:
+                            lyric = note.lyric.replace('♭', 'b')
+                            
                             if '(' in note.lyric:
-                                scale = note.lyric.split('(')[0]
-                                chord = note.lyric.split('(')[1][:-1]
-                                res.append((note.offset, scale[:-1], scale[-1], chord))
+                                tonic = lyric.split('(')[0][:-1]
+                                key = lyric.split('(')[0][-1]
+                                chord = lyric.split('(')[1][:-1]
+
+                                res.append((note.offset, tonic, key, chord))
                             else:
-                                res.append(
-                                    (note.offset, scale[:-1], scale[-1], note.lyric))
-                        except Exception:
-                            print(note.lyric)
+                                chord = lyric
+                                res.append((note.offset, tonic, key, chord))
+                        
+                        except Exception as e:
+                            print(f'\033[93m[{e}] for chord {note.lyric} at {note.offset} of {self.name}\033[0m')
         elif type == 'key':
             for offset, el in notes.items():
                 for note in el:
                     if note.lyric and '(' in note.lyric:
-                        scale = note.lyric.split('(')[0]
-                        res.append((note.offset, scale[:-1], scale[-1]))
+                        tonic = note.lyric.split('(')[0][:-1]
+                        tonic = tonic[:-1] + 'b' if tonic.endswith('♭') else tonic
+                        key = note.lyric.split('(')[0][-1]
+                        res.append((note.offset, tonic, key))
         else:
             raise ValueError('Type must be either chord or key')
 
@@ -201,8 +211,34 @@ if __name__ == "__main__":
     # raise SystemExit
 
     scores = [f for f in os.listdir(DATASET_PATH) if f.endswith(".mxl")]
+    chord_dict = {}
 
     for score in scores:
         p = Piece(score)
         print(score, 'processing...')
         p._export_ground_truth()
+
+
+        # res, tmpdict = p.get_ground_truth()
+        # print(tmpdict)
+
+        # path = os.path.join(DATA_PATH, 'counter', p.name + '.csv')
+        # with open(path, 'w', newline='') as f:
+        #     writer = csv.writer(f)
+        #     writer.writerow(('chord', 'occurance'))
+        #     for k, v in tmpdict.items():
+        #         writer.writerow((k, v))
+    
+
+    #     for k, v in tmpdict.items():
+    #         if k not in chord_dict:
+    #             chord_dict[k] = v
+    #         else:
+    #             chord_dict[k] += v
+
+    # path = os.path.join(DATA_PATH, 'chords_count.csv')
+    # with open(path, 'w', newline='') as f:
+    #     writer = csv.writer(f)
+    #     writer.writerow(('chord', 'occurance'))
+    #     for k, v in chord_dict.items():
+    #         writer.writerow((k, v))
