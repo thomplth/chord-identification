@@ -1,5 +1,5 @@
 from utility.constant import *
-from utility import note_input_convertor
+from preprocess.note import Note
 
 
 def get_scale(tonic, is_major):
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print("Please input the scale you want. ")
     print("E.g. for F♯ major, type 'F#'. ")
     input_str = input("E.g. for B♭ minor, type 'b-'. \n")
-    note = note_input_convertor(input_str)
+    note = Note(input_str=input_str)
     print("Unison:", note.get_note_by_interval("P1").__str__())
     is_major = input_str[0].upper() == input_str[0]
     scale = get_scale(note, is_major)

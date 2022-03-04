@@ -7,6 +7,7 @@ import traceback
 from utility.m21_utility import *
 
 from preprocess.piece import Piece
+from preprocess.note import Note
 from segmentation import *
 from identification.key_identification import (
     determine_key_by_adjacent,
@@ -89,6 +90,7 @@ def main():
             # key_signature = get_initial_key_signature(flatten_stream) # Scale(key_signature.tonic.name)
 
             # Key segmentation and Identification
+            # TODO: stream or chordified?
             key_segments: Measure_OffsetChroma_dict = key_segmentation(stream)
             measures_key = determine_key_by_adjacent(key_segments)
             # measures_key = determine_key_solo(key_segmentation(stream))
@@ -101,7 +103,7 @@ def main():
             offset_chord_choices = []
             for segment in combined_segments:
                 notes_frequencies = [
-                    (note_input_convertor(note_name), value)
+                    (Note(input_str=note_name), value)
                     for note_name, value in segment["note_profile"].items()
                 ]
                 if KeyThenChordMode:

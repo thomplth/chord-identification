@@ -4,7 +4,7 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.chord_constant import *
-from utility import invert_interval, note_input_convertor
+from utility import invert_interval
 from utility.entities import Notes_frequencies, Pitch_scale, ChordSimilarityScore
 
 from preprocess.note import Note
@@ -225,11 +225,11 @@ if __name__ == "__main__":
         scale = ""
     target_scale = None
     if not scale == "":
-        target_tonic = note_input_convertor(scale)
+        target_tonic = Note(input_str=scale)
         target_scale = Scale(tonic_note=target_tonic, is_major=scale.isupper())
 
     # First convert to notes
-    notes = [note_input_convertor(note) for note in input_notes]
+    notes = [Note(input_str=note) for note in input_notes]
 
     # search for the right pattern
     # print(notes[0].__str__(), notes_intervals)

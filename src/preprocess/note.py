@@ -11,11 +11,22 @@ from utility.constant import (
 
 
 class Note:
-    def __init__(self, alphabet: str = "C", accidental: int = 0):
+    def __init__(self, alphabet: str = "C", accidental: int = 0, input_str=None):
         self.alphabet = "C"
+        self.accidental = 0
+        if input_str is not None:
+            alphabet = input_str[0].upper()
+            note_accidental = input_str[1:]
+            # Use # for sharp and - for flat (align with music21)
+            # also use "b" for flat. Suppose it is invalid to exist "-" and "b" for flat as the same time
+            accidental = (
+                note_accidental.count("#")
+                - note_accidental.count("-")
+                - note_accidental.count("b")
+            )
+
         if alphabet in ["A", "B", "C", "D", "E", "F", "G"]:
             self.alphabet = alphabet
-        self.accidental = 0
         if accidental in range(-2, 3):
             self.accidental = accidental
 
@@ -91,3 +102,10 @@ class Note:
             if int(interval[1]) == alphabetical_distance:
                 return interval
         return "?0"
+
+
+if __name__ == "__main__":
+    d_sharp = Note("D", 1)
+    e_flat = Note(input_str="Eb")
+    print(d_sharp.__str__())
+    print(e_flat.__str__())

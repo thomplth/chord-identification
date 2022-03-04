@@ -6,7 +6,6 @@ if __name__ == "__main__":
 from preprocess.note import Note
 from preprocess.scale import Scale
 from preprocess.chord_to_note import pick_chord
-from utility import note_input_convertor
 from utility.chord_constant import (
     CHORD_INTERVAL_FORM_BIDICT,
     CHORD_FORM_ABBR_BIDICT,
@@ -99,7 +98,7 @@ class JazzChord(Chord):
             if len(chord_props) > 1:
                 abbr_form = chord_props[1]
 
-        root_note = note_input_convertor(root)
+        root_note = Note(input_str=root)
         tonic_interval = scale.tonic.get_interval(root_note)
 
         if abbr_form not in CHORD_FORM_ABBR_BIDICT.inverse:

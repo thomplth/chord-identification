@@ -4,7 +4,7 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.chord_constant import MAJOR_CHORD_DICT, MINOR_CHORD_DICT
-from utility import note_input_convertor
+from preprocess.note import Note
 import time
 
 import sys
@@ -46,7 +46,7 @@ def print_all_chords(tonic, is_major):
 if __name__ == "__main__":
     start_time = time.time()
     input_major = sys.argv[1]
-    tonic = note_input_convertor(input_major)
+    tonic = Note(input_str=input_major)
     is_major = input_major[0].upper() == input_major[0]
     input_chord = sys.argv[2]
     # print(tonic.__str__(), is_major, input_chord)

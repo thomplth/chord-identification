@@ -4,13 +4,13 @@ if __name__ == "__main__":
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from utility.m21_utility import *
-from utility import note_input_convertor
 from utility.entities import (
     Note_duration_dict,
     Measure_OffsetChroma_dict,
     OffsetNoteProfile,
 )
 from utility.constant import NOTES_VARIATION_THRESHOLD, NOTES_FREQUENCY_THRESHOLD
+from preprocess.note import Note
 import numpy as np
 
 
@@ -129,7 +129,7 @@ def create_chroma(partial_stream, steedman=False) -> list[float]:
         for m21_note in m21_notes:
             name: str = m21_note.name
             duration: float = m21_note.duration.quarterLength
-            note_class = note_input_convertor(name).get_pitch_class()
+            note_class = Note(input_str=name).get_pitch_class()
             # adding pitch duration is the ordinary Krumhansl-Schmuckler approach
             pitch_class[note_class] += duration
 

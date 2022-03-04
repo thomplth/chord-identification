@@ -3,7 +3,7 @@ if __name__ == "__main__":
 
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from utility import note_input_convertor
+from preprocess.note import Note
 import music21
 
 import time
@@ -48,9 +48,8 @@ if __name__ == "__main__":
         result = []
 
         for i in range(trial_num):
-            # note = note_input_convertor(base_notes[i % base_notes_len])
             m21_note = m21_notes[i % base_notes_len]
-            note = note_input_convertor(m21_note.name)
+            note = Note(input_str=m21_note.name)
             interval = intervals[i % intervals_len]
             new_note = note.get_note_by_interval(interval)
             result.append(new_note.__str__())
@@ -90,7 +89,7 @@ if __name__ == "__main__":
         start_time = time.time()
         result = []
         for combo in list(combinations(m21_notes, 2)):
-            notes = [note_input_convertor(m21_note.name) for m21_note in combo]
+            notes = [Note(input_str=m21_note.name) for m21_note in combo]
             ans = notes[0].get_interval(notes[1])
             result.append(ans)
 
