@@ -76,29 +76,19 @@ def find_chords_two_notes(
         interval = notes_intervals[idx]
         if interval == "M3":
             res += search_chord_dictionary(notes[idx], ["M3", "m3"], pitch_scale)
+            res += search_chord_dictionary(notes[idx], ["M3", "M3"], pitch_scale)
         elif interval == "m3":
             res += search_chord_dictionary(notes[idx], ["m3", "M3"], pitch_scale)
             res += search_chord_dictionary(notes[idx], ["m3", "m3"], pitch_scale)
-        # elif interval == "M2":
-        #     res.append({"chord": "FreVI", "tonic": notes[idx], "is_major": True})
-        #     res.append({"chord": "FreVI", "tonic": notes[idx], "is_major": False})
-        # elif interval == "A2":
-        #     tonic = notes[idx].get_note_by_interval("M6")
-        #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": True})
-        #     res.append({"chord": "GerVI", "tonic": tonic, "is_major": False})
-        # elif interval == "A4":
-        #     res.append({"chord": "ItaVI", "tonic": notes[idx], "is_major": True})
-        #     res.append({"chord": "ItaVI", "tonic": notes[idx], "is_major": False})
         elif interval == "d5":
             res += search_chord_dictionary(notes[idx], ["m3", "m3"], pitch_scale)
         elif interval == "P5":
             res += search_chord_dictionary(notes[idx], ["M3", "m3"], pitch_scale)
             res += search_chord_dictionary(notes[idx], ["m3", "M3"], pitch_scale)
+        elif interval == "A5":
+            res += search_chord_dictionary(notes[idx], ["M3", "M3"], pitch_scale)
         elif interval == "A6":
             tonic = notes[idx].get_note_by_interval("M3")
-            # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": True})
-            # res.append({"chord": "ItaVI", "tonic": tonic, "is_major": False})
-            # if scale.tonic.is_equal(tonic):
             if pitch_scale == None or pitch_scale[0] == tonic.get_pitch_class():
                 res.append(
                     Chord(scale=Scale(tonic_note=tonic, is_major=True), numeral="ItaVI")
@@ -108,16 +98,7 @@ def find_chords_two_notes(
                         scale=Scale(tonic_note=tonic, is_major=False), numeral="ItaVI"
                     )
                 )
-
-        # elif interval == "d7":
-        #     res += search_chord_dictionary(notes[idx], ["m3", "m3", "m3"])
-        # elif interval == "m7":
-        #     res += search_chord_dictionary(notes[idx], ["M3", "m3", "m3"])
-        #     res += search_chord_dictionary(notes[idx], ["m3", "M3", "m3"])
-        #     res += search_chord_dictionary(notes[idx], ["m3", "m3", "M3"])
-        # elif interval == "M7":
-        #     res += search_chord_dictionary(notes[idx], ["M3", "m3", "M3"])
-        # The rest 13 intervals have no combinations of intervals
+        # The rest intervals have no combinations of intervals
     return res
 
 

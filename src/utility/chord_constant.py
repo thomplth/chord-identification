@@ -4,6 +4,7 @@ from bidict import bidict
 CHORD_INTERVAL_FORM_BIDICT = bidict({("M3", "m3"): "Major"})
 CHORD_INTERVAL_FORM_BIDICT[("m3", "M3")] = "Minor"
 CHORD_INTERVAL_FORM_BIDICT[("m3", "m3")] = "Diminished"
+CHORD_INTERVAL_FORM_BIDICT[("M3", "M3")] = "Augmented"
 CHORD_INTERVAL_FORM_BIDICT[("M3", "m3", "M3")] = "Major seventh"  # can omit
 CHORD_INTERVAL_FORM_BIDICT[("m3", "M3", "m3")] = "Minor seventh"
 CHORD_INTERVAL_FORM_BIDICT[("M3", "m3", "m3")] = "Dominant seventh"
@@ -17,6 +18,7 @@ CHORD_INTERVAL_FORM_BIDICT[("M3", "A4")] = "Italian sixth"
 CHORD_FORM_ABBR_BIDICT = bidict({"Major": ""})
 CHORD_FORM_ABBR_BIDICT["Minor"] = "m"
 CHORD_FORM_ABBR_BIDICT["Diminished"] = "dim"
+CHORD_FORM_ABBR_BIDICT["Augmented"] = "aug"
 CHORD_FORM_ABBR_BIDICT["Major seventh"] = "maj7"
 CHORD_FORM_ABBR_BIDICT["Minor seventh"] = "m7"
 CHORD_FORM_ABBR_BIDICT["Dominant seventh"] = "7"
@@ -40,27 +42,28 @@ def put_chord_dict(dictionary: dict, numeral: str, first_interval: str, form: st
 
 MAJOR_CHORD_DICT = {}
 put_chord_dict(MAJOR_CHORD_DICT, "I", "P1", "Major")
-# put_chord_dict(MAJOR_CHORD_DICTIONARY, "I7", "P1", "Major seventh")
+put_chord_dict(MAJOR_CHORD_DICT, "Iaug", "P1", "Augmented")
 put_chord_dict(MAJOR_CHORD_DICT, "bII", "m2", "Major")
 put_chord_dict(MAJOR_CHORD_DICT, "II", "M2", "Minor")
 put_chord_dict(MAJOR_CHORD_DICT, "II7", "M2", "Minor seventh")
+put_chord_dict(MAJOR_CHORD_DICT, "#IIdim7", "A2", "Diminished seventh")
 put_chord_dict(MAJOR_CHORD_DICT, "III", "M3", "Minor")
-# put_chord_dict(MAJOR_CHORD_DICTIONARY, "III7", "M3", "Minor seventh")  # can delete
 put_chord_dict(MAJOR_CHORD_DICT, "IV", "P4", "Major")
-# put_chord_dict(MAJOR_CHORD_DICTIONARY, "IV7", "P4", "Major seventh")  # can delete
+put_chord_dict(MAJOR_CHORD_DICT, "IVaug", "P4", "Augmented")
+put_chord_dict(MAJOR_CHORD_DICT, "#IVdim", "A4", "Diminished")
 put_chord_dict(MAJOR_CHORD_DICT, "V", "P5", "Major")
 put_chord_dict(MAJOR_CHORD_DICT, "V7", "P5", "Dominant seventh")
+put_chord_dict(MAJOR_CHORD_DICT, "Vaug", "P5", "Augmented")
 put_chord_dict(MAJOR_CHORD_DICT, "bVI", "m6", "Major")
+put_chord_dict(MAJOR_CHORD_DICT, "VI", "M6", "Minor")
 put_chord_dict(MAJOR_CHORD_DICT, "GerVI", "m6", "German sixth")
 put_chord_dict(MAJOR_CHORD_DICT, "FreVI", "m6", "French sixth")
 put_chord_dict(MAJOR_CHORD_DICT, "ItaVI", "m6", "Italian sixth")
-put_chord_dict(MAJOR_CHORD_DICT, "VI", "M6", "Minor")
-# put_chord_dict(MAJOR_CHORD_DICTIONARY, "VI7", "M6", "Minor seventh")  # can delete
 put_chord_dict(MAJOR_CHORD_DICT, "VIIdim", "M7", "Diminished")
-# put_chord_dict(
-#     MAJOR_CHORD_DICTIONARY, "DimVII5", "M7", "Half-diminished seventh"
-# )  # Half-dim 7th, can delete
 put_chord_dict(MAJOR_CHORD_DICT, "VIIdim7", "M7", "Diminished seventh")
+put_chord_dict(
+    MAJOR_CHORD_DICT, "VIIhdim7", "M7", "Half-diminished seventh"
+)  # Half-dim 7th
 
 
 MINOR_CHORD_DICT = {}
@@ -82,6 +85,7 @@ MINOR_CHORD_DICT["ItaVI"] = MAJOR_CHORD_DICT["ItaVI"]
 put_chord_dict(MINOR_CHORD_DICT, "VII", "m7", "Major")
 MINOR_CHORD_DICT["VIIdim"] = MAJOR_CHORD_DICT["VIIdim"]
 MINOR_CHORD_DICT["VIIdim7"] = MAJOR_CHORD_DICT["VIIdim7"]
+MINOR_CHORD_DICT["VIIhdim7"] = MAJOR_CHORD_DICT["VIIhdim7"]
 
 # Dictionary for note to chord
 MAJOR_CHORD_FINDER_DICT = {}
@@ -116,7 +120,7 @@ for chord, pattern in MINOR_CHORD_DICT.items():
 MINOR_CHORD_FINDER_DICT["P5", "A2"] = [{"chord": "GerVI", "tonic_interval": "m6"}]
 MINOR_CHORD_FINDER_DICT["A4", "M3"] = [{"chord": "FreVI", "tonic_interval": "m6"}]
 
-
+# TODO: update in csv
 # chord frequency dictionary
 PROBABILITY_DICT = {
     "often": 8.0 / 15,
