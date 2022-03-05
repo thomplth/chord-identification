@@ -80,10 +80,10 @@ import re
 
 
 def SplitJazzChordProperties(jazz_chord: str) -> list[str]:
-    return re.findall("[A-G][#b-]?|.*[m|o]7?|7|.*\+6", jazz_chord)
+    return re.findall("[A-G][#b-]?|.*m7?|7|.*\+6", jazz_chord)
     # Explain: Return an array with max length of 2, where
     # 1. root note, which can contain sharp or flat
-    # 2. chord form, which can return 'm', 'm7', 'dim', 'dim7', 'o7', '+6' and '7'
+    # 2. chord form, which can return 'm', 'm7', 'dim', 'dim7', 'hdim7', '+6' and '7'
     #    if a chord is major in form then the length of the array is 1.
 
 
@@ -91,6 +91,7 @@ def SplitJazzChordProperties(jazz_chord: str) -> list[str]:
 class JazzChord(Chord):
     def __init__(self, scale: Scale = None, name: str = ""):
         chord_props = SplitJazzChordProperties(name)
+        # print(chord_props)
         root: str = ""
         abbr_form: str = ""
         if len(chord_props) > 0:

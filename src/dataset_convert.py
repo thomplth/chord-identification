@@ -44,8 +44,8 @@ def get_Schubert_chord(csv_file):
         convert_dict["7"] = "7"
         convert_dict["maj7"] = "maj7"
         convert_dict["min7"] = "m7"
-        convert_dict["dim7"] = "o7"
-        convert_dict["hdim7"] = "%7"
+        convert_dict["dim7"] = "dim7"
+        convert_dict["hdim7"] = "hdim7"
 
         standard_abbr = convert_dict[dataset_form]
         return standard_abbr
@@ -59,7 +59,7 @@ def get_Schubert_chord(csv_file):
         chord_form = convert_form_Suchubert(
             jazz_chord[1] if len(jazz_chord) > 1 else ""
         )
-        result[float(row[0])] = jazz_chord[0] + chord_form
+        result[float(row[0])] = (jazz_chord[0], chord_form)
     return result
 
 
@@ -72,21 +72,30 @@ def exporter(keys_dict, chords_dict, piece_name):
     key_list = sorted(keys_dict.items(), key=lambda x: x[0])
     chord_list = sorted(chords_dict.items(), key=lambda x: x[0])
     key_ptr = 0
+
     for offset, chord in chord_list:
         if key_ptr < len(key_list) - 1 and key_list[key_ptr + 1][0] <= offset:
             key_ptr += 1
-
+        tonic, form = chord
         scale = Scale(
             tonic_note=Note(input_str=key_list[key_ptr][1][0]),
             is_major=key_list[key_ptr][1][1] == "M",
         )
-        roman_chord = JazzChord(scale=scale, name=chord)
-        print(
-            offset,
-            key_list[key_ptr][1][0],
-            key_list[key_ptr][1][1],
-            roman_chord.numeral,
-        )
+        roman_chord = JazzChord(scale=scale, name=tonic + form)
+
+        # if the chord is seventh and it cannot be recognized,
+        # remove the seventh note
+        if roman_chord.numeral == "?":
+            if form == "7" or form == "maj7":
+                form = ""
+            elif form == "m7":
+                form = "m"
+            elif form == "dim7" or form == "hdim7":
+                form = "dim"
+            roman_chord = JazzChord(scale=scale, name=tonic + form)
+
+        if roman_chord.numeral == "?":
+            print(">>>", offset, key_list[key_ptr][1], tonic, form, chord)
         writer.writerow(
             (
                 offset,
