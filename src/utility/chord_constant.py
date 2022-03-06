@@ -72,9 +72,11 @@ MINOR_CHORD_DICT["I+"] = MAJOR_CHORD_DICT["I"]
 MINOR_CHORD_DICT["bII"] = MAJOR_CHORD_DICT["bII"]
 put_chord_dict(MINOR_CHORD_DICT, "IIdim", "M2", "Diminished")
 put_chord_dict(MINOR_CHORD_DICT, "IIdim7", "M2", "Half-diminished seventh")
+MINOR_CHORD_DICT["#IIdim7"] = MAJOR_CHORD_DICT["#IIdim7"]
 put_chord_dict(MINOR_CHORD_DICT, "III", "m3", "Major")
 put_chord_dict(MINOR_CHORD_DICT, "IV", "P4", "Minor")
 MINOR_CHORD_DICT["IV+"] = MAJOR_CHORD_DICT["IV"]
+MINOR_CHORD_DICT["#IVdim"] = MAJOR_CHORD_DICT["#IVdim"]
 put_chord_dict(MINOR_CHORD_DICT, "V", "P5", "Minor")
 MINOR_CHORD_DICT["V+"] = MAJOR_CHORD_DICT["V"]
 MINOR_CHORD_DICT["V+7"] = MAJOR_CHORD_DICT["V7"]

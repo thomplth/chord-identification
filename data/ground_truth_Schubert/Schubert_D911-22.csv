@@ -5,7 +5,7 @@ offset,tonic,key,numeral
 3.75,A,m,V+7
 4.0,A,m,I
 5.0,A,m,I
-6.75,A,m,?
+6.75,A,m,IIdim
 7.0,A,m,V+
 8.0,A,m,V+
 8.5,A,m,#IVdim
@@ -14,7 +14,7 @@ offset,tonic,key,numeral
 10.5,A,m,#IVdim
 11.0,A,m,V+
 12.0,A,m,I
-13.75,A,m,?
+13.75,A,m,#IVdim
 14.0,A,m,V+
 15.0,A,M,I
 16.0,A,M,V7
@@ -28,7 +28,7 @@ offset,tonic,key,numeral
 21.75,A,m,V+7
 22.0,A,m,I
 23.0,A,m,I
-24.75,A,m,?
+24.75,A,m,IIdim
 25.0,A,m,V+
 26.0,A,m,V+
 26.5,A,m,#IVdim
@@ -37,7 +37,7 @@ offset,tonic,key,numeral
 28.5,A,m,#IVdim
 29.0,A,m,V+
 30.0,A,m,I
-31.75,A,m,?
+31.75,A,m,#IVdim
 32.0,A,m,V+
 33.0,A,M,I
 34.0,A,M,V7
