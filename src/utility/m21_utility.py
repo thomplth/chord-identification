@@ -42,9 +42,9 @@ def get_notes_in_measures(stream):
             m21_notes = []
             # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
             # so they should be ignored
-            if isinstance(element, chord.Chord) and not isinstance(
+            if isinstance(element, chord.Chord) and not (isinstance(
                 element, harmony.ChordSymbol
-            ):
+            )):
                 m21_notes_temp = list(element.notes)
                 # the offset of notes in chord is relative to chord
                 for n in m21_notes_temp:

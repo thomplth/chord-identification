@@ -4,6 +4,9 @@ import csv
 import os
 import traceback
 
+
+from itertools import zip_longest
+
 from utility.m21_utility import *
 
 from preprocess.piece import Piece
@@ -36,7 +39,6 @@ except KeyError:
 
 def get_files(filename=None):
     all_scores = [f for f in os.listdir(DATA_PATH + DATASET_PATH) if f.endswith(".mxl")]
-    print(all_scores)
     # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
     if filename in all_scores:
         return [filename]
@@ -73,6 +75,25 @@ def export_chords(out_list, dirname, filename):
 
     file.close()
 
+def export_chromas(out_list, dirname, filename):
+    path = os.path.join("../data/chroma", dirname, filename + ".csv")
+    file = open(path, "w", newline="")
+    writer = csv.writer(file)
+    
+    header = tuple(map(str, "offset c c# d d# e f f# g g# a a# b total".split(' ')))
+    writer.writerow(header)
+    for segment in out_list:
+        chroma: list[float] = [0.0 for _ in range(13)] # the last one store total
+        for note, duration in segment["note_profile"].items():
+            pitch = Note(input_str=note).get_pitch_class()
+            chroma[pitch] += duration
+            chroma[12] += duration
+        chroma = [round(dur, 3) for dur in chroma]
+
+        result = tuple([segment["offset"]]) + tuple(chroma)
+        writer.writerow(result)
+
+    file.close()
 
 def main():
     score_files = get_files()
@@ -98,6 +119,9 @@ def main():
             # Chord segmentation and Identification
             notes_in_measures = get_notes_in_measures(chordify_stream)
             beat_segments = uniform_segmentation(notes_in_measures, time_signature)
+            if True:
+                export_chromas(beat_segments, "KYDataset", score_file.removesuffix(".mxl"))
+                continue
             combined_segments = merge_chord_segment(beat_segments)
 
             offset_chord_choices = []
