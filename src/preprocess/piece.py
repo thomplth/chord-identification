@@ -177,7 +177,7 @@ class Piece:
             path = os.path.join(GT_PATH, self.name + ".csv")
             file = open(path, "w", newline="")
             writer = csv.writer(file)
-            writer.writerow(("offset", "tonic", "key", "chord"))
+            writer.writerow(("offset", "tonic", "key", "numeral"))
             for segment in gt:
                 writer.writerow(segment)
             file.close()

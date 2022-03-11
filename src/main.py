@@ -39,6 +39,7 @@ except KeyError:
 
 def get_files(filename=None):
     all_scores = [f for f in os.listdir(DATA_PATH + DATASET_PATH) if f.endswith(".mxl")]
+    # print(all_scores)
     # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
     if filename in all_scores:
         return [filename]
@@ -95,6 +96,23 @@ def export_chromas(out_list, dirname, filename):
 
     file.close()
 
+def chroma_extration():
+    all_scores = [f for f in os.listdir(os.path.join(DATA_PATH, "Schubert_Winterreise_Dataset", "musicxml")) if f.endswith(".xml")]
+
+    for score in all_scores:
+        try:
+            print(">> Currently handling: " + score)
+            piece = Piece(score)
+
+            time_signature = get_initial_time_signature(piece.flattened)
+            notes_in_measures = get_notes_in_measures(piece.chordified)
+            beat_segments = uniform_segmentation(notes_in_measures, time_signature)
+        
+            export_chromas(beat_segments, "Schubert", score.removesuffix(".xml"))
+
+        except Exception as error:
+            traceback.print_exc()
+
 def main():
     score_files = get_files()
     results = []
@@ -119,9 +137,9 @@ def main():
             # Chord segmentation and Identification
             notes_in_measures = get_notes_in_measures(chordify_stream)
             beat_segments = uniform_segmentation(notes_in_measures, time_signature)
-            if True:
-                export_chromas(beat_segments, "KYDataset", score_file.removesuffix(".mxl"))
-                continue
+            # if True:
+            #     export_chromas(beat_segments, "KYDataset", score_file.removesuffix(".mxl"))
+            #     continue
             combined_segments = merge_chord_segment(beat_segments)
 
             offset_chord_choices = []
@@ -164,13 +182,6 @@ def main():
                 )
                 export_chords(chord_result, "chords", score_file.removesuffix(".mxl"))
 
-            # TODO: cannot run for Metric
-            """metric = Metric(piece)
-            print(metric.symbolic_recall(chord_result), piece.length)"""
-            # metric.evaluate(key_result, type='key')
-            # metric.evaluate(chord_result, type='chord')
-            # results.append((score_file, metric))
-
             raise SystemExit
 
         except Exception as error:
@@ -183,4 +194,5 @@ def main():
 if __name__ == "__main__":
     start_time = time.time()
     main()
+    # chroma_extration()
     print("--- Used %s seconds ---" % (time.time() - start_time))
