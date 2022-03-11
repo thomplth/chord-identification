@@ -14,7 +14,7 @@ def openFile(file_name: str):
 
 # f = openFile("B063_00_01a_a.hrm")
 if 1:
-    directory = "..\data\TAVERN-Beethoven\B063\Joined"
+    directory = "..\data\TAVERN-Beethoven\B063"
     scores = get_files(directory)
     for s in scores[:1]:
         file_dir = directory + "\\" + s
