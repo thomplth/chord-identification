@@ -96,7 +96,7 @@ def export_chromas(out_list, dirname, filename):
 
     file.close()
 
-def chroma_extration():
+def schubert_chroma():
     all_scores = [f for f in os.listdir(os.path.join(DATA_PATH, "Schubert_Winterreise_Dataset", "musicxml")) if f.endswith(".xml")]
 
     for score in all_scores:
@@ -194,5 +194,4 @@ def main():
 if __name__ == "__main__":
     start_time = time.time()
     main()
-    # chroma_extration()
     print("--- Used %s seconds ---" % (time.time() - start_time))
