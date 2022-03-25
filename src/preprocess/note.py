@@ -55,7 +55,7 @@ class Note:
     # Give pitch class of a note
     def get_pitch_class(self) -> int:
         """
-        :return type: int range [1:11]
+        :return type: int range [0:11]
         """
         return (HEPTATONIC_DICT[self.alphabet] + self.accidental) % 12
 
