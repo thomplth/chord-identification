@@ -5,7 +5,7 @@ import configparser
 import os
 import sys
 
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 
 CONFIG = configparser.ConfigParser()
@@ -23,16 +23,19 @@ except KeyError:
 
 
 class Piece:
-    """Container of a music21.stream object with custom data extration methods and enhanced abstraction.
-    """
+    """Container of a music21.stream object with custom data extration methods and enhanced abstraction."""
 
     def __init__(self, filename):
         """
         :param filename: filename of the music piece (with or without extension)
         :type filename: str
         """
-        self.name = filename[:-4] if filename.endswith('.mxl') else filename
-        self.score = converter.parse(os.path.join(DATASET_PATH, self.name+'.mxl'))
+        self.name = (
+            filename[:-4]
+            if filename.endswith(".mxl") or filename.endswith(".xml")
+            else filename
+        )
+        self.score = converter.parse(os.path.join(DATASET_PATH, filename))
         self.length = self.score.duration.quarterLength
 
         self.chordified = self.score.chordify()
@@ -84,9 +87,9 @@ class Piece:
         """
         if not custom_stream:
             parts_iter = self.score.getElementsByClass("PartStaff")
-            return [list(part.getElementsByClass('Measure')) for part in parts_iter]
+            return [list(part.getElementsByClass("Measure")) for part in parts_iter]
         else:
-            return list(custom_stream.recurse().getElementsByClass('Measure'))
+            return list(custom_stream.recurse().getElementsByClass("Measure"))
 
     def get_notes(self, custom_stream=None):
         """Obtain all notes of the score.
@@ -99,11 +102,13 @@ class Piece:
         """
         if not custom_stream:
             parts = self.get_measures()
-            return [self.__get_elements_in_measures(measures, 'Note') for measures in parts]
+            return [
+                self.__get_elements_in_measures(measures, "Note") for measures in parts
+            ]
         else:
-            return list(custom_stream.recurse().getElementsByClass('Note'))
+            return list(custom_stream.recurse().getElementsByClass("Note"))
 
-    def get_ground_truth(self, type='chord'):
+    def get_ground_truth(self, type="chord"):
         """Traverse labelled music stream to generates text-based ground truth data for evaluation.
 
         :param type: 'chord' or 'key' segments, defaults to 'chord'
@@ -113,7 +118,7 @@ class Piece:
         :rtype: list
         """
         res = []
-        notes = self.get_elements_by_offset(filter=['Note', 'Chord'])
+        notes = self.get_elements_by_offset(filter=["Note", "Chord"])
 
         # Archived code for chordsymbol-lookup
         # if type == 'chord':
@@ -123,40 +128,42 @@ class Piece:
         #     cs = f'{chord.figure}({chord.chordKindStr})'
         #     res.append((offset, cs))
 
-        chord, tonic, key = '', '', ''
-        if type == 'chord':
+        chord, tonic, key = "", "", ""
+        if type == "chord":
             for offset, el in notes.items():
                 for note in el:
                     if note.lyric:
                         try:
-                            lyric = note.lyric.replace('♭', 'b')
-                            
-                            if '(' in note.lyric:
-                                tonic = lyric.split('(')[0][:-1]
-                                key = lyric.split('(')[0][-1]
-                                chord = lyric.split('(')[1][:-1]
+                            lyric = note.lyric.replace("♭", "b")
+
+                            if "(" in note.lyric:
+                                tonic = lyric.split("(")[0][:-1]
+                                key = lyric.split("(")[0][-1]
+                                chord = lyric.split("(")[1][:-1]
 
                                 res.append((note.offset, tonic, key, chord))
                             else:
                                 chord = lyric
                                 res.append((note.offset, tonic, key, chord))
-                        
+
                         except Exception as e:
-                            print(f'\033[93m[{e}] for chord {note.lyric} at {note.offset} of {self.name}\033[0m')
-        elif type == 'key':
+                            print(
+                                f"\033[93m[{e}] for chord {note.lyric} at {note.offset} of {self.name}\033[0m"
+                            )
+        elif type == "key":
             for offset, el in notes.items():
                 for note in el:
-                    if note.lyric and '(' in note.lyric:
-                        tonic = note.lyric.split('(')[0][:-1]
-                        tonic = tonic[:-1] + 'b' if tonic.endswith('♭') else tonic
-                        key = note.lyric.split('(')[0][-1]
+                    if note.lyric and "(" in note.lyric:
+                        tonic = note.lyric.split("(")[0][:-1]
+                        tonic = tonic[:-1] + "b" if tonic.endswith("♭") else tonic
+                        key = note.lyric.split("(")[0][-1]
                         res.append((note.offset, tonic, key))
         else:
-            raise ValueError('Type must be either chord or key')
+            raise ValueError("Type must be either chord or key")
 
         return res
 
-    def export(self, path=RESULT_PATH, filename=None, type='mxl'):
+    def export(self, path=RESULT_PATH, filename=None, type="mxl"):
         """Output music stream as mxl file (by default).
 
         :param path: path to write on, defaults to OUTPUT_PATH
@@ -169,8 +176,7 @@ class Piece:
         self.score.write(type, fp=filepath)
 
     def _export_ground_truth(self):
-        """Single use function for generating ground truth csv files
-        """
+        """Single use function for generating ground truth csv files"""
         try:
             gt = self.get_ground_truth()
 
@@ -182,7 +188,7 @@ class Piece:
                 writer.writerow(segment)
             file.close()
 
-            gt = self.get_ground_truth(type='key')
+            gt = self.get_ground_truth(type="key")
 
             path = os.path.join(GT_PATH + "_key", self.name + ".csv")
             file = open(path, "w", newline="")
@@ -215,9 +221,8 @@ if __name__ == "__main__":
 
     for score in scores:
         p = Piece(score)
-        print(score, 'processing...')
+        print(score, "processing...")
         p._export_ground_truth()
-
 
         # res, tmpdict = p.get_ground_truth()
         # print(tmpdict)
@@ -228,7 +233,6 @@ if __name__ == "__main__":
         #     writer.writerow(('chord', 'occurance'))
         #     for k, v in tmpdict.items():
         #         writer.writerow((k, v))
-    
 
     #     for k, v in tmpdict.items():
     #         if k not in chord_dict:

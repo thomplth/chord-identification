@@ -38,8 +38,12 @@ except KeyError:
 
 
 def get_files(filename=None):
-    all_scores = [f for f in os.listdir(DATA_PATH + DATASET_PATH) if f.endswith(".mxl")]
-    # print(all_scores)
+    all_scores = [
+        f
+        for f in os.listdir(DATA_PATH + DATASET_PATH)
+        if f.endswith(".mxl") or f.endswith(".xml")
+    ]
+    print(os.listdir(DATA_PATH + DATASET_PATH))
     # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
     if filename in all_scores:
         return [filename]
@@ -98,31 +102,6 @@ def export_chromas(out_list, dirname, filename):
     file.close()
 
 
-def schubert_chroma():
-    all_scores = [
-        f
-        for f in os.listdir(
-            os.path.join(DATA_PATH, "Schubert_Winterreise_Dataset", "musicxml")
-        )
-        if f.endswith(".xml")
-    ]
-
-    for score in all_scores:
-        try:
-            print(">> Currently handling: " + score)
-            piece = Piece(score)
-
-            # time_signature = get_initial_time_signature(piece.flattened)
-
-            # notes_in_measures = get_notes_in_measures(piece.chordified)
-            # beat_segments = uniform_segmentation(notes_in_measures, time_signature)
-
-            # export_chromas(beat_segments, "Schubert", score.removesuffix(".xml"))
-
-        except Exception as error:
-            traceback.print_exc()
-
-
 def main():
     score_files = get_files()
     results = []
@@ -146,7 +125,7 @@ def main():
             beat_segments = generate_note_profiles_in_segments(notes_in_measures)
             if True:
                 export_chromas(
-                    beat_segments, "KYDataset2", score_file.removesuffix(".mxl")
+                    beat_segments, "Schubert2", score_file[:-4]
                 )
                 continue
             combined_segments = merge_chord_segment(beat_segments)
