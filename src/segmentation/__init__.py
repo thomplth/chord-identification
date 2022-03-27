@@ -12,6 +12,7 @@ from utility.entities import (
 from utility.constant import NOTES_VARIATION_THRESHOLD, NOTES_FREQUENCY_THRESHOLD
 from preprocess.note import Note
 import numpy as np
+from math import log2
 
 
 # normalization of note dictionary
@@ -36,22 +37,42 @@ def sum_note_dictionary(
 
 
 # top-down approach of chord segmentation
-def uniform_segmentation(chordify_stream, time_signature) -> list[OffsetNoteProfile]:
-    offsets_notes_dictionary: dict[float, dict[str, float]] = {}
+# def uniform_segmentation(chordify_stream) -> list[OffsetNoteProfile]:
+#     offsets_notes_dictionary: dict[float, dict[str, float]] = {}
 
-    for measure_offset, notes in chordify_stream.items():
-        # duration calculation
-        for m21_note in notes:
+#     for measure_offset, notes in chordify_stream.items():
+#         # duration calculation
+#         for m21_note in notes:
+#             name: str = m21_note.name
+#             note_offset: float = int(m21_note.offset) + measure_offset
+#             duration: float = m21_note.duration.quarterLength
+
+#             if duration > 0:
+#                 if not (note_offset in offsets_notes_dictionary):
+#                     offsets_notes_dictionary[note_offset] = {}
+#                 if not (name in offsets_notes_dictionary[note_offset]):
+#                     offsets_notes_dictionary[note_offset][name] = 0
+#                 offsets_notes_dictionary[note_offset][name] += duration
+#                 # no normalization
+
+#     offsets_notes_list: list[OffsetNoteProfile] = [
+#         {"note_profile": notes_dict, "offset": offset}
+#         for offset, notes_dict in offsets_notes_dictionary.items()
+#     ]
+
+def generate_note_profiles_in_segments(notes_in_segments: dict):
+    offsets_notes_dictionary: dict[float, dict[str, float]] = {}
+    for offset, m21_notes in notes_in_segments.items():
+        for m21_note in m21_notes:
             name: str = m21_note.name
-            note_offset: float = int(m21_note.offset) + measure_offset
             duration: float = m21_note.duration.quarterLength
 
             if duration > 0:
-                if not (note_offset in offsets_notes_dictionary):
-                    offsets_notes_dictionary[note_offset] = {}
-                if not (name in offsets_notes_dictionary[note_offset]):
-                    offsets_notes_dictionary[note_offset][name] = 0
-                offsets_notes_dictionary[note_offset][name] += duration
+                if not (offset in offsets_notes_dictionary):
+                    offsets_notes_dictionary[offset] = {}
+                if not (name in offsets_notes_dictionary[offset]):
+                    offsets_notes_dictionary[offset][name] = 0
+                offsets_notes_dictionary[offset][name] += duration
                 # no normalization
 
     offsets_notes_list: list[OffsetNoteProfile] = [
@@ -60,6 +81,35 @@ def uniform_segmentation(chordify_stream, time_signature) -> list[OffsetNoteProf
     ]
 
     return offsets_notes_list
+
+def get_notes_in_segments(stream, segment_unit=1.0):
+    measures = get_measures(stream)
+    res = {}
+    for measure in measures:
+        for element in list(measure.elements):
+            m21_notes = []
+            # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
+            # so they should be ignored
+            if isinstance(element, chord.Chord) and not (
+                isinstance(element, harmony.ChordSymbol)
+            ):
+                m21_notes_temp = list(element.notes)
+                # the offset of notes in chord is relative to chord
+                for n in m21_notes_temp:
+                    n.offset += element.offset
+                m21_notes.extend(m21_notes_temp)
+            elif isinstance(element, note.Note):
+                m21_notes.append(element)
+            else:
+                continue
+
+            offset = m21_notes[0].offset
+            index = measure.offset + floor(offset / segment_unit) * segment_unit
+            if index in res:
+                res[index].extend(m21_notes)
+            else:
+                res[index] = m21_notes
+    return res
 
 
 def is_excess_notes_variation(notes_dictionary: Note_duration_dict) -> bool:
@@ -154,3 +204,28 @@ def key_segmentation(stream) -> Measure_OffsetChroma_dict:
             result[idx] = {"chroma": np_chroma, "offset": measure.offset}
 
     return result
+
+
+def get_segment_unit(stream) -> float:
+    min_length = float("inf")
+    for measure in get_measures(stream):
+        for element in list(flatten(measure).elements):
+            m21_notes = []
+            # harmony.ChordSymbol is inherited from chord.Chord but it is just repeated the chord
+            # so they should be ignored
+            if isinstance(element, chord.Chord) and not isinstance(
+                element, harmony.ChordSymbol
+            ):
+                m21_notes = list(element.notes)
+            elif isinstance(element, note.Note):
+                m21_notes = [element]
+            else:
+                continue
+
+            for m21_note in m21_notes:
+                duration: float = m21_note.duration.quarterLength
+                if duration > 0 and duration < min_length:
+                    if log2(duration).is_integer():
+                        min_length = duration
+    print(f"min_length: {min_length}")
+    return min_length

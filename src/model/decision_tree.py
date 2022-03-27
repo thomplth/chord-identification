@@ -14,6 +14,8 @@ def sepearate_data(filename):
     X = df.drop(["offset", "total", "form"], axis=1).copy()
     Y = df["form"].copy()
     Y = pd.get_dummies(Y)  # One hot encoding
+    print(X)
+    print(Y)
 
     chroma_train, chroma_test, form_train, form_test = train_test_split(
         X, Y, train_size=0.9, random_state=RANDOM_STATE

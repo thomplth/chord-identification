@@ -76,15 +76,16 @@ def export_chords(out_list, dirname, filename):
 
     file.close()
 
+
 def export_chromas(out_list, dirname, filename):
     path = os.path.join("../data/chroma", dirname, filename + ".csv")
     file = open(path, "w", newline="")
     writer = csv.writer(file)
-    
-    header = tuple(map(str, "offset c c# d d# e f f# g g# a a# b total".split(' ')))
+
+    header = tuple(map(str, "offset c c# d d# e f f# g g# a a# b total".split(" ")))
     writer.writerow(header)
     for segment in out_list:
-        chroma: list[float] = [0.0 for _ in range(13)] # the last one store total
+        chroma: list[float] = [0.0 for _ in range(13)]  # the last one store total
         for note, duration in segment["note_profile"].items():
             pitch = Note(input_str=note).get_pitch_class()
             chroma[pitch] += duration
@@ -96,22 +97,31 @@ def export_chromas(out_list, dirname, filename):
 
     file.close()
 
+
 def schubert_chroma():
-    all_scores = [f for f in os.listdir(os.path.join(DATA_PATH, "Schubert_Winterreise_Dataset", "musicxml")) if f.endswith(".xml")]
+    all_scores = [
+        f
+        for f in os.listdir(
+            os.path.join(DATA_PATH, "Schubert_Winterreise_Dataset", "musicxml")
+        )
+        if f.endswith(".xml")
+    ]
 
     for score in all_scores:
         try:
             print(">> Currently handling: " + score)
             piece = Piece(score)
 
-            time_signature = get_initial_time_signature(piece.flattened)
-            notes_in_measures = get_notes_in_measures(piece.chordified)
-            beat_segments = uniform_segmentation(notes_in_measures, time_signature)
-        
-            export_chromas(beat_segments, "Schubert", score.removesuffix(".xml"))
+            # time_signature = get_initial_time_signature(piece.flattened)
+
+            # notes_in_measures = get_notes_in_measures(piece.chordified)
+            # beat_segments = uniform_segmentation(notes_in_measures, time_signature)
+
+            # export_chromas(beat_segments, "Schubert", score.removesuffix(".xml"))
 
         except Exception as error:
             traceback.print_exc()
+
 
 def main():
     score_files = get_files()
@@ -125,21 +135,20 @@ def main():
             chordify_stream = piece.chordified
             flatten_stream = piece.flattened
 
-            time_signature = get_initial_time_signature(flatten_stream)
-            # key_signature = get_initial_key_signature(flatten_stream) # Scale(key_signature.tonic.name)
-
             # Key segmentation and Identification
-            # TODO: stream or chordified?
+            segment_unit = get_segment_unit(stream)
             key_segments: Measure_OffsetChroma_dict = key_segmentation(stream)
             measures_key = determine_key_by_adjacent(key_segments)
             # measures_key = determine_key_solo(key_segmentation(stream))
 
             # Chord segmentation and Identification
-            notes_in_measures = get_notes_in_measures(chordify_stream)
-            beat_segments = uniform_segmentation(notes_in_measures, time_signature)
-            # if True:
-            #     export_chromas(beat_segments, "KYDataset", score_file.removesuffix(".mxl"))
-            #     continue
+            notes_in_measures = get_notes_in_segments(chordify_stream, segment_unit)
+            beat_segments = generate_note_profiles_in_segments(notes_in_measures)
+            if True:
+                export_chromas(
+                    beat_segments, "KYDataset2", score_file.removesuffix(".mxl")
+                )
+                continue
             combined_segments = merge_chord_segment(beat_segments)
 
             offset_chord_choices = []
