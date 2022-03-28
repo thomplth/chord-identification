@@ -8,6 +8,7 @@ import traceback
 from itertools import zip_longest
 
 from utility.m21_utility import *
+from utility import get_files
 
 from preprocess.piece import Piece
 from preprocess.note import Note
@@ -36,18 +37,6 @@ except KeyError:
     print("failed to read config.ini, or invalid index specified")
     raise SystemExit
 
-
-def get_files(filename=None):
-    all_scores = [
-        f
-        for f in os.listdir(DATA_PATH + DATASET_PATH)
-        if f.endswith(".mxl") or f.endswith(".xml")
-    ]
-    print(os.listdir(DATA_PATH + DATASET_PATH))
-    # RuntimeWarning: invalid value encountered in double_scalars correlation_value = corr_value_numerator / corr_value_denominator
-    if filename in all_scores:
-        return [filename]
-    return all_scores
 
 
 def export_keys(out_list, dirname, filename):
@@ -103,7 +92,7 @@ def export_chromas(out_list, dirname, filename):
 
 
 def main():
-    score_files = get_files()
+    score_files = get_files(DATA_PATH + DATASET_PATH, (".mxl", ".xml"))
     results = []
 
     for score_file in score_files:
@@ -124,9 +113,7 @@ def main():
             notes_in_measures = get_notes_in_segments(chordify_stream, segment_unit)
             beat_segments = generate_note_profiles_in_segments(notes_in_measures)
             if True:
-                export_chromas(
-                    beat_segments, "Schubert2", score_file[:-4]
-                )
+                export_chromas(beat_segments, "Schubert2", score_file[:-4])
                 continue
             combined_segments = merge_chord_segment(beat_segments)
 

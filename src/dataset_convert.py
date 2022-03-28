@@ -1,30 +1,21 @@
-import configparser
-import operator
 import csv
 import os
+import numpy as np
 from preprocess.note import Note
 from preprocess.scale import Scale
 from preprocess.chord import Chord, JazzChord
+from utility import get_files
 from identification.note_to_chord import find_chords
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.join(os.path.dirname(__file__), "config_data_convert.ini"))
-try:
-    DATA_PATH = CONFIG["locations"]["data_path"]
-    DATASET_PATH_KEY = CONFIG["locations"]["dataset_key_path"]
-    DATASET_PATH_CHORD = CONFIG["locations"]["dataset_chord_path"]
-    GT_PATH = CONFIG["locations"]["gt_path"]
-except KeyError:
-    print("failed to read config.ini, or invalid index specified")
-    raise SystemExit
 
-
-def get_files():
-    all_scores = [
-        f for f in os.listdir(DATA_PATH + DATASET_PATH_KEY) if f.endswith(".csv")
-    ]
-    # print(all_scores)
-    return all_scores
+DATA_PATH = "../data"
+DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
+DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
+GT_PATH = DATA_PATH + "/ground_truth"  # "/ground_truth_Schubert"
+CHROMA_PATH = DATA_PATH + "/chroma/KYDataset2"  # "/chroma/Schubert2"
+TRAINING_DATA_PATH = (
+    DATA_PATH + "/SegmentedChroma/KYDataset"
+)  # "/SegmentedChroma/Schubert"
 
 
 def get_Schubert_key(csv_file):
@@ -123,7 +114,46 @@ def get_Schubert_chord(csv_file):
     return result
 
 
-def exporter(keys_dict, chords_dict, piece_name):
+def get_ground_truth(csv_file):
+    csv_reader = csv.reader(csv_file, delimiter=",")
+    gt_dict = {}
+    next(csv_reader)  # no need the header
+
+    # Input lists of chords first
+    for row in csv_reader:
+        offset, tonic, scale_type, roman_num = row[:4]
+        if roman_num == "?":
+            continue  # ignore cases that are unknown (cleaner the data)
+        tonic_note = Note(input_str=tonic)
+        scale = Scale(is_major=scale_type == "M", tonic_note=tonic_note)
+        chord = Chord(scale=scale, numeral=roman_num)
+        gt_dict[float(offset)] = chord
+
+    # Remove duplication
+    chord_list = sorted(gt_dict.items(), key=lambda x: x[0])
+    dedup_chord_list = [chord_list[0]]
+    for idx in range(1, len(chord_list) - 1):
+        if not dedup_chord_list[-1][1].is_equal(chord_list[idx][1]):
+            dedup_chord_list.append(chord_list[idx])
+
+    return dedup_chord_list
+
+
+def get_chroma(csv_file):
+    csv_reader = csv.reader(csv_file, delimiter=",")
+    chroma_dict = {}
+    next(csv_reader)  # no need the header
+
+    # Input lists of chroma
+    for row in csv_reader:
+        offset = float(row[0])
+        chroma = np.array([float(val) for val in row[1:]])
+        chroma_dict[offset] = chroma
+
+    return sorted(chroma_dict.items(), key=lambda x: x[0])
+
+
+def ground_truth_exporter(keys_dict, chords_dict, piece_name):
     path = os.path.join(GT_PATH, piece_name)
     export_file = open(path, "w", newline="")
     writer = csv.writer(export_file)
@@ -276,27 +306,129 @@ def exporter(keys_dict, chords_dict, piece_name):
     return (len(chord_list), error_counter)
 
 
-files = get_files()
-total_num, total_err = 0, 0
-for f in files:
-    print("Now handling:", f)
-    gt_key_file = open(DATA_PATH + DATASET_PATH_KEY + "/" + f)
-    gt_chord_file = open(DATA_PATH + DATASET_PATH_CHORD + "/" + f)
-    with gt_key_file as key_file:
-        with gt_chord_file as chord_file:
-            keys_dict = get_Schubert_key(key_file)
-            chords_dict = get_Schubert_chord(chord_file)
-            num, err = exporter(keys_dict, chords_dict, f)
-            total_num += num
-            total_err += err
+def ground_truth_handler():
+    files = get_files(DATA_PATH + DATASET_PATH_KEY, ".csv")
+    total_num, total_err = 0, 0
+    for f in files:
+        print("Now handling:", f)
+        gt_key_file = open(DATA_PATH + DATASET_PATH_KEY + "/" + f)
+        gt_chord_file = open(DATA_PATH + DATASET_PATH_CHORD + "/" + f)
+        with gt_key_file as key_file:
+            with gt_chord_file as chord_file:
+                keys_dict = get_Schubert_key(key_file)
+                chords_dict = get_Schubert_chord(chord_file)
+                continue  # Remove this carefully
+                num, err = ground_truth_exporter(keys_dict, chords_dict, f)
+                total_num += num
+                total_err += err
 
-    gt_key_file.close()
-    gt_chord_file.close()
+        gt_key_file.close()
+        gt_chord_file.close()
 
-print("Total chords:", total_num)
-print(
-    "Error:",
-    total_err,
-    "and the Convert Rate:",
-    (total_num - total_err) / total_num,
-)
+    print("Total chords:", total_num)
+    print(
+        "Error:",
+        total_err,
+        "and the Convert Rate:",
+        (total_num - total_err) / total_num,
+    )
+
+
+def ground_truth_segment_merger(file_str):
+    gt_file = open(GT_PATH + "/" + file_str)
+    chord_list = get_ground_truth(gt_file)
+    chords_len = len(chord_list)
+
+    chroma_file = open(CHROMA_PATH + "/" + file_str)
+    chroma_list = get_chroma(chroma_file)
+    chromas_len = len(chroma_list)
+
+    segmented_chroma_dict = {}
+    # Handle the case that cannot cover by first chord
+    chromas_in_zeroth = [
+        chroma for chroma in chroma_list if chroma[0] < chord_list[0][0]
+    ]
+    if chromas_in_zeroth:
+        segmented_chroma_dict[chromas_in_zeroth[0][0]] = {
+            "chord": None,
+            "chroma": np.sum([c[1] for c in chromas_in_zeroth], axis=0),
+        }
+
+    # Handle the rest
+    chord_ptr = 0
+    chroma_ptr = len(chromas_in_zeroth)
+    while (chord_ptr < chords_len) and (chroma_ptr < chromas_len):
+        chord_offset = chord_list[chord_ptr][0]
+        if chord_offset not in segmented_chroma_dict:
+            segmented_chroma_dict[chord_offset] = {
+                "chord": chord_list[chord_ptr][1],
+                "chroma": np.zeros(13),
+            }
+
+        chroma_offset = chroma_list[chroma_ptr][0]
+        # print(chord_offset, chroma_offset)
+        if (
+            chroma_offset > chord_offset
+            and chord_ptr < chords_len - 1
+            and chroma_offset >= chord_list[chord_ptr + 1][0]
+        ):
+            chord_ptr += 1
+        else:
+            segmented_chroma_dict[chord_offset]["chroma"] += chroma_list[chroma_ptr][1]
+            chroma_ptr += 1
+    chroma_file.close()
+    gt_file.close()
+
+    return segmented_chroma_dict
+
+
+def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
+    path = os.path.join(TRAINING_DATA_PATH, file_str)
+    export_file = open(path, "w", newline="")
+    writer = csv.writer(export_file)
+
+    header = tuple(
+        map(
+            str,
+            "offset c c# d d# e f f# g g# a a# b tonic is_major numeral chord_tonality".split(
+                " "
+            ),
+        )
+    )
+    writer.writerow(header)
+
+    for offset, segment in segmented_chroma_dict.items():
+        chroma = segment["chroma"]
+        chroma_sum = segment["chroma"][-1]
+        normalized_chroma = [0.0 for _ in range(12)]
+        if chroma_sum > 0:
+            normalized_chroma = [round((val / chroma_sum), 6) for val in chroma[:-1]]
+
+        chord = segment["chord"]
+        chord_tuple = (None, None, None, None)
+        if chord:
+            chord_tuple = (
+                chord.scale.tonic.__str__(),
+                chord.scale.is_major,
+                chord.numeral,
+                chord.form,
+            )
+
+        result = tuple([offset]) + tuple(normalized_chroma) + chord_tuple
+        writer.writerow(result)
+
+
+def main():
+    gt_files = get_files(
+        GT_PATH, ".csv", "Bach_C.P.E._Solfeggietto_in_C_Minor_(H_220).csv"
+    )
+    for f in gt_files:
+        print("Now handling:", f)
+        try:
+            segmented_chroma_dict = ground_truth_segment_merger(f)
+            ground_truth_segmented_exporter(segmented_chroma_dict, f)
+        except Exception:
+            print(Exception)
+
+
+main()

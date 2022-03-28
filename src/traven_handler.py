@@ -1,3 +1,4 @@
+"This files is currently useless."
 import music21 as m21
 from utility.m21_utility import get_notes_in_measures
 import os

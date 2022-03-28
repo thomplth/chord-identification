@@ -1,4 +1,5 @@
 from utility.constant import *
+import os
 
 # Convert Music21.note.Note to note string
 def note_name_simplifier(m21_notes, is_unique=True):
@@ -32,3 +33,10 @@ def invert_interval(interval):
         new_quality = "A"
     new_distance = str((9 - int(distance)))
     return new_quality + new_distance
+
+
+def get_files(directory, suffix, filename=None):
+    all_scores = [f for f in os.listdir(directory) if f.endswith(suffix)]
+    if filename in all_scores:
+        return [filename]
+    return all_scores

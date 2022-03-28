@@ -17,14 +17,14 @@ from utility.chord_constant import (
 class Chord:
     def __init__(self, scale: Scale = None, numeral: str = "?"):
         self.scale: Scale = Scale() if scale is None else scale
-        self.numeral: str = numeral
+        self.numeral: str = numeral.strip()
         dictionary = self.scale.get_chord_dictionary()
 
         self.form: str = "Undefined"
         self.root: Note = None
-        if numeral in dictionary:
-            self.form = CHORD_INTERVAL_FORM_BIDICT[tuple(dictionary[numeral][1:])]
-            interval = dictionary[numeral][0]
+        if self.numeral in dictionary:
+            self.form = CHORD_INTERVAL_FORM_BIDICT[tuple(dictionary[self.numeral][1:])]
+            interval = dictionary[self.numeral][0]
             self.root = self.scale.tonic.get_note_by_interval(interval)
 
     # get the jazz representation of a chord
@@ -42,6 +42,15 @@ class Chord:
 
         if self.form == "Undefined" or other_chord.form == "Undefined":
             print("Cannot compare as there is an undefined chord.")
+            print(
+                "/",
+                self.__str__(),
+                self.form,
+                " vs ",
+                "/",
+                other_chord.__str__(),
+                other_chord.form,
+            )
             return False
 
         if on_jazz:
