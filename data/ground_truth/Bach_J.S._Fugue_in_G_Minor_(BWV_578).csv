@@ -19,7 +19,7 @@ offset,tonic,key,numeral
 36.0,D,m,I
 37.0,D,m,V+7
 38.0,D,m,I
-40.0,G,m,II
+40.0,G,m,IIdim
 42.0,G,m,I
 44.0,G,m,V+7
 46.0,G,m,I
@@ -37,7 +37,7 @@ offset,tonic,key,numeral
 62.0,G,m,I
 63.0,G,m,V+7
 66.0,D,m,I
-67.0,D,m,II
+67.0,D,m,IIdim
 68.0,D,m,I
 69.5,D,m,V+7
 70.0,D,m,I
@@ -66,7 +66,7 @@ offset,tonic,key,numeral
 98.0,G,m,I
 101.0,G,m,V+7
 102.0,G,m,I
-103.5,G,m,VII
+103.5,G,m,VIIdim
 104.0,G,m,VI
 106.0,G,m,V+7
 108.0,G,m,I
@@ -84,7 +84,7 @@ offset,tonic,key,numeral
 120.0,G,m,V+7
 121.0,G,m,III
 122.0,G,m,VI
-123.0,G,m,II7
+123.0,G,m,IIdim7
 124.0,G,m,III
 126.0,Bb,M,V7
 128.0,Bb,M,I
@@ -106,7 +106,7 @@ offset,tonic,key,numeral
 148.0,Bb,M,V
 150.0,F,M,V7
 152.0,Bb,M,V7
-153.5,Eb,M,VII
+153.5,Eb,M,VIIdim
 154.0,Eb,M,I
 156.0,Bb,M,I
 158.0,Bb,M,II
@@ -140,7 +140,7 @@ offset,tonic,key,numeral
 198.0,C,m,I
 199.0,C,m,V+7
 200.0,C,m,I
-203.0,C,m,II7
+203.0,C,m,IIdim7
 204.0,C,m,V+7
 206.0,C,m,I
 207.0,C,m,V+7
@@ -151,13 +151,13 @@ offset,tonic,key,numeral
 212.0,C,m,I
 213.0,C,m,V+7
 214.0,C,m,I
-215.0,C,m,II
+215.0,C,m,IIdim
 215.5,C,m,V+7
 216.0,C,m,I
 217.5,F,M,V7
 220.0,F,M,I
 222.0,F,M,IV
-224.0,F,M,VII
+224.0,F,M,VIIdim
 226.0,G,m,V+7
 228.0,G,m,I
 229.0,G,m,V+7
@@ -170,10 +170,10 @@ offset,tonic,key,numeral
 240.0,G,m,V+7
 242.0,G,m,I
 244.0,G,m,IV
-245.0,G,m,VII
+245.0,G,m,VIIdim
 246.0,G,m,III
 247.0,G,m,VI
-248.0,G,m,II7
+248.0,G,m,IIdim7
 249.0,G,m,V+7
 250.0,G,m,I
 251.0,G,m,V+
@@ -189,6 +189,6 @@ offset,tonic,key,numeral
 265.0,G,m,V+7
 266.0,G,m,I
 266.5,G,m,VI
-267.0,G,m,II7
+267.0,G,m,IIdim7
 267.5,G,m,V+7
 268.0,G,m,I+

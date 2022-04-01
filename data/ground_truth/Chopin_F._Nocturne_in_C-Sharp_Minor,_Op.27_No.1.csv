@@ -4,7 +4,7 @@ offset,tonic,key,numeral
 14.0,C#,m,IV
 16.0,C#,m,bII
 20.0,C#,m,I
-22.0,C#,m,VII
+22.0,C#,m,VIIdim
 24.0,C#,m,III
 26.0,C#,m,I
 28.0,C#,m,I+
@@ -31,7 +31,7 @@ offset,tonic,key,numeral
 80.0,C#,m,bII
 82.0,C#,m,V+
 84.0,C#,m,I
-86.0,C#,m,VII
+86.0,C#,m,VIIdim
 88.0,C#,m,III
 90.0,C#,m,I
 92.0,C#,m,I+
@@ -54,7 +54,7 @@ offset,tonic,key,numeral
 154.0,C#,m,I+
 157.0,C#,m,IV
 163.0,C#,m,III
-166.0,C#,m,VII
+166.0,C#,m,VIIdim
 169.0,C#,m,III
 172.0,Ab,M,I
 178.0,Ab,M,V7
@@ -69,7 +69,7 @@ offset,tonic,key,numeral
 205.0,Db,m,I+
 208.0,Db,m,I
 211.0,Db,m,I+
-214.0,Db,m,DimVII7
+214.0,Db,m,VIIdim7
 219.0,Db,m,V+7
 220.0,Db,m,I
 223.0,Db,m,IV
@@ -86,12 +86,12 @@ offset,tonic,key,numeral
 250.0,C,M,I
 253.0,C,M,V7
 256.0,C,M,I
-259.0,C,M,DimVII7
-260.0,C#,m,DimVII7
-261.0,C,m,DimVII7
-262.0,C#,m,DimVII7
-265.0,C,m,DimVII7
-268.0,C#,m,DimVII7
+259.0,C,M,VIIdim7
+260.0,C#,m,VIIdim7
+261.0,C,m,VIIdim7
+262.0,C#,m,VIIdim7
+265.0,C,m,VIIdim7
+268.0,C#,m,VIIdim7
 273.0,C#,m,IV
 274.0,C#,m,V+7
 301.0,C#,m,I
@@ -99,7 +99,7 @@ offset,tonic,key,numeral
 315.0,C#,m,IV
 317.0,C#,m,bII
 321.0,C#,m,I
-323.0,C#,m,VII
+323.0,C#,m,VIIdim
 325.0,C#,m,III
 327.0,C#,m,I
 329.0,C#,m,I+

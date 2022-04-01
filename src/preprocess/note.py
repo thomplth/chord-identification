@@ -12,7 +12,7 @@ from utility.constant import (
 
 class Note:
     def __init__(self, alphabet: str = "C", accidental: int = 0, input_str=None):
-        self.alphabet = "C"
+        self.alphabet = "?"
         self.accidental = 0
         if input_str is not None:
             alphabet = input_str[0].upper()

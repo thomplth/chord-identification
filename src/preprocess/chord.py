@@ -41,13 +41,11 @@ class Chord:
     ) -> bool:
 
         if self.form == "Undefined" or other_chord.form == "Undefined":
-            print("Cannot compare as there is an undefined chord.")
+            print("Error: undefined chord.", end="\t")
             print(
-                "/",
                 self.__str__(),
                 self.form,
                 " vs ",
-                "/",
                 other_chord.__str__(),
                 other_chord.form,
             )

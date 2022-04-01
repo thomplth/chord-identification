@@ -127,7 +127,13 @@ def get_ground_truth(csv_file):
         tonic_note = Note(input_str=tonic)
         scale = Scale(is_major=scale_type == "M", tonic_note=tonic_note)
         chord = Chord(scale=scale, numeral=roman_num)
-        gt_dict[float(offset)] = chord
+        try:
+            offset_num = float(offset)
+        except:
+            # The offset is in fraction
+            frac = offset.split("/")
+            offset_num = round(float(frac[0]) / float(frac[1]), 6)
+        gt_dict[offset_num] = chord
 
     # Remove duplication
     chord_list = sorted(gt_dict.items(), key=lambda x: x[0])
@@ -390,7 +396,7 @@ def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
     header = tuple(
         map(
             str,
-            "offset c c# d d# e f f# g g# a a# b tonic is_major numeral chord_tonality".split(
+            "offset c c# d d# e f f# g g# a a# b total tonic is_major numeral chord_tonality".split(
                 " "
             ),
         )
@@ -400,9 +406,9 @@ def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
     for offset, segment in segmented_chroma_dict.items():
         chroma = segment["chroma"]
         chroma_sum = segment["chroma"][-1]
-        normalized_chroma = [0.0 for _ in range(12)]
+        normalized_chroma = [0.0 for _ in range(13)]
         if chroma_sum > 0:
-            normalized_chroma = [round((val / chroma_sum), 6) for val in chroma[:-1]]
+            normalized_chroma = [round((val / chroma_sum), 6) for val in chroma]
 
         chord = segment["chord"]
         chord_tuple = (None, None, None, None)
@@ -419,16 +425,67 @@ def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
 
 
 def main():
-    gt_files = get_files(
-        GT_PATH, ".csv", "Bach_C.P.E._Solfeggietto_in_C_Minor_(H_220).csv"
-    )
-    for f in gt_files:
+    gt_files = get_files(GT_PATH, ".csv")
+    for f in gt_files:  # TODO: Label error @ 9
         print("Now handling:", f)
         try:
             segmented_chroma_dict = ground_truth_segment_merger(f)
             ground_truth_segmented_exporter(segmented_chroma_dict, f)
-        except Exception:
-            print(Exception)
+        except Exception as e:
+            print(e)
 
 
 main()
+# import re
+
+
+def tavern_handler():
+    path = "../data/TAVERN-Beethoven"
+    folders = [f for f in os.listdir(path) if f != "combine"]
+    for folder in folders[:1]:
+        piece_fragments = [f for f in os.listdir(path + "/" + folder)]
+        f = open(path + "/combine/" + folder + ".krn", "w")
+
+        frag = piece_fragments[0]
+        krn = open(path + "/" + folder + "/" + frag)
+        lines = krn.readlines()
+        idx = [i for i in range(len(lines)) if lines[i].startswith("=")][0]
+        header = lines[:idx]
+        idx = [i for i in range(len(header)) if lines[i].startswith("*")][0]
+        f.writelines(header[:idx])
+        for line in header[idx:]:
+            parts = line.split("\t")
+            new_line = "{func}\t{notes1}\t{notes2}\t{chord}\n".format(
+                func=parts[0],
+                notes1=parts[2],
+                notes2=parts[3].removesuffix("\n"),
+                chord=parts[1],
+            )
+            f.write(new_line)
+
+        for frag in piece_fragments:
+            krn = open(path + "/" + folder + "/" + frag)
+            lines = krn.readlines()
+            idx = [i for i in range(len(lines)) if lines[i].startswith("=")][0]
+            target_lines = lines[idx:-1]
+            for l in target_lines:
+                new_line = l
+                if not l.startswith("="):
+                    parts = l.split("\t")
+                    new_line = "{func}\t{notes1}\t{notes2}\t{chord}\n".format(
+                        func=parts[0],
+                        notes1=parts[2],
+                        notes2=parts[3].removesuffix("\n"),
+                        chord=parts[1],
+                    )
+                    # print(parts, new_line)
+                f.write(new_line)
+        f.write("*-\t*-\t*-\t*-\n")
+        f.close()
+        # TODO: You have to edit the title manually
+
+
+# from music21 import converter
+
+# f = converter.parse("../data/TAVERN-Beethoven/combine/B063.krn")
+# f.show()

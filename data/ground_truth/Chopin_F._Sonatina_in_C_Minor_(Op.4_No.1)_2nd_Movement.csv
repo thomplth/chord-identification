@@ -9,10 +9,10 @@ offset,tonic,key,numeral
 14.0,Eb,M,V
 14.5,Eb,M,I
 15.0,Eb,M,IV
-16.0,G,m,DimVII7
+16.0,G,m,VIIdim7
 17.0,Eb,M,I
 17.5,Eb,M,GerVI
-18.0,G,m,DimVII7
+18.0,G,m,VIIdim7
 19.0,C,m,I
 20.0,C,m,V+7
 22.0,C,m,V
@@ -62,7 +62,7 @@ offset,tonic,key,numeral
 126.375,C,m,V
 127.375,Eb,M,V
 130.375,Eb,M,II
-132.375,Eb,M,VII
+132.375,Eb,M,VIIdim
 133.375,Eb,M,I
 135.375,Eb,M,IV
 137.375,Eb,M,I
@@ -85,7 +85,7 @@ offset,tonic,key,numeral
 170.375,Gb,M,V
 171.375,Gb,M,I
 172.375,Gb,M,V
-173.375,Bb,M,DimVII7
+173.375,Bb,M,VIIdim7
 174.375,E,m,V+
 177.375,E,m,I
 181.375,E,m,V+7

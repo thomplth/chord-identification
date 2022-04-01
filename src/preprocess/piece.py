@@ -127,6 +127,23 @@ class Piece:
         #     chord = el[0]
         #     cs = f'{chord.figure}({chord.chordKindStr})'
         #     res.append((offset, cs))
+        def convert_KYDataset(scale, chord):
+            # print(offset, scale, chord)
+            is_major = scale == "M"
+            if is_major:
+                pass
+            else:
+                if chord == "II":
+                    chord = "IIdim"
+                elif chord == "II7":
+                    chord = "IIdim7"
+                elif chord == "V7":
+                    chord = "V"
+            if chord == "VII" or chord == "DimVII":
+                chord = "VIIdim"
+            elif chord == "DimVII7":
+                chord = "VIIdim7"
+            return chord
 
         chord, tonic, key = "", "", ""
         if type == "chord":
@@ -140,11 +157,10 @@ class Piece:
                                 tonic = lyric.split("(")[0][:-1]
                                 key = lyric.split("(")[0][-1]
                                 chord = lyric.split("(")[1][:-1]
-
-                                res.append((note.offset, tonic, key, chord))
                             else:
                                 chord = lyric
-                                res.append((note.offset, tonic, key, chord))
+                            chord = convert_KYDataset(key, chord)
+                            res.append((note.offset, tonic, key, chord))
 
                         except Exception as e:
                             print(
@@ -220,8 +236,8 @@ if __name__ == "__main__":
     chord_dict = {}
 
     for score in scores:
-        p = Piece(score)
         print(score, "processing...")
+        p = Piece(score)
         p._export_ground_truth()
 
         # res, tmpdict = p.get_ground_truth()

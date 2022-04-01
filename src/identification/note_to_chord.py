@@ -76,7 +76,6 @@ def find_chords_two_notes(
         interval = notes_intervals[idx]
         if interval == "M3":
             res += search_chord_dictionary(notes[idx], ["M3", "m3"], pitch_scale)
-            res += search_chord_dictionary(notes[idx], ["M3", "M3"], pitch_scale)
         elif interval == "m3":
             res += search_chord_dictionary(notes[idx], ["m3", "M3"], pitch_scale)
             res += search_chord_dictionary(notes[idx], ["m3", "m3"], pitch_scale)
@@ -175,13 +174,19 @@ def print_chords_names(notes, possible_chords, target_scale):
     for ans in possible_chords:
         # chord_tonic = ans["tonic"].__str__()
         # print if there is no specify scale or match the scale
-        if target_scale.tonic.alphabet == "?" or target_scale.is_equal(ans["scale"]):
-            chord_notes = pick_chord(ans["scale"], ans["chord"])
+        if (
+            target_scale is None
+            or target_scale.tonic.alphabet == "?"
+            or target_scale.is_equal(ans["chord"].scale)
+        ):
+            scale = ans["chord"].scale
+            numeral = ans["chord"].numeral
+            chord_notes = pick_chord(scale, numeral)
             # If you get some strange notes, just DO NOT return that chord
             if chord_notes == None:
                 continue
             chord_notes_str = [note.__str__() for note in chord_notes]
-            print(ans["chord"] + " chord in " + ans["scale"].__str__(), end=" ")
+            print(ans["chord"].__str__(), end=" ")
             print("Chord notes :", chord_notes_str, end="")
             missing_notes = list(set(chord_notes_str) - set(notes_str))
             if len(missing_notes) > 0:
@@ -214,7 +219,8 @@ if __name__ == "__main__":
 
     # search for the right pattern
     # print(notes[0].__str__(), notes_intervals)
-    possible_chords = find_chords(notes, target_scale)
+    possible_chords = find_chords([(note, 1.0) for note in notes], target_scale)
+    print(possible_chords)
     print_chords_names(notes, possible_chords, target_scale)
 
     # Time calculation

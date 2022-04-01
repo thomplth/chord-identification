@@ -38,7 +38,6 @@ except KeyError:
     raise SystemExit
 
 
-
 def export_keys(out_list, dirname, filename):
     path = os.path.join(RESULT_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
@@ -99,6 +98,8 @@ def main():
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
+            piece._export_ground_truth()
+            continue
             stream = piece.score
             chordify_stream = piece.chordified
             flatten_stream = piece.flattened

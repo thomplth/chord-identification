@@ -7,12 +7,12 @@ offset,tonic,key,numeral
 20.0,E,m,III
 22.0,B,m,V+7
 24.0,B,m,I
-26.0,F#,m,DimVII7
+26.0,F#,m,VIIdim7
 28.0,B,m,V+7
 32.0,B,m,I
 33.0,E,m,V+
 34.0,E,m,I
-35.0,E,m,II
+35.0,E,m,IIdim
 36.0,E,m,I
 40.0,E,m,V+7
 42.0,E,m,I
@@ -28,7 +28,7 @@ offset,tonic,key,numeral
 62.0,D,m,I
 64.0,E,m,V+7
 66.0,E,m,I
-67.0,B,m,II
+67.0,B,m,IIdim
 68.0,B,m,I
 70.0,B,m,V+
 72.0,E,m,V+
@@ -38,7 +38,7 @@ offset,tonic,key,numeral
 80.0,B,m,V+
 84.0,B,m,I+
 92.0,B,m,IV+
-96.0,B,m,II
+96.0,B,m,IIdim
 100.0,B,m,I+
 104.0,E,M,V
 108.0,E,M,VI
@@ -55,11 +55,11 @@ offset,tonic,key,numeral
 138.0,E,m,V
 139.0,B,m,V+7
 140.25,B,m,I
-142.25,F#,m,DimVII7
+142.25,F#,m,VIIdim7
 69257/480,B,m,V+7
 71207/480,E,m,V+
 72167/480,E,m,I
-72647/480,E,m,II
+72647/480,E,m,IIdim
 73127/480,E,m,I
 75047/480,E,m,V+7
 76007/480,E,m,I
@@ -68,7 +68,7 @@ offset,tonic,key,numeral
 78247/480,E,m,I
 78887/480,E,m,V+7
 82727/480,E,m,I
-83687/480,G#,m,DimVII7
+83687/480,G#,m,VIIdim7
 84647/480,E,m,I
 85607/480,E,m,V+
 86567/480,E,M,I
@@ -76,7 +76,7 @@ offset,tonic,key,numeral
 92327/480,E,M,II
 94247/480,E,M,I
 98327/480,E,M,II7
-100247/480,E,m,II
+100247/480,E,m,IIdim
 102167/480,E,m,I+
-104087/480,E,m,DimVII7
+104087/480,E,m,VIIdim7
 106007/480,E,m,I+
