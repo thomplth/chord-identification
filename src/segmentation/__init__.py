@@ -60,6 +60,7 @@ def sum_note_dictionary(
 #         for offset, notes_dict in offsets_notes_dictionary.items()
 #     ]
 
+
 def generate_note_profiles_in_segments(notes_in_segments: dict):
     offsets_notes_dictionary: dict[float, dict[str, float]] = {}
     for offset, m21_notes in notes_in_segments.items():
@@ -81,6 +82,7 @@ def generate_note_profiles_in_segments(notes_in_segments: dict):
     ]
 
     return offsets_notes_list
+
 
 def get_notes_in_segments(stream, segment_unit=1.0):
     measures = get_measures(stream)
@@ -227,5 +229,5 @@ def get_segment_unit(stream) -> float:
                 if duration > 0 and duration < min_length:
                     if log2(duration).is_integer():
                         min_length = duration
-    print(f"min_length: {min_length}")
+    # print(f"min_length: {min_length}")
     return min_length

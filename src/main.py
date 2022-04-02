@@ -98,8 +98,8 @@ def main():
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
+            # TODO: Uncomment when a new file is added
             piece._export_ground_truth()
-            continue
             stream = piece.score
             chordify_stream = piece.chordified
             flatten_stream = piece.flattened
@@ -113,9 +113,9 @@ def main():
             # Chord segmentation and Identification
             notes_in_measures = get_notes_in_segments(chordify_stream, segment_unit)
             beat_segments = generate_note_profiles_in_segments(notes_in_measures)
-            if True:
-                export_chromas(beat_segments, "Schubert2", score_file[:-4])
-                continue
+            # TODO: Uncomment when a new file is added
+            export_chromas(beat_segments, "KYDataset2", score_file[:-4])
+            continue
             combined_segments = merge_chord_segment(beat_segments)
 
             offset_chord_choices = []

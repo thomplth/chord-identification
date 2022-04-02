@@ -131,7 +131,8 @@ class Piece:
             # print(offset, scale, chord)
             is_major = scale == "M"
             if is_major:
-                pass
+                if chord in ["I7", "III7", "IV7", "VI7"]:
+                    chord = chord[:-1]  # drop the seventh
             else:
                 if chord == "II":
                     chord = "IIdim"
