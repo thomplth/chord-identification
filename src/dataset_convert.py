@@ -1,5 +1,6 @@
 import csv
 import os
+from pydoc import doc
 import numpy as np
 from preprocess.note import Note
 from preprocess.scale import Scale
@@ -11,11 +12,18 @@ from identification.note_to_chord import find_chords
 DATA_PATH = "../data"
 DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
 DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
-GT_PATH = DATA_PATH + "/ground_truth"  # "/ground_truth_Schubert"
-CHROMA_PATH = DATA_PATH + "/chroma/KYDataset2"  # "/chroma/Schubert2"
-TRAINING_DATA_PATH = (
-    DATA_PATH + "/SegmentedChroma/KYDataset"
-)  # "/SegmentedChroma/Schubert"
+GT_PATH = DATA_PATH + "/ground_truth"
+CHROMA_PATH = DATA_PATH + "/chroma/KYDataset2"
+TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
+TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
+
+if False:
+    DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
+    DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
+    GT_PATH = DATA_PATH + "/ground_truth_Schubert"
+    CHROMA_PATH = DATA_PATH + "/chroma/Schubert2"
+    TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/Schubert"
+    TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/Schubert"
 
 
 def get_Schubert_key(csv_file):
@@ -424,13 +432,119 @@ def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
         writer.writerow(result)
 
 
+def ground_truth_random_segment_merger(file_str):
+    gt_file = open(GT_PATH + "/" + file_str)
+    chord_list = get_ground_truth(gt_file)
+    chord_offset_list = [i[0] for i in chord_list]
+    chords_len = len(chord_offset_list)
+
+    chroma_file = open(CHROMA_PATH + "/" + file_str)
+    chroma_list = get_chroma(chroma_file)
+    chromas_len = len(chroma_list)
+
+    def get_range_idx(offset, floor, ceiling, limits):
+        # Check base case
+        if ceiling - floor > 1:
+            mid = (ceiling + floor) // 2
+            if limits[mid] == offset:
+                return mid
+            elif limits[mid] > offset:
+                return get_range_idx(offset, floor, mid, limits)
+            else:
+                return get_range_idx(offset, mid, ceiling, limits)
+        else:
+            return floor
+
+    from itertools import combinations, product
+
+    chromas_range_idx = [
+        get_range_idx(chroma[0], 0, chords_len, chord_offset_list)
+        for chroma in chroma_list
+    ]
+
+    chroma_range_to_offset_idx = {}
+    for idx in range(chords_len):
+        chroma_range_to_offset_idx[idx] = []
+    for idx in range(chromas_len):
+        chroma_range_to_offset_idx[chromas_range_idx[idx]].append(idx)
+    grouped_chromas = list(chroma_range_to_offset_idx.values())
+
+    random_chroma_list = []
+    from itertools import combinations
+
+    # Case A: Complete / Partial segmented
+    for indices in grouped_chromas:
+        indices_num = len(indices)
+        if indices_num < 1:
+            continue
+        # just print itself
+        elif indices_num == 1:
+            random_chroma_list.append((chroma_list[idx][1], True))
+            continue
+        else:
+            indices_pairs = list(combinations(range(indices_num), 2))
+            if len(indices_pairs) > 5000:  # too many pairs
+                from random import choices
+
+                indices_pairs = choices(indices_pairs, k=5000)
+            for a, b in indices_pairs:
+                new_chroma = [0.0 for _ in range(13)]
+                for idx in indices[a:b]:
+                    new_chroma = np.sum([chroma_list[idx][1], new_chroma], axis=0)
+                random_chroma_list.append((new_chroma, True))
+    print(len(random_chroma_list), end=" , ")
+
+    # Case B: Adjacent wrong segmented
+    for idx in range(chords_len - 1):
+        curr_group = grouped_chromas[idx]
+        next_group = grouped_chromas[idx + 1]
+        curr_len = len(curr_group)
+        next_len = len(next_group)
+        if curr_len == 0 or next_len == 0:
+            continue
+        indices_pairs = list(product(range(curr_len), range(next_len)))
+        if len(indices_pairs) > 5000:  # too many pairs
+            from random import choices
+
+            indices_pairs = choices(indices_pairs, k=5000)
+        for a, b in indices_pairs:
+            new_chroma = [0.0 for _ in range(13)]
+            for idx in curr_group[a:] + next_group[:b]:
+                new_chroma = np.sum([chroma_list[idx][1], new_chroma], axis=0)
+            random_chroma_list.append((new_chroma, False))
+
+    print(len(random_chroma_list))
+    chroma_file.close()
+    gt_file.close()
+    return random_chroma_list
+
+
+def ground_truth_random_segmented_exporter(random_chroma_list, file_str):
+    path = os.path.join(TRAINING_DATA_PATH2, file_str)
+    export_file = open(path, "w", newline="")
+    writer = csv.writer(export_file)
+
+    header = tuple(map(str, "1 2 3 4 5 6 7 8 9 10 11 12 Validity".split(" ")))
+    writer.writerow(header)
+
+    for chroma, validity in random_chroma_list:
+        chroma_sum = chroma[-1]
+        normalized_chroma = [0.0 for _ in range(12)]
+        if chroma_sum > 0:
+            normalized_chroma = [round((val / chroma_sum), 6) for val in chroma[:-1]]
+        normalized_chroma.sort(reverse=True)
+
+        result = tuple(normalized_chroma) + tuple([validity])
+        writer.writerow(result)
+
+
 def main():
     gt_files = get_files(GT_PATH, ".csv")
-    for f in gt_files:  # TODO: Label error @ 9
+    for f in gt_files:
         print("Now handling:", f)
         try:
-            segmented_chroma_dict = ground_truth_segment_merger(f)
-            ground_truth_segmented_exporter(segmented_chroma_dict, f)
+            random_chroma_list = ground_truth_random_segment_merger(f)
+            ground_truth_random_segmented_exporter(random_chroma_list, f)
         except Exception as e:
             print(e)
 
