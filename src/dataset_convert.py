@@ -9,6 +9,8 @@ from utility import get_files
 from identification.note_to_chord import find_chords
 from itertools import combinations, product
 
+USE_CHROMA_DIFFERENCE = True
+
 DATA_PATH = "../data"
 DATASET_PATH_KEY = "/ground_truth_key"
 DATASET_PATH_CHORD = "/ground_truth"
@@ -402,11 +404,11 @@ def ground_truth_segment_merger(file_str):
     return segmented_chroma_dict
 
 
-USE_CHROMA_DIFFERENCE = False
-
-
 def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
-    path = os.path.join(TRAINING_DATA_PATH3, file_str)
+    if USE_CHROMA_DIFFERENCE:
+        path = os.path.join(TRAINING_DATA_PATH3, file_str)
+    else:
+        path = os.path.join(TRAINING_DATA_PATH, file_str)
     export_file = open(path, "w", newline="")
     writer = csv.writer(export_file)
 
@@ -566,14 +568,16 @@ def ground_truth_random_segmented_exporter(random_chroma_list, file_str):
 
 
 def main():
-    gt_files = get_files(GT_PATH, ".csv")
+    gt_files = get_files(
+        GT_PATH, ".csv", "Mendelsshon_F._Songs_Without_Words_(Op._19_No._6).csv"
+    )
     for f in gt_files:
         print("Now handling:", f)
         try:
-            chroma = ground_truth_segment_merger(f)
-            ground_truth_segmented_exporter(chroma, f)
-            # random_chroma_list = ground_truth_random_segment_merger(f)
-            # ground_truth_random_segmented_exporter(random_chroma_list, f)
+            # chroma = ground_truth_segment_merger(f)
+            # ground_truth_segmented_exporter(chroma, f)
+            random_chroma_list = ground_truth_random_segment_merger(f)
+            ground_truth_random_segmented_exporter(random_chroma_list, f)
         except Exception as e:
             print(e)
 

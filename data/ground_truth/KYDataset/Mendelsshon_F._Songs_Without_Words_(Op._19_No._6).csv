@@ -1,6 +1,6 @@
 offset,tonic,key,numeral
 0.0,G,m,I
-4.5,G,m,IIdim7
+4.5,G,m,IIhdim7
 6.0,G,m,I
 7.5,G,m,VIIdim
 9.0,G,m,III
@@ -30,7 +30,7 @@ offset,tonic,key,numeral
 70.5,G,m,GerVI
 72.0,G,m,V+
 75.0,G,m,I
-82.5,G,m,IIdim7
+82.5,G,m,IIhdim7
 84.0,G,m,V+
 86.5,G,m,I
 91.5,G,m,I+
