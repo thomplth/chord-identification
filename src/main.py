@@ -94,7 +94,7 @@ def main():
     score_files = get_files(DATA_PATH + DATASET_PATH, (".mxl", ".xml"))
     results = []
 
-    for score_file in score_files[2:]:
+    for score_file in score_files:
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)

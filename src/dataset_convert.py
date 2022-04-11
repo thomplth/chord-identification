@@ -12,8 +12,8 @@ from itertools import combinations, product
 DATA_PATH = "../data"
 DATASET_PATH_KEY = "/ground_truth_key"
 DATASET_PATH_CHORD = "/ground_truth"
-GT_PATH = DATA_PATH + "/ground_truth"
-CHROMA_PATH = DATA_PATH + "/chroma/KYDataset2"
+GT_PATH = DATA_PATH + "/ground_truth/KYDataset"
+CHROMA_PATH = DATA_PATH + "/chroma/KYDataset"
 TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
 TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
 TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
@@ -26,7 +26,7 @@ if False:
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/Schubert"
     TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/Schubert"
 
-if True:
+if False:
     GT_PATH = DATA_PATH + "/ground_truth/ABC"
     CHROMA_PATH = DATA_PATH + "/chroma/ABC"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/ABC"
@@ -402,7 +402,7 @@ def ground_truth_segment_merger(file_str):
     return segmented_chroma_dict
 
 
-USE_CHROMA_DIFFERENCE = True
+USE_CHROMA_DIFFERENCE = False
 
 
 def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):

@@ -1,15 +1,6 @@
 import csv
 import os
-from pydoc import doc
-import numpy as np
-from preprocess.note import Note
-from preprocess.scale import Scale
-from preprocess.chord import Chord, JazzChord
 from utility import get_files
-from identification.note_to_chord import find_chords
-from itertools import combinations, product
-from preprocess.piece import Piece
-import re
 
 DATA_PATH = "../data/ABC"
 MAIN_ANNO_PATH = DATA_PATH + "/index_annotations.csv"
@@ -62,11 +53,3 @@ def ground_truth_exporter(file_dict):
 
 file_dict = ground_truth_handler()
 ground_truth_exporter(file_dict)
-# for data in dataset:
-#     name = re.search("op[0-9].*mov[0-9]", data)  # shd work
-#     name = name.group(0)
-#     piece_code = re.split("_", name)
-#     op = int(piece_code[0][2:])
-#     no = int(piece_code[1][2:])
-#     mov = int(piece_code[2][3:])
-#     print(op, no, mov)
