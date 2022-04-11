@@ -94,27 +94,27 @@ def main():
     score_files = get_files(DATA_PATH + DATASET_PATH, (".mxl", ".xml"))
     results = []
 
-    for score_file in score_files:
+    for score_file in score_files[2:]:
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
             # TODO: Uncomment when a new file is added
-            piece._export_ground_truth()
+            # piece._export_ground_truth()
             stream = piece.score
             chordify_stream = piece.chordified
             flatten_stream = piece.flattened
 
             # Key segmentation and Identification
             segment_unit = get_segment_unit(stream)
-            key_segments: Measure_OffsetChroma_dict = key_segmentation(stream)
-            measures_key = determine_key_by_adjacent(key_segments)
+            # key_segments: Measure_OffsetChroma_dict = key_segmentation(stream)
+            # measures_key = determine_key_by_adjacent(key_segments)
             # measures_key = determine_key_solo(key_segmentation(stream))
 
             # Chord segmentation and Identification
             notes_in_measures = get_notes_in_segments(chordify_stream, segment_unit)
             beat_segments = generate_note_profiles_in_segments(notes_in_measures)
             # TODO: Uncomment when a new file is added
-            export_chromas(beat_segments, "KYDataset2", score_file[:-4])
+            export_chromas(beat_segments, "ABC", score_file[:-4])
             continue
             combined_segments = merge_chord_segment(beat_segments)
 
