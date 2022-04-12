@@ -43,7 +43,7 @@ def determine_chord(keys, chords):
     res = []
     for chord in chords:
         offset = chord["offset"]
-
+        # KeyAndChordMode
         if not keys == None:
             scale_score_dict = find_scale_in_chord_segment(keys, chord)
 
@@ -56,7 +56,6 @@ def determine_chord(keys, chords):
                 for possible_chord in chord["chords"]
             ]
             # TODO: debug
-            print(scores_chords)
             # ignore if cannot find a chord with a key
             if len(scores_chords) > 0:
                 scores_chords.sort(key=lambda i: i[0], reverse=True)
@@ -64,6 +63,7 @@ def determine_chord(keys, chords):
                 res.append(
                     {"offset": offset, "chord": chosen_chord, "score": chord_score}
                 )
+        # KeyThenChordMode
         else:
             # ignore if cannot find a chord with a key
             if len(chord["chords"]) > 0:

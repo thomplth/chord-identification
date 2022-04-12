@@ -35,7 +35,7 @@ def ground_truth_exporter(file_dict):
         path = os.path.join(GT_PATH, f"op{k[0]}_no{k[1]}_mov{k[2]}.csv")
         export_file = open(path, "w", newline="")
         writer = csv.writer(export_file)
-        header = tuple(["offset", "tonic", "key", "numeral"])  # , "original_chord"
+        header = tuple(["offset", "tonic", "key", "numeral"])
         writer.writerow(header)
 
         for segment in v:
@@ -45,7 +45,6 @@ def ground_truth_exporter(file_dict):
                     segment["global_key"],
                     "M" if segment["is_major"] == "TRUE" else "m",
                     segment["unified_chord"],
-                    # segment["chord"],
                 ]
             )
             writer.writerow(truth)

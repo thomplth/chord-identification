@@ -97,7 +97,6 @@ class Note:
         ) % 12
         intervals = SEMITONE_INTERVAL_DICT[semitone_difference]
 
-        # print(alphabetical_distance, semitone_difference, intervals)
         for interval in intervals:
             if int(interval[1]) == alphabetical_distance:
                 return interval
