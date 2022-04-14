@@ -15,6 +15,10 @@ from preprocess.note import Note
 from preprocess.scale import Scale
 from segmentation import *
 from identification.key_identification import determine_key_by_adjacent
+from identification.ml_models_identification import (
+    determine_chord_tonality_by_tree,
+    chord_filter_by_tonalities,
+)
 
 from identification.note_to_chord import find_chords
 from identification.result_combination import *
@@ -98,7 +102,7 @@ def main():
             load_model("./model/identification/random_forest.joblib"),
         ]
 
-    for score_file in score_files[1:2]:
+    for score_file in score_files:
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
@@ -156,6 +160,18 @@ def main():
                     possible_chords = find_chords(notes_frequencies, possible_key)
                 else:
                     possible_chords = find_chords(notes_frequencies)
+
+                # use ML to filter chords
+                if identification_models is not None:
+                    chroma = convert_offsetNoteProfile_to_offsetChroma(segment)[
+                        "chroma"
+                    ]
+                    chord_tonalities_by_scale = determine_chord_tonality_by_tree(
+                        chroma, identification_models
+                    )
+                    possible_chords = chord_filter_by_tonalities(
+                        possible_chords, chord_tonalities_by_scale
+                    )
                 offset_chord_choices.append(
                     {"offset": segment["offset"], "chords": possible_chords}
                 )
