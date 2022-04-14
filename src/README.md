@@ -1,3 +1,5 @@
+# Unzip models before use
+
 # Terms Explanation
 
 - Note.py (A class to store a note)
@@ -18,7 +20,9 @@
   - tonic: The first note of a major or a minor scale
 
 - Ref:
+
   - MAJOR_CHORD_FINDER_DICTIONARY result:
+
   ```
   ('M3', 'm3') [{'chord': 'I', 'tonic_interval': 'P1'}, {'chord': 'bII', 'tonic_interval': 'm2'}, {'chord': 'IV', 'tonic_interval': 'P4'}, {'chord': 'V', 'tonic_interval': 'P5'}, {'chord': 'bVI', 'tonic_interval': 'm6'}]
   ('m3', 'M3') [{'chord': 'II', 'tonic_interval': 'M2'}, {'chord': 'III', 'tonic_interval': 'M3'}, {'chord': 'VI', 'tonic_interval': 'M6'}]
@@ -32,7 +36,9 @@
   ('P5', 'A2') [{'chord': 'GerVI', 'tonic_interval': 'm6'}]
   ('A4', 'M3') [{'chord': 'FreVI', 'tonic_interval': 'm6'}]
   ```
+
   - MINOR_CHORD_FINDER_DICTIONARY result:
+
   ```
   ('m3', 'M3') [{'chord': 'I', 'tonic_interval': 'P1'}, {'chord': 'IV', 'tonic_interval': 'P4'}, {'chord': 'V', 'tonic_interval': 'P5'}]
   ('M3', 'm3') [{'chord': 'I+', 'tonic_interval': 'P1'}, {'chord': 'bII', 'tonic_interval': 'm2'}, {'chord': 'III', 'tonic_interval': 'm3'}, {'chord': 'IV+', 'tonic_interval': 'P4'}, {'chord': 'V+', 'ton_interval': 'P4'}, {'chord': 'V+', 'tonic_interval': 'P5'}, {'chord': 'VI', 'tonic_interval': 'm6'}, {'chord': 'VII', 'tonic_interval': 'm7'}]
@@ -48,7 +54,7 @@
   ```
 
 - Naming convention for the result file
-  - result_KTC_NoCommon_4_.1
+  - result*KTC_NoCommon_4*.1
   - KTC = Key then Chord, KAC = Key and Chord (refer to report for details)
   - No Common = No Commonity of Chord, Simple Common = x/15 distribution one, ComplexCommon = Hybrid distribution
   - 3rd number is note variation theshold

@@ -61,7 +61,9 @@ try:
     DATA_CHROMA_PATH = CONFIG["locations"]["testing_chroma_path"]
     RESULT_PATH = CONFIG["locations"]["result_path"]
     CSV_PATH = CONFIG["locations"]["csv_path"]
-    KeyThenChordMode = CONFIG["param"]["KeyThenChord"]
+    KeyThenChordMode = CONFIG["param"]["KeyThenChord"] == "True"
+    DTRFMode = CONFIG["param"]["UsingDTRF"] == "True"
+    MODEL_PATH = CONFIG["locations"]["ml_path"]
     ExportKey = CONFIG["export"]["keys"]
     ExportChord = CONFIG["export"]["chords"]
 
@@ -69,11 +71,29 @@ except KeyError:
     print("failed to read config.ini, or invalid index specified")
     raise SystemExit
 
+from joblib import load
+import warnings
+
+
+def load_model(dir: str):
+    try:
+        model = load(dir)
+        return model
+    except Exception as error:
+        print(error)
+
 
 def main():
     score_files = get_files(DATA_PATH + DATA_SCORE_PATH, (".mxl", ".xml"))
+    warnings.filterwarnings("ignore")
+    identification_models = None
+    if DTRFMode:
+        identification_models = [
+            load_model("./model/segmentation/decision_tree_12.joblib"),
+            load_model("./model/segmentation/random_forest_12.joblib"),
+        ]
 
-    for score_file in score_files:
+    for score_file in score_files[:1]:
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
@@ -91,7 +111,12 @@ def main():
             note_profile_segments = generate_note_profiles_in_segments(
                 notes_in_measures
             )
-            combined_segments = merge_chord_segment(note_profile_segments)
+            combined_segments = merge_chord_segment(
+                note_profile_segments, models=identification_models
+            )
+            print("!!!")
+            print(combined_segments[:2], len(combined_segments))
+            return
 
             def convert_offsetNoteProfile_to_offsetChroma(offset_note_profile):
                 offset = offset_note_profile["offset"]
@@ -114,6 +139,7 @@ def main():
                 segmented_chroma_dict[idx] = convert_offsetNoteProfile_to_offsetChroma(
                     offset_note_profile
                 )
+            print(segmented_chroma_dict[0], len(segmented_chroma_dict))
             measures_key = determine_key_by_adjacent(segmented_chroma_dict)
 
             # Chord identification
