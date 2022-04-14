@@ -86,14 +86,19 @@ def load_model(dir: str):
 def main():
     score_files = get_files(DATA_PATH + DATA_SCORE_PATH, (".mxl", ".xml"))
     warnings.filterwarnings("ignore")
+    segmentation_models = None
     identification_models = None
     if DTRFMode:
-        identification_models = [
+        segmentation_models = [
             load_model("./model/segmentation/decision_tree_12.joblib"),
             load_model("./model/segmentation/random_forest_12.joblib"),
         ]
+        identification_models = [
+            load_model("./model/identification/decision_tree.joblib"),
+            load_model("./model/identification/random_forest.joblib"),
+        ]
 
-    for score_file in score_files[:1]:
+    for score_file in score_files[1:2]:
         try:
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
@@ -112,11 +117,8 @@ def main():
                 notes_in_measures
             )
             combined_segments = merge_chord_segment(
-                note_profile_segments, models=identification_models
+                note_profile_segments, models=segmentation_models
             )
-            print("!!!")
-            print(combined_segments[:2], len(combined_segments))
-            return
 
             def convert_offsetNoteProfile_to_offsetChroma(offset_note_profile):
                 offset = offset_note_profile["offset"]
@@ -139,7 +141,6 @@ def main():
                 segmented_chroma_dict[idx] = convert_offsetNoteProfile_to_offsetChroma(
                     offset_note_profile
                 )
-            print(segmented_chroma_dict[0], len(segmented_chroma_dict))
             measures_key = determine_key_by_adjacent(segmented_chroma_dict)
 
             # Chord identification
@@ -159,10 +160,10 @@ def main():
                     {"offset": segment["offset"], "chords": possible_chords}
                 )
 
-            if KeyThenChordMode:
-                measures_key = None
             chord_result = determine_chord(
-                keys=measures_key, chords=offset_chord_choices
+                keys=measures_key,
+                chords=offset_chord_choices,
+                determine_mode=KeyThenChordMode,
             )
 
             if ExportKey:
@@ -181,7 +182,18 @@ def main():
                         )
                 export_keys(key_result, "keys", score_file.removesuffix(".mxl"))
             if ExportChord:
-                export_chords(chord_result, "chords", score_file.removesuffix(".mxl"))
+                merged_chord_result = []
+                for chord_pack in chord_result:
+                    if len(merged_chord_result) > 0:
+                        original_chord = merged_chord_result[-1]["chord"]
+                        new_chord = chord_pack["chord"]
+                        chord_equal = original_chord.is_equal(new_chord)
+
+                    if len(merged_chord_result) == 0 or (not chord_equal):
+                        merged_chord_result.append(chord_pack)
+                export_chords(
+                    merged_chord_result, "chords", score_file.removesuffix(".mxl")
+                )
 
             # raise SystemExit
 
