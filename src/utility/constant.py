@@ -35,8 +35,9 @@ for semitone, intervals in SEMITONE_INTERVAL_DICT.items():
 
 
 # the threshold that determine if a segment can be given a chord label
+# these values are obtained by DT
 NOTES_VARIATION_THRESHOLD = 4
-NOTES_FREQUENCY_THRESHOLD = 0.2
+NOTES_FREQUENCY_THRESHOLD = 0.02
 
 # Key profile dictionary
 KEY_PROFILE_DICT = {}

@@ -39,14 +39,13 @@ def calculate_choice_scores(key_dict, chord: Chord, base_score: float):
     return {"chord": chord, "score": base_score * key_dict[scale] * chord_score}
 
 
-def determine_chord(keys, chords):
+def determine_chord(keys, chords, determine_mode):
     res = []
     for chord in chords:
         offset = chord["offset"]
-
-        if not keys == None:
-            scale_score_dict = find_scale_in_chord_segment(keys, chord)
-
+        scale_score_dict = find_scale_in_chord_segment(keys, chord)
+        # KeyAndChordMode
+        if not determine_mode:
             scores_chords = [
                 calculate_choice_scores(
                     scale_score_dict,
@@ -55,34 +54,34 @@ def determine_chord(keys, chords):
                 )
                 for possible_chord in chord["chords"]
             ]
-            # TODO: debug
-            print(scores_chords)
             # ignore if cannot find a chord with a key
             if len(scores_chords) > 0:
-                scores_chords.sort(key=lambda i: i[0], reverse=True)
-                chord_score, chosen_chord = scores_chords[0]
+                scores_chords.sort(key=lambda i: i["score"], reverse=True)
+                chosen_chord = scores_chords[0]
                 res.append(
-                    {"offset": offset, "chord": chosen_chord, "score": chord_score}
+                    {
+                        "offset": offset,
+                        "chord": chosen_chord["chord"],
+                        "score": chosen_chord["score"],
+                    }
                 )
+        # KeyThenChordMode
         else:
             # ignore if cannot find a chord with a key
             if len(chord["chords"]) > 0:
                 possible_chord = max(
                     chord["chords"], key=lambda item: item["similarity_score"]
                 )
-                key_score = median(
-                    [
-                        option["similarity_score"]
-                        for option in chord["chords"]
-                        if option["chord"].scale.is_equal(possible_chord["chord"].scale)
-                    ]
+                scored_chosen_chord = calculate_choice_scores(
+                    scale_score_dict,
+                    possible_chord["chord"],
+                    possible_chord["similarity_score"],
                 )
-                # key_score = possible_chord[1]
                 res.append(
                     {
                         "offset": offset,
-                        "chord": possible_chord["chord"],
-                        "score": key_score,
+                        "chord": scored_chosen_chord["chord"],
+                        "score": scored_chosen_chord["score"],
                     }
                 )
     # print(res)

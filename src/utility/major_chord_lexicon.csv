@@ -1,0 +1,23 @@
+﻿numeral,first_interval,chord_tonality,frequency,ratio
+I,P1,Major,4758,0.287110789
+Iaug,P1,Augmented,35,0.002111996
+bII,m2,Major,60,0.003620565
+II,M2,Minor,970,0.058532464
+II7,M2,Minor seventh,145,0.008749698
+#IIdim7,A2,Diminished seventh,14,0.000844798
+III,M3,Minor,105,0.006335988
+IV,P4,Major,1127,0.068006276
+IVaug,P4,Augmented,11,0.00066377
+#IVdim,A4,Diminished,11,0.00066377
+V,P5,Major,3029,0.18277818
+V7,P5,Dominant seventh,4837,0.291877866
+Vaug,P5,Augmented,26,0.001568911
+bVI,m6,Major,19,0.001146512
+VI,M6,Minor,581,0.035059136
+GerVI,m6,German sixth,55,0.003318851
+FreVI,m6,French sixth,5,0.000301714
+ItaVI,m6,Italian sixth,27,0.001629254
+VIIdim,M7,Diminished,489,0.029507603
+VIIdim7,M7,Diminished seventh,200,0.012068549
+VIIhdim7,M7,Half-diminished seventh,68,0.004103307
+Total,*,*,16572,

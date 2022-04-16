@@ -7,15 +7,18 @@ from preprocess.scale import Scale
 from preprocess.chord import Chord, JazzChord
 from utility import get_files
 from identification.note_to_chord import find_chords
+from itertools import combinations, product
 
+USE_CHROMA_DIFFERENCE = True
 
 DATA_PATH = "../data"
-DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
-DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
-GT_PATH = DATA_PATH + "/ground_truth"
-CHROMA_PATH = DATA_PATH + "/chroma/KYDataset2"
+DATASET_PATH_KEY = "/ground_truth_key"
+DATASET_PATH_CHORD = "/ground_truth"
+GT_PATH = DATA_PATH + "/ground_truth/KYDataset"
+CHROMA_PATH = DATA_PATH + "/chroma/KYDataset"
 TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
 TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
+TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
 
 if False:
     DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
@@ -24,6 +27,11 @@ if False:
     CHROMA_PATH = DATA_PATH + "/chroma/Schubert2"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/Schubert"
     TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/Schubert"
+
+if False:
+    GT_PATH = DATA_PATH + "/ground_truth/ABC"
+    CHROMA_PATH = DATA_PATH + "/chroma/ABC"
+    TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/ABC"
 
 
 def get_Schubert_key(csv_file):
@@ -397,18 +405,29 @@ def ground_truth_segment_merger(file_str):
 
 
 def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
-    path = os.path.join(TRAINING_DATA_PATH, file_str)
+    if USE_CHROMA_DIFFERENCE:
+        path = os.path.join(TRAINING_DATA_PATH3, file_str)
+    else:
+        path = os.path.join(TRAINING_DATA_PATH, file_str)
     export_file = open(path, "w", newline="")
     writer = csv.writer(export_file)
 
-    header = tuple(
-        map(
-            str,
-            "offset c c# d d# e f f# g g# a a# b total tonic is_major numeral chord_tonality".split(
-                " "
-            ),
+    if USE_CHROMA_DIFFERENCE:
+        indices_pairs = list(combinations(range(12), 2))
+        header = (
+            tuple(["offset"])
+            + tuple([f"{val_1}/{val_2}" for val_1, val_2 in indices_pairs])
+            + tuple(["total", "tonic", "is_major", "numeral", "chord_tonality"])
         )
-    )
+    else:
+        header = tuple(
+            map(
+                str,
+                "offset c c# d d# e f f# g g# a a# b total tonic is_major numeral chord_tonality".split(
+                    " "
+                ),
+            )
+        )
     writer.writerow(header)
 
     for offset, segment in segmented_chroma_dict.items():
@@ -427,8 +446,21 @@ def ground_truth_segmented_exporter(segmented_chroma_dict, file_str):
                 chord.numeral,
                 chord.form,
             )
-
-        result = tuple([offset]) + tuple(normalized_chroma) + chord_tuple
+        if USE_CHROMA_DIFFERENCE:
+            chroma_diff = [0.0 for _ in range(len(indices_pairs))]
+            for idx in range(len(indices_pairs)):
+                a, b = indices_pairs[idx]
+                chroma_diff[idx] = round(
+                    abs(normalized_chroma[a] - normalized_chroma[b]), 6
+                )
+            result = (
+                tuple([offset])
+                + tuple(chroma_diff)
+                + tuple([normalized_chroma[-1]])
+                + chord_tuple
+            )
+        else:
+            result = tuple([offset]) + tuple(normalized_chroma) + chord_tuple
         writer.writerow(result)
 
 
@@ -455,8 +487,6 @@ def ground_truth_random_segment_merger(file_str):
         else:
             return floor
 
-    from itertools import combinations, product
-
     chromas_range_idx = [
         get_range_idx(chroma[0], 0, chords_len, chord_offset_list)
         for chroma in chroma_list
@@ -470,7 +500,6 @@ def ground_truth_random_segment_merger(file_str):
     grouped_chromas = list(chroma_range_to_offset_idx.values())
 
     random_chroma_list = []
-    from itertools import combinations
 
     # Case A: Complete / Partial segmented
     for indices in grouped_chromas:
@@ -539,17 +568,22 @@ def ground_truth_random_segmented_exporter(random_chroma_list, file_str):
 
 
 def main():
-    gt_files = get_files(GT_PATH, ".csv")
+    gt_files = get_files(
+        GT_PATH, ".csv", "Mendelsshon_F._Songs_Without_Words_(Op._19_No._6).csv"
+    )
     for f in gt_files:
         print("Now handling:", f)
         try:
+            # chroma = ground_truth_segment_merger(f)
+            # ground_truth_segmented_exporter(chroma, f)
             random_chroma_list = ground_truth_random_segment_merger(f)
             ground_truth_random_segmented_exporter(random_chroma_list, f)
         except Exception as e:
             print(e)
 
 
-main()
+if __name__ == "__main__":
+    main()
 # import re
 
 

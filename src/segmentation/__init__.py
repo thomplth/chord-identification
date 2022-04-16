@@ -11,6 +11,9 @@ from utility.entities import (
 )
 from utility.constant import NOTES_VARIATION_THRESHOLD, NOTES_FREQUENCY_THRESHOLD
 from preprocess.note import Note
+from segmentation.ml_models_classification import (
+    determine_valid_combined_segment_by_tree,
+)
 import numpy as np
 from math import log2
 
@@ -114,7 +117,7 @@ def get_notes_in_segments(stream, segment_unit=1.0):
     return res
 
 
-def is_excess_notes_variation(notes_dictionary: Note_duration_dict) -> bool:
+def is_valid_note_profile(notes_dictionary: Note_duration_dict) -> bool:
     # First normalization the notes dictionary
     normalized_notes_dict: Note_duration_dict = normalize_note_dictionary(
         notes_dictionary
@@ -123,22 +126,29 @@ def is_excess_notes_variation(notes_dictionary: Note_duration_dict) -> bool:
     # Then sort acc. to the ranking
     notes.sort(key=lambda tup: tup[1], reverse=True)
 
-    # The variation does not excess if:
-    return not (
-        (
-            # too few notes, OR
-            len(notes) <= NOTES_VARIATION_THRESHOLD
-            # the notes distribution is satisfied
-            or (
-                notes[NOTES_VARIATION_THRESHOLD - 1][1] >= NOTES_FREQUENCY_THRESHOLD
-                and notes[NOTES_VARIATION_THRESHOLD][1] < NOTES_FREQUENCY_THRESHOLD
-            )
-        )
+    # In Phase I: The variation does not excess if:
+    # return not (
+    #     (
+    #         # too few notes, OR
+    #         len(notes) <= NOTES_VARIATION_THRESHOLD
+    #         # the notes distribution is satisfied
+    #         or (
+    #             notes[NOTES_VARIATION_THRESHOLD - 1][1] >= NOTES_FREQUENCY_THRESHOLD
+    #             and notes[NOTES_VARIATION_THRESHOLD][1] < NOTES_FREQUENCY_THRESHOLD
+    #         )
+    #     )
+    # )
+
+    # In Phase II: The variation does not excess if
+    # the notes distribution is satisfied: check the normalized value of the pitch class in rank \theta{nv}
+    return (
+        len(notes) < NOTES_VARIATION_THRESHOLD
+        or notes[NOTES_VARIATION_THRESHOLD - 1][1] <= NOTES_FREQUENCY_THRESHOLD
     )
 
 
 # bottom-up approach of chord segmentation, segments = return of uniform_segmentation()
-def merge_chord_segment(segments: list[OffsetNoteProfile]):
+def merge_chord_segment(segments: list[OffsetNoteProfile], models):
     res: list[OffsetNoteProfile] = [segments[0]]
     for idx in range(1, len(segments)):
         previous_segment = res.pop()
@@ -149,7 +159,14 @@ def merge_chord_segment(segments: list[OffsetNoteProfile]):
         merged_segment = sum_note_dictionary(
             previous_segment["note_profile"], current_segment["note_profile"]
         )
-        if not is_excess_notes_variation(merged_segment):
+        is_valid: bool = is_valid_note_profile(merged_segment)
+        if models is not None:
+            is_valid = determine_valid_combined_segment_by_tree(
+                note_profile=merged_segment,
+                rule_based_result=is_valid,
+                models = models
+            )
+        if is_valid_note_profile(merged_segment):
             res.append(
                 {"note_profile": merged_segment, "offset": previous_segment["offset"]}
             )
