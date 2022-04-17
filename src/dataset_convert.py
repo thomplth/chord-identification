@@ -10,25 +10,27 @@ from identification.note_to_chord import find_chords
 from itertools import combinations, product
 
 USE_CHROMA_DIFFERENCE = True
+# CONVERT_DATASET = "KyDataset"
+CONVERT_DATASET = "Schubert"
+# CONVERT_DATASET = "ABC"
 
 DATA_PATH = "../data"
-DATASET_PATH_KEY = "/ground_truth_key"
-DATASET_PATH_CHORD = "/ground_truth"
-GT_PATH = DATA_PATH + "/ground_truth/KYDataset"
-CHROMA_PATH = DATA_PATH + "/chroma/KYDataset"
-TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
-TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
-TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
-
-if False:
+if CONVERT_DATASET == "KyDataset":
+    DATASET_PATH_KEY = "/ground_truth_key"
+    DATASET_PATH_CHORD = "/ground_truth"
+    GT_PATH = DATA_PATH + "/ground_truth/KYDataset"
+    CHROMA_PATH = DATA_PATH + "/chroma/KYDataset"
+    TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
+    TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
+    TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
+elif CONVERT_DATASET == "Schubert":
     DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
     DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
     GT_PATH = DATA_PATH + "/ground_truth_Schubert"
     CHROMA_PATH = DATA_PATH + "/chroma/Schubert2"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/Schubert"
     TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/Schubert"
-
-if False:
+elif CONVERT_DATASET == "ABC":
     GT_PATH = DATA_PATH + "/ground_truth/ABC"
     CHROMA_PATH = DATA_PATH + "/chroma/ABC"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/ABC"
@@ -106,7 +108,6 @@ def get_chord_info(chord_str):
 
 
 def get_Schubert_chord(csv_file):
-
     csv_reader = csv.reader(csv_file, delimiter=";")
     result = {}
     next(csv_reader)  # no need the header
@@ -568,14 +569,12 @@ def ground_truth_random_segmented_exporter(random_chroma_list, file_str):
 
 
 def main():
-    gt_files = get_files(
-        GT_PATH, ".csv", "Mendelsshon_F._Songs_Without_Words_(Op._19_No._6).csv"
-    )
+    gt_files = get_files(GT_PATH, ".csv")
     for f in gt_files:
         print("Now handling:", f)
         try:
-            # chroma = ground_truth_segment_merger(f)
-            # ground_truth_segmented_exporter(chroma, f)
+            chroma = ground_truth_segment_merger(f)
+            ground_truth_segmented_exporter(chroma, f)
             random_chroma_list = ground_truth_random_segment_merger(f)
             ground_truth_random_segmented_exporter(random_chroma_list, f)
         except Exception as e:
