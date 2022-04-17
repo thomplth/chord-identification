@@ -28,7 +28,7 @@ CONFIG = configparser.ConfigParser()
 CONFIG.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
 
-def export_keys(out_list, dirname, filename):
+def export_keys(out_list, dirname, filename, length):
     path = os.path.join(RESULT_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
     writer = csv.writer(file)
@@ -37,15 +37,17 @@ def export_keys(out_list, dirname, filename):
 
     for el in out_list:
         writer.writerow((el[0], el[1]))
+    writer.writerow((length, None))
 
     file.close()
 
 
-def export_chords(out_list, dirname, filename):
+def export_chords(out_list, dirname, filename, length):
     path = os.path.join(RESULT_PATH, dirname, filename + ".csv")
     file = open(path, "w", newline="")
     writer = csv.writer(file)
 
+    writer.writerow(("offset", "key", "numeral", "score"))
     for segment in out_list:
         writer.writerow(
             (
@@ -55,6 +57,7 @@ def export_chords(out_list, dirname, filename):
                 round(segment["score"], 6),
             )
         )
+    writer.writerow((length, None, None, None))
 
     file.close()
 
@@ -107,6 +110,7 @@ def main():
             print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
             stream = piece.score
+            length = piece.length
             chordify_stream = piece.chordified
             # initial_key = get_initial_key_signature(chordify_stream)
             # initial_scale = Scale(
@@ -196,7 +200,7 @@ def main():
                                 offs["chord"].scale.__str__(),
                             )
                         )
-                export_keys(key_result, "keys", score_file.removesuffix(".mxl"))
+                export_keys(key_result, "keys", piece.name, length)
             if ExportChord:
                 merged_chord_result = []
                 for chord_pack in chord_result:
@@ -207,9 +211,7 @@ def main():
 
                     if len(merged_chord_result) == 0 or (not chord_equal):
                         merged_chord_result.append(chord_pack)
-                export_chords(
-                    merged_chord_result, "chords", score_file.removesuffix(".mxl")
-                )
+                export_chords(merged_chord_result, "chords", piece.name, length)
 
             # raise SystemExit
 

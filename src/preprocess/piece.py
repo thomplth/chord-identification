@@ -36,7 +36,13 @@ class Piece:
             else filename
         )
         self.score = converter.parse(os.path.join(DATASET_PATH, filename))
-        self.length = self.score.duration.quarterLength
+        length = self.score.duration.quarterLength
+        try:
+            self.length = float(length)
+        except:
+            # The offset is in fraction
+            frac = length.split("/")
+            self.length = round(float(frac[0]) / float(frac[1]), 6)
 
         self.chordified = self.score.chordify()
         self.flattened = self.score.flatten()
