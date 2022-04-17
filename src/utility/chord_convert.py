@@ -25,15 +25,54 @@ def pick_chord(tonic, chord, is_major):
     return chord_notes
 
 
+Schubert_time_signature_info = [
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 8, "numerator": 6},
+    {"denominator": 2, "numerator": 2},
+    {"denominator": 4, "numerator": 4},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 8, "numerator": 3},
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 8, "numerator": 6},
+    {"denominator": 4, "numerator": 2},
+    ## line break ###
+    {"denominator": 8, "numerator": 6},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 8, "numerator": 12},
+    {"denominator": 4, "numerator": 4},
+    {"denominator": 8, "numerator": 6},
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 4, "numerator": 4},
+    {"denominator": 4, "numerator": 2},
+    {"denominator": 4, "numerator": 3},
+    {"denominator": 4, "numerator": 3},
+]
+
 if __name__ == "__main__":
-    inpath = "../../data/ground_truth/KYDataset/"
-    outpath = "../../data/chord/KYDataset/"
+    # inpath = "../../data/ground_truth/KYDataset/"
+    # outpath = "../../data/chord/KYDataset/"
+    # files = get_files(inpath, ".csv")
+
+    inpath = "../../data/ground_truth/Schubert/"
+    chromapath = "../../data/chroma/Schubert/"
+    outpath = "../../data/chord/Schubert/"
     files = get_files(inpath, ".csv")
 
     print(len(files))
 
-    def export_chord_chroma(filename, inpath, outpath):
+    def export_chord_chroma(filename, inpath, outpath, idx):
         print(">>>", filename)
+        chromafile = open(chromapath + filename, "r")
+        reader = csv.reader(chromafile)
+        next(reader)
+        offset_threshold = next(reader)[0]
+        chromafile.close()
+
         infile = open(inpath + filename, "r")
         outfile = open(outpath + filename, "w", newline="")
         reader = csv.reader(infile)
@@ -44,16 +83,31 @@ if __name__ == "__main__":
         notecount = {n: 0.0 for n in range(12)}
         chroma = [0.0 for _ in range(12)]
 
-        headers = next(reader)
+        next(reader)
         writer.writerow(
             ("offset", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b")
         )
+        row = next(reader)
+        new_offset = float(row[0])
+
+        def align_offset(offset_threshold, new_offset):
+            sign_info = Schubert_time_signature_info[idx]
+            m = 4 * sign_info["numerator"] / sign_info["denominator"]
+            c = offset_threshold - m * new_offset
+            return lambda offset: m * offset + c
+
+        align_func = align_offset(float(offset_threshold), float(new_offset))
+
+        infile.seek(0)
+        next(reader)
         for row in reader:
             try:
                 new_offset = float(row[0])
             except ValueError:
                 num, den = row[0].split("/")
                 new_offset = float(num) / float(den)
+            print(new_offset, align_func(new_offset))
+            new_offset = align_func(new_offset)
 
             while new_offset > offset + 1.0:
                 offset += 1
@@ -80,13 +134,14 @@ if __name__ == "__main__":
         infile.close()
         outfile.close()
 
-    for filename in files:
-        export_chord_chroma(filename, inpath, outpath)
+    for idx in range(len(files)):
+        filename = files[idx]
+        export_chord_chroma(filename, inpath, outpath, idx)
 
-    inpath = "../../data/ground_truth/Schubert/"
-    outpath = "../../data/chord/Schubert/"
-    files = get_files(inpath, ".csv")
+    # inpath = "../../data/ground_truth/Schubert/"
+    # outpath = "../../data/chord/Schubert/"
+    # files = get_files(inpath, ".csv")
 
-    print(len(files))
-    for filename in files:
-        export_chord_chroma(filename, inpath, outpath)
+    # print(len(files))
+    # for filename in files:
+    #     export_chord_chroma(filename, inpath, outpath)
