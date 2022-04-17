@@ -15,6 +15,7 @@ CONVERT_DATASET = "Schubert"
 # CONVERT_DATASET = "ABC"
 
 DATA_PATH = "../data"
+TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
 if CONVERT_DATASET == "KyDataset":
     DATASET_PATH_KEY = "/ground_truth_key"
     DATASET_PATH_CHORD = "/ground_truth"
@@ -22,12 +23,11 @@ if CONVERT_DATASET == "KyDataset":
     CHROMA_PATH = DATA_PATH + "/chroma/KYDataset"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/KYDataset"
     TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/KYDataset"
-    TRAINING_DATA_PATH3 = DATA_PATH + "/ChromaDifference"
 elif CONVERT_DATASET == "Schubert":
-    DATASET_PATH_KEY = "/Schubert_Winterreise_Dataset/localkey-ann"
-    DATASET_PATH_CHORD = "/Schubert_Winterreise_Dataset/chord"
-    GT_PATH = DATA_PATH + "/ground_truth_Schubert"
-    CHROMA_PATH = DATA_PATH + "/chroma/Schubert2"
+    DATASET_PATH_KEY = "/Schubert/localkey-ann"
+    DATASET_PATH_CHORD = "/Schubert/chord"
+    GT_PATH = DATA_PATH + "/ground_truth/Schubert"
+    CHROMA_PATH = DATA_PATH + "/chroma/Schubert"
     TRAINING_DATA_PATH = DATA_PATH + "/SegmentedChroma/Schubert"
     TRAINING_DATA_PATH2 = DATA_PATH + "/RandomChroma/Schubert"
 elif CONVERT_DATASET == "ABC":
@@ -575,8 +575,8 @@ def main():
         try:
             chroma = ground_truth_segment_merger(f)
             ground_truth_segmented_exporter(chroma, f)
-            random_chroma_list = ground_truth_random_segment_merger(f)
-            ground_truth_random_segmented_exporter(random_chroma_list, f)
+            # random_chroma_list = ground_truth_random_segment_merger(f)
+            # ground_truth_random_segmented_exporter(random_chroma_list, f)
         except Exception as e:
             print(e)
 
