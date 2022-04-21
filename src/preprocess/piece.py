@@ -69,6 +69,14 @@ class Piece:
         target_stream = self.score if not custom_stream else custom_stream
         return list(target_stream.recurse().getElementsByClass("KeySignature"))
 
+    def get_time_signatures(self, custom_stream=None):
+        """Search time signatures for all parts of the score.
+
+        :rtype: list of keySignature objects
+        """
+        target_stream = self.score if not custom_stream else custom_stream
+        return list(target_stream.recurse().getElementsByClass("TimeSignature"))
+
     def get_elements_by_offset(self, filter=None):
         """Obtain all/specified elements in flatterned stream, ordered by offset
 

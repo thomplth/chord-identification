@@ -39,7 +39,7 @@ def determine_chord_tonality_by_tree(chroma, models):
     result = {}
     scale_modes = zip([True, False], [1.0, 0.0])
     for is_major, fp_num in scale_modes:
-        pred_dt = decision_tree.predict([pcd + [fp_num]])[0]
+        pred_dt = decision_tree.predict([chroma + [fp_num]])[0]
         pred_rf = random_forest.predict([chroma + [fp_num]])[0]
         possible_tonalities = get_tonalities(pred_dt) + get_tonalities(pred_rf)
         result[is_major] = list(set(possible_tonalities))

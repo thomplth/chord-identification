@@ -127,15 +127,13 @@ def is_valid_note_profile(notes_dictionary: Note_duration_dict) -> bool:
     notes.sort(key=lambda tup: tup[1], reverse=True)
 
     # In Phase I: The variation does not excess if:
-    # return not (
-    #     (
-    #         # too few notes, OR
-    #         len(notes) <= NOTES_VARIATION_THRESHOLD
-    #         # the notes distribution is satisfied
-    #         or (
-    #             notes[NOTES_VARIATION_THRESHOLD - 1][1] >= NOTES_FREQUENCY_THRESHOLD
-    #             and notes[NOTES_VARIATION_THRESHOLD][1] < NOTES_FREQUENCY_THRESHOLD
-    #         )
+    # return (
+    #     # too few notes, OR
+    #     len(notes) <= NOTES_VARIATION_THRESHOLD
+    #     # the notes distribution is satisfied
+    #     or (
+    #         notes[NOTES_VARIATION_THRESHOLD - 1][1] >= 0.1
+    #         and notes[NOTES_VARIATION_THRESHOLD][1] < 0.1
     #     )
     # )
 
@@ -162,9 +160,7 @@ def merge_chord_segment(segments: list[OffsetNoteProfile], models):
         is_valid: bool = is_valid_note_profile(merged_segment)
         if models is not None:
             is_valid = determine_valid_combined_segment_by_tree(
-                note_profile=merged_segment,
-                rule_based_result=is_valid,
-                models = models
+                note_profile=merged_segment, rule_based_result=is_valid, models=models
             )
         if is_valid_note_profile(merged_segment):
             res.append(

@@ -20,6 +20,7 @@ from identification.ml_models_identification import (
     chord_filter_by_tonalities,
 )
 
+
 from identification.note_to_chord import find_chords
 from identification.result_combination import *
 from evaluation import Metric
@@ -67,9 +68,11 @@ try:
     DATA_SCORE_PATH = CONFIG["locations"]["testing_data_path"]
     DATA_CHROMA_PATH = CONFIG["locations"]["testing_chroma_path"]
     RESULT_PATH = CONFIG["locations"]["result_path"]
+    GT_PATH = CONFIG["locations"]["gt_path"]
     CSV_PATH = CONFIG["locations"]["csv_path"]
-    KeyThenChordMode = CONFIG["param"]["KeyThenChord"] == "True"
-    DTRFMode = CONFIG["param"]["UsingDTRF"] == "True"
+    # KeyThenChordMode = CONFIG["param"]["KeyThenChord"] == "True"
+    # DTRFMode = CONFIG["param"]["UsingDTRFForSegmentation"] == "True"
+    # DTRFMode2 = CONFIG["param"]["UsingDTRFForIdentification"] == "True"
     MODEL_PATH = CONFIG["locations"]["ml_path"]
     ExportKey = CONFIG["export"]["keys"]
     ExportChord = CONFIG["export"]["chords"]
@@ -90,25 +93,28 @@ def load_model(dir: str):
         print(error)
 
 
-def main():
+def main(KeyThenChordMode, DTRFMode, DTRFMode2):
     score_files = get_files(DATA_PATH + DATA_SCORE_PATH, (".mxl", ".xml"))
     warnings.filterwarnings("ignore")
     segmentation_models = None
     identification_models = None
     if DTRFMode:
         segmentation_models = [
-            load_model("./model/segmentation/decision_tree_12.joblib"),
-            load_model("./model/segmentation/random_forest_12.joblib"),
+            load_model("./model/segmentation/decision_tree.joblib"),
+            load_model("./model/segmentation/random_forest.joblib"),
         ]
+    if DTRFMode2:
         identification_models = [
             load_model("./model/identification/decision_tree.joblib"),
             load_model("./model/identification/random_forest.joblib"),
         ]
 
-    for score_file in score_files:
+    for score_file in score_files[-1:]:
         try:
-            print(">> Currently handling: " + score_file)
+            # print(">> Currently handling: " + score_file)
             piece = Piece(score_file)
+            if score_file.startswith("Schubert"):
+                time_signature = piece.get_time_signatures()[0]
             stream = piece.score
             length = piece.length
             chordify_stream = piece.chordified
@@ -185,6 +191,26 @@ def main():
                 chords=offset_chord_choices,
                 determine_mode=KeyThenChordMode,
             )
+            if score_file.startswith("Schubert"):
+                time_signature = piece.get_time_signatures()[0]
+
+                def align_offset(x, y):
+                    m = time_signature.denominator / (4 * time_signature.numerator)
+                    c = y - m * x
+                    return lambda offset: m * offset + c
+
+                gt_file = open(GT_PATH + "/" + score_file[:-4] + ".csv", "r")
+                reader = csv.reader(gt_file)
+                next(reader)
+                offset_threshold = next(reader)[0]
+                gt_file.close()
+
+                # offset align for Subert
+                old_offset = chord_result[0]["offset"]
+                align_func = align_offset(float(old_offset), float(offset_threshold))
+                for x in chord_result:
+                    x["offset"] = round(align_func(x["offset"]), 6)
+                length = round(align_func(length), 6)
 
             if ExportKey:
                 key_result = []
@@ -224,5 +250,12 @@ def main():
 
 if __name__ == "__main__":
     start_time = time.time()
-    main()
+    from itertools import product
+    from evaluation_metrics import generate_report
+
+    for KeyThenChordMode, DTRFMode, DTRFMode2 in product(
+        [True, False], [True, False], [True, False]
+    ):
+        main(KeyThenChordMode, DTRFMode, DTRFMode2)
+        generate_report(KeyThenChordMode, DTRFMode, DTRFMode2)
     print("--- Used %s seconds ---" % (time.time() - start_time))

@@ -3,6 +3,7 @@ import csv
 import os
 from utility import get_files
 
+# from new_main import main
 from preprocess.note import Note
 from preprocess.scale import Scale
 from preprocess.chord import Chord
@@ -15,16 +16,18 @@ RESULT_PATH = "../result/"
 MEASURE_OUTPUT_PATH = "../result/metrics/"
 try:
     KeyThenChordMode = CONFIG["param"]["KeyThenChord"] == "True"
-    DTRFMode = CONFIG["param"]["UsingDTRF"] == "True"
+    DTRFMode = CONFIG["param"]["UsingDTRFForSegmentation"] == "True"
+    DTRFMode2 = CONFIG["param"]["UsingDTRFForIdentification"] == "True"
 
 except KeyError:
     print("failed to read config.ini, or invalid index specified")
     raise SystemExit
 
 
-def export_measurement(metrics, filename):
+def export_measurement(metrics, filename, KeyThenChordMode, DTRFMode, DTRFMode2):
     path = os.path.join(
-        MEASURE_OUTPUT_PATH, filename + f"_({KeyThenChordMode}_{DTRFMode}).csv"
+        MEASURE_OUTPUT_PATH,
+        filename + f"_({KeyThenChordMode}_{DTRFMode}_{DTRFMode2}).csv",
     )
     measure_file = open(path, "w", newline="")
     writer = csv.writer(measure_file)
@@ -120,6 +123,24 @@ def get_result_list(file_dir):
 def get_chord_symbol_recall(
     gt_list, result_list, check_type="chord", chord_matching_mode=0
 ):
+
+    if False and check_type == "key":
+
+        def list_to_scale_only(chord_list):
+            res = [chord_list[0]]
+            for cd in chord_list[1:]:
+                old_scale = res[-1]["chord"].scale
+                new_scale = cd["chord"].scale
+                if old_scale.is_equal(new_scale):
+                    res[-1]["end"] = cd["end"]
+                    res[-1]["duration"] += cd["duration"]
+                else:
+                    res.append(cd)
+            return res
+
+        gt_list = list_to_scale_only(gt_list)
+        result_list = list_to_scale_only(result_list)
+
     gt_len = len(gt_list)
     result_len = len(result_list)
     total_duration = result_list[-1]["end"]
@@ -191,7 +212,7 @@ def get_directional_hamming_distance(gt_list, result_list):
     return round(match_duration / total_duration, 6)
 
 
-def main():
+def generate_report(KeyThenChordMode, DTRFMode, DTRFMode2):
     # load ground truth
     gt_files = get_files(GT_PATH, ".csv")
     for file_str in gt_files:
@@ -222,8 +243,52 @@ def main():
         ]
         metrics.extend(csr_list)
         # export measurement
-        export_measurement(tuple(metrics), file_str)
+        export_measurement(
+            tuple(metrics), file_str, KeyThenChordMode, DTRFMode, DTRFMode2
+        )
 
 
 if __name__ == "__main__":
-    main()
+    if True:
+        # for idx in range(8):
+        #     KeyThenChordMode = (idx & 4) > 0
+        #     DTRFMode = (idx & 2) > 0
+        #     DTRFMode2 = (idx & 1) > 0
+        #     # main(KeyThenChordMode, DTRFMode, DTRFMode2)
+        #     generate_report(KeyThenChordMode, DTRFMode, DTRFMode2)
+        gt_files = get_files(MEASURE_OUTPUT_PATH, ".csv")
+        path = os.path.join(MEASURE_OUTPUT_PATH, "overall.csv")
+        measure_file = open(path, "w", newline="")
+        writer = csv.writer(measure_file)
+        writer.writerow(
+            (
+                "Score",
+                "DHD",
+                "CSR on Key",
+                "CSR on Chord (strict)",
+                "CSR on Chord (triad)",
+                "CSR on Chord (jazz)",
+                "KeyThenChordMode",
+                "DTRFModeSeg",
+                "DTRFModeIden",
+            )
+        )
+        for gt_file in gt_files:
+            measure_file = open(MEASURE_OUTPUT_PATH + gt_file, "r")
+            csv_reader = csv.reader(measure_file)
+            next(csv_reader)
+            row = next(csv_reader)
+            # print(row)
+
+            gt_info = gt_file.split(".csv")
+            name = gt_info[0]
+            setting = gt_info[1][2:-1].split("_")
+
+            print(name, setting)
+            writer.writerow([name] + row + setting)
+
+            measure_file.close()
+
+        #
+
+        measure_file.close()
