@@ -135,6 +135,3 @@ dmypy.json
 # APFS
 .DS_Store
 _ref/
-
-# large folder
-src/model
